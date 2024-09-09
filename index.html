@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
-     <link rel="icon" type="image/x-icon" href="discord-avatar.ico">
+    <link rel="icon" type="image/x-icon" href="discord-avatar.ico">
     <title>@xliam1</title>
     <style>
         body, html {
@@ -18,6 +18,8 @@
             position: relative;
             display: flex;
             justify-content: center;
+            flex-direction: column; 
+            gap: 20px;
             align-items: center;
         }
         a {
@@ -53,18 +55,15 @@
             font-size: 1.2em;
             border-bottom-left-radius: 20px;
             border-bottom-right-radius: 20px;
-            text-decoration: none;
         }
-        .top-bar a {
-            text-align: right;
-            align-items: right;
-        }
+
         #container {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             align-items: center;
             gap: 20px;
             z-index: 2;
+            color:white;
             background: rgba(0, 0, 0, 0.7);
             padding: 20px;
             border-radius: 15px;
@@ -72,15 +71,46 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
+        #container2 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column; /* Stack heading and rectangles vertically */
+            gap: 20px;
+            z-index: 2;
+            width: 90%;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        #container2 .text-content {
+            text-align: center;
+        }
+
+        .rectangles-container {
+            display: flex;
+            justify-content: space-between; /* Distributes space between rectangles */
+        }
+
+        .small-rectangle {
+            flex: 1;
+            background-color: rgba(0, 0, 0, 0.6);
+            margin: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            text-align: center;
+            padding: 10px; /* Add padding inside rectangles */
+        }
+
         #container img {
             max-width: 150px;
             height: auto;
             border-radius: 10px;
-        }
-
-        #container .text-content {
-            color: white;
-            text-align: center;
         }
 
         .social-icons {
@@ -95,9 +125,80 @@
         }
 
         .social-icons img {
-            width: 30px; /* Adjust icon size */
+            width: 30px;
             height: auto;
+            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+            cursor: pointer;
         }
+
+        .social-icons img:disabled {
+            pointer-events: none;
+        }
+
+        .social-icons img:hover {
+            box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+            transform: translateY(-2px);
+        }
+
+        .social-icons img:active {
+            box-shadow: none;
+            transform: translateY(0);
+        }
+
+        .small-rectangle {
+            flex: 1;
+            margin: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .button {
+            appearance: none;
+            background-color: #000000;
+            border: 2px solid #1A1A1A;
+            border-radius: 15px;
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            display: inline-block;
+            font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+            font-size: 16px;
+            font-weight: 600;
+            line-height: normal;
+            margin: 0;
+            min-height: 60px;
+            min-width: 0;
+            outline: none;
+            padding: 16px 24px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            width: 100%;
+            will-change: transform;
+        }
+
+        .button:disabled {
+            pointer-events: none;
+        }
+
+        .button:hover {
+            box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+            transform: translateY(-2px);
+        }
+
+        .button:active {
+            box-shadow: none;
+            transform: translateY(0);
+        }
+
+        
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -128,7 +229,7 @@
     </video>
     
     <div id="top-bar">
-       xliam.vercel.app
+       This website is not optimized for mobile
     </div>
 
     <div id="container">
@@ -145,5 +246,37 @@
             </div>
         </div>
     </div>
+
+
+    <div id="container2">
+        <div class="text-content">
+            <h1>My Projects</h1>
+        </div>
+        <div class="rectangles-container">
+            <div class="small-rectangle">
+                <h3>Tetrys Tweaks</h3>
+                <p>Themes and hacks for Tetrys (stacker) chrome extension</p>
+                <a class="button"href="https://github.com/Typhoonz0/stacker-tetrys-tweaks" target="_blank">
+                    Download
+                </a>
+            </div>   
+            <div class="small-rectangle">
+                <h3>Chronos</h3>
+                <p>A discord and wifi multitool batchfile (use at own risk)</p>
+                <a class="button" href="https://github.com/Typhoonz0/chronos---discord-wifi-multitool" target="_blank">
+                    Download
+                </a>
+            </div>
+            <div class="small-rectangle">
+                <h3>NTFetch</h3>
+                <p>A fetch tool similar to Neofetch written in Batchfile</p>
+                <a class="button"href="https://github.com/Typhoonz0/ntfetch" target="_blank">
+                    Download
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    
 </body>
 </html>
