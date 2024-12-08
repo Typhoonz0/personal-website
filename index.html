@@ -121,21 +121,18 @@ a {
 
 .social-icons {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    justify-content: center;
-}
-
-.social-icons a {
-    color: white;
-    text-decoration: none;
+    gap: 20px; /* Adjust spacing between icons */
+    margin-top: 20px; /* Slightly larger margin above */
+    justify-content: center; /* Centers icons horizontally */
+    flex-wrap: wrap; /* Ensures icons wrap if screen is narrow */
 }
 
 .social-icons img {
-    width: 300px;
-    height: auto;
+    width: 50px; /* Adjust to a reasonable, consistent size */
+    height: 50px;
     transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
     cursor: pointer;
+    border-radius: 5px; /* Adds a slight border radius for aesthetics */
 }
 
 .social-icons img:hover {
@@ -147,6 +144,7 @@ a {
     box-shadow: none;
     transform: translateY(0);
 }
+
 
 .button {
     appearance: none;
