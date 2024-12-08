@@ -9,196 +9,181 @@
     <link rel="icon" type="image/x-icon" href="discord-avatar.ico">
     <title>@xliam1</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            flex-direction: column; 
-            gap: 20px;
-            align-items: center;
-        }
-        a {
-            color: white;
-            text-decoration: none;
-        }
-        #video-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-        #top-bar {
-            position: fixed;
-            text-align: right;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: rgb(255, 255, 255);
-            font-size: 1.2em;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-        }
+a {
+    color: white;
+    text-decoration: none;
+}
 
-        #container {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            z-index: 2;
-            color:white;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
+#video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
 
-        #container2 {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column; /* Stack heading and rectangles vertically */
-            gap: 20px;
-            z-index: 2;
-            width: 90%;
-            color: white;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
+#top-bar {
+    position: fixed;
+    text-align: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    font-size: 1em;
+    color: rgb(255, 255, 255);
+}
 
-        #container2 .text-content {
-            text-align: center;
-        }
+#container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 2;
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    flex-wrap: wrap;
+    max-width: 90%;
+    margin: 20px;
+}
 
-        .rectangles-container {
-            display: flex;
-            justify-content: space-between; /* Distributes space between rectangles */
-        }
+#container img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 10px;
+}
 
-        .small-rectangle {
-            flex: 1;
-            background-color: rgba(0, 0, 0, 0.6);
-            margin: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            text-align: center;
-            padding: 10px; /* Add padding inside rectangles */
-        }
+#container .text-content {
+    text-align: center;
+}
 
-        #container img {
-            max-width: 150px;
-            height: auto;
-            border-radius: 10px;
-        }
+#container2 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 2;
+    width: 90%;
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    max-width: 90%;
+}
 
-        .social-icons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px; 
-        }
+.rectangles-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 
-        .social-icons a {
-            color: white;
-            text-decoration: none;
-        }
+.small-rectangle {
+    flex: 1 1 calc(100% - 20px);
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+}
 
-        .social-icons img {
-            width: 30px;
-            height: auto;
-            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-            cursor: pointer;
-        }
+@media (min-width: 768px) {
+    .small-rectangle {
+        flex: 1 1 calc(33% - 20px);
+    }
+}
 
-        .social-icons img:disabled {
-            pointer-events: none;
-        }
+.social-icons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
+}
 
-        .social-icons img:hover {
-            box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-            transform: translateY(-2px);
-        }
+.social-icons a {
+    color: white;
+    text-decoration: none;
+}
 
-        .social-icons img:active {
-            box-shadow: none;
-            transform: translateY(0);
-        }
+.social-icons img {
+    width: 30px;
+    height: auto;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    cursor: pointer;
+}
 
-        .small-rectangle {
-            flex: 1;
-            margin: 5px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            text-align: center;
-        }
+.social-icons img:hover {
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+}
 
-        .button {
-            appearance: none;
-            background-color: #000000;
-            border: 2px solid #1A1A1A;
-            border-radius: 15px;
-            box-sizing: border-box;
-            color: #FFFFFF;
-            cursor: pointer;
-            display: inline-block;
-            font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-            font-size: 16px;
-            font-weight: 600;
-            line-height: normal;
-            margin: 0;
-            min-height: 60px;
-            min-width: 0;
-            outline: none;
-            padding: 16px 24px;
-            text-align: center;
-            text-decoration: none;
-            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-            width: 100%;
-            will-change: transform;
-        }
+.social-icons img:active {
+    box-shadow: none;
+    transform: translateY(0);
+}
 
-        .button:disabled {
-            pointer-events: none;
-        }
+.button {
+    appearance: none;
+    background-color: #000000;
+    border: 2px solid #1A1A1A;
+    border-radius: 15px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: normal;
+    margin: 0;
+    min-height: 60px;
+    outline: none;
+    padding: 16px 24px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    width: 100%;
+}
 
-        .button:hover {
-            box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-            transform: translateY(-2px);
-        }
+.button:hover {
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+}
 
-        .button:active {
-            box-shadow: none;
-            transform: translateY(0);
-        }
+.button:active {
+    box-shadow: none;
+    transform: translateY(0);
+}
 
-        
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
