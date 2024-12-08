@@ -121,18 +121,18 @@ a {
 
 .social-icons {
     display: flex;
-    gap: 20px; /* Adjust spacing between icons */
-    margin-top: 20px; /* Slightly larger margin above */
-    justify-content: center; /* Centers icons horizontally */
-    flex-wrap: wrap; /* Ensures icons wrap if screen is narrow */
+    gap: 20px; /* Maintain a reasonable gap */
+    margin-top: 20px;
+    justify-content: center;
+    flex-wrap: wrap; /* Ensure icons wrap if the screen is narrow */
 }
 
 .social-icons img {
-    width: 50px; /* Adjust to a reasonable, consistent size */
-    height: 50px;
+    width: 100px; /* Increase the size for better visibility */
+    height: auto; /* Maintain aspect ratio */
     transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
     cursor: pointer;
-    border-radius: 5px; /* Adds a slight border radius for aesthetics */
+    border-radius: 10px; /* Slightly rounded corners for aesthetics */
 }
 
 .social-icons img:hover {
