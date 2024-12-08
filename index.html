@@ -13,9 +13,9 @@ body, html {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: auto; /* Allow body to adjust to content height */
-    overflow-y: scroll; /* Enable vertical scrolling */
-    overflow-x: hidden; /* Disable horizontal scrolling */
+    height: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -53,7 +53,7 @@ a {
 
 #container {
     display: flex;
-    flex-direction: column; /* Stack content vertically on smaller screens */
+    flex-direction: column;
     align-items: center;
     gap: 20px;
     z-index: 2;
@@ -64,13 +64,14 @@ a {
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     width: 90%;
-    margin: 80px auto 20px; /* Add top margin to avoid overlap with the fixed top bar */
+    margin: 80px auto 20px;
 }
 
 #container img {
     max-width: 100%;
     height: auto;
     border-radius: 10px;
+    display: block;
 }
 
 #container2 {
@@ -110,7 +111,7 @@ a {
 
 @media (min-width: 768px) {
     #container {
-        flex-direction: row; /* Row layout for larger screens */
+        flex-direction: row;
     }
 
     .small-rectangle {
