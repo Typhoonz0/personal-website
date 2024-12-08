@@ -66,13 +66,6 @@ a {
     width: 90%;
 }
 
-#container img {
-    width: 150px;
-    height: auto;
-    border-radius: 10px;
-    display: block;
-}
-
 #container2 {
     display: flex;
     flex-direction: column;
@@ -117,21 +110,21 @@ a {
         flex: 1 1 calc(33% - 20px);
     }
 }
-
-.social-icons {
-    display: flex;
-    gap: 20px; /* Maintain a reasonable gap */
-    margin-top: 20px;
-    justify-content: center;
-    flex-wrap: wrap; /* Ensure icons wrap if the screen is narrow */
+/* Avatar in #container */
+#container > img {
+    width: 100px; /* Ensure the avatar is 100px */
+    height: auto;
+    border-radius: 10px;
+    display: block;
 }
 
+/* Social icons */
 .social-icons img {
-    width: 100px; /* Increase the size for better visibility */
+    width: 50px; /* Ensure the social icons are 50px */
     height: auto; /* Maintain aspect ratio */
     transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
     cursor: pointer;
-    border-radius: 10px; /* Slightly rounded corners for aesthetics */
+    border-radius: 10px;
 }
 
 .social-icons img:hover {
