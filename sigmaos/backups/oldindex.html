@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pretend OS</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Taskbar */
+    .taskbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background-color: #007bff;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+
+    .taskbar button {
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+    .start {
+      display:block;
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .taskbar button:hover {
+      background-color: #004494;
+    }
+
+    /* Draggable Window */
+    .draggable {
+      width: 400px;
+      height: 300px;
+      background-color: #f1f1f1;
+      border: 1px solid #ccc;
+      position: absolute;
+      top: 100px;
+      left: 100px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      resize: both;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .header {
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      cursor: grab;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .content {
+      width: 100%;
+      height: calc(100% - 40px);
+      overflow: auto;
+    }
+
+    .header .window-controls {
+      display: flex;
+      gap: 5px;
+    }
+
+    .header button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .header button:hover {
+      color: #ff4d4d;
+    }
+
+    .header .maximize:hover {
+      color: #ffd700;
+    }
+
+    .header .minimize:hover {
+      color: #00ff00;
+    }
+
+    .hidden {
+      display: none;
+    }
+    #login-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 300px;
+      background-color: #fff;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #login-screen input {
+      width: 100%;
+      margin: 10px 0;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #login-screen button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #login-screen button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Start Menu Styling */
+    #start-menu {
+      position: absolute;
+      bottom: 50px; /* Adjusted to position above the taskbar */
+      left: 10px;   /* Matches Start button location */
+      width: 200px;
+      background-color: white;
+      border: 1px solid #ccc;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 1001;
+    }
+
+  </style>
+</head>
+<body>
+      <!-- Login Screen -->
+  <div id="login-screen">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Enter username">
+    <input type="password" id="password" placeholder="Enter password">
+    <button id="login-btn">Login</button>
+  </div>
+
+ 
+
+  <script>
+    // Check if user credentials exist
+    const credentials = JSON.parse(localStorage.getItem('credentials'));
+    const loggedIn = sessionStorage.getItem('loggedin');
+
+    const loginScreen = document.getElementById('login-screen');
+    const Desktop = document.getElementById('pretend-os');
+
+    // Show appropriate screen based on login state
+    if (loggedIn) {
+      showDesktop();
+    } else {
+      showLoginScreen();
+    }
+
+    function showLoginScreen() {
+      loginScreen.style.display = 'flex';
+      Desktop.style.display = 'none';
+    }
+
+    function showDesktop() {
+      loginScreen.style.display = 'none';
+      Desktop.style.display = 'block';
+    }
+
+    // Handle login button click
+    document.getElementById('login-btn').addEventListener('click', () => {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (!credentials) {
+        // If no credentials exist, store them
+        localStorage.setItem('credentials', JSON.stringify({ username, password }));
+        alert('Credentials saved! Please log in again.');
+      } else {
+        // If credentials exist, authenticate
+        if (username === credentials.username && password === credentials.password) {
+          sessionStorage.setItem('loggedin', 'true');
+          showDesktop();
+        } else {
+          alert('Invalid credentials. Please try again.');
+        }
+      }
+    });
+
+    // Handle logout button click
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      sessionStorage.removeItem('loggedin');
+      showLoginScreen();
+    });
+
+  </script>
+</body>
+</html>

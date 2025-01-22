@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallpaper Settings</title>
+  <style>
+    @font-face {
+      font-family:"msfont";
+      src: url("../assets/fonts/msfont.ttf") format("truetype"), url("../assets/fonts/msfont.woff") format("woff");
+    }
+    * {
+      font-family: msfont, sans-serif
+    }
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #818181;
+    }
+
+    .settings-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .settings-container h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .file-input, .color-picker {
+      margin: 10px 0;
+    }
+
+    .button {
+      font-size: 14px;
+      background-color: #0827f5;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 2px;
+      margin-right: 2px;
+    }
+
+    .button:hover {
+      background-color: #091ea8;
+    }
+  </style>
+</head>
+<body>
+  <div class="settings-container">
+    <a class="button" href="settings.html">Back</a>
+    <h1>Wallpaper Settings</h1>
+    <h2>Set Background Image</h2>
+    <input type="file" class="file-input" accept="image/*" id="file-picker">
+    <h2>Set Solid Color</h2>
+    <input type="color" class="color-picker" id="color-picker">
+    <button class="button" onclick="applyWallpaper()">Apply</button>
+  </div>
+
+  <script>
+    function applyWallpaper() {
+      const fileInput = document.getElementById('file-picker');
+      const colorPicker = document.getElementById('color-picker');
+
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          sendMessageToIndex('backgroundImage', `url(${e.target.result})`);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        const color = colorPicker.value;
+        sendMessageToIndex('backgroundColor', color);
+      }
+    }
+
+    function sendMessageToIndex(property, value) {
+      const message = { property, value };
+      localStorage.setItem('wallpaperSettings', JSON.stringify(message));
+      alert('Wallpaper updated! Please reload the main page to see the changes.');
+    }
+  </script>
+</body>
+</html>

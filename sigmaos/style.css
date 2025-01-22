@@ -1,0 +1,220 @@
+@font-face {
+    font-family:"msfont";
+    src: url("assets/fonts/msfont.ttf") format("truetype"), url("assets/fonts/msfont.woff") format("woff");
+  }
+* {
+    font-family: msfont, sans-serif
+}
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #008080;
+   /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+}
+
+.taskbar {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background-color: #818181;
+    color: white;
+    padding: 0 10px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.taskbar button,
+
+#taskbar-clock {
+    font-size: 14px;
+    background-color: #0827f5;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.start {
+    display: block;
+    background-color: #818181;
+    color: black;
+    font-size: 16px;
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* This makes the button take up the whole width */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+    margin: 2px 0; /* Adds space between buttons */
+}
+
+
+.taskbar button:hover, #taskbar-clock:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.draggable {
+    overflow:hidden;
+    width: 400px;
+    height: 300px;
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px solid #ccc;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    resize: both;
+    overflow: hidden;
+    border-radius: 10px;
+    z-index: 10;
+}
+
+.header {
+    padding: 10px;
+    background-color: #0827f5;
+    color: white;
+    cursor: grab;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content {
+    width: 100%;
+    height: calc(100% - 40px);
+    overflow: auto;
+}
+
+.header .window-controls {
+    display: flex;
+    gap: 5px;
+}
+
+.header button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.header button:hover {
+    color: #ff4d4d;
+}
+
+.header .maximize:hover {
+    color: #ffd700;
+}
+
+.header .minimize:hover {
+    color: #00ff00;
+}
+
+.hidden {
+    display: none;
+}
+
+#login-screen {
+    margin: 10%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    background: #818181;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+#login-screen input {
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#login-screen button {
+    padding: 10px 20px;
+    background-color: #818181;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#login-screen button:hover {
+    background-color: #0827f5;
+}
+#logout-btn {
+    width: 200px;
+    background-color: #818181;
+    border: 1px solid #818181;
+}
+#start-menu {
+    position: absolute;
+    bottom: 50px;
+    left: 10px;
+    color: black;
+    width: 200px;
+    background-color: #818181;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+}
+#logout-btn button:hover,
+#start-menu button:hover {
+    color: white;
+    background-color: #0827f5;
+}
+
+#sigmaOS {
+    display: none;
+}
+
+@keyframes genie-close {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.95);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+}
+
+
+@keyframes genie-open {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.draggable.opening {
+    animation: genie-open 0.5s forwards;
+}
+
+.draggable.closing {
+    animation: genie-close 0.5s forwards;
+}

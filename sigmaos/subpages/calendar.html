@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <style>
+        @font-face {
+            font-family:"msfont";
+            src: url("../assets/fonts/msfont.ttf") format("truetype"), url("../assets/fonts/msfont.woff") format("woff");
+        }
+        * {
+            font-family: msfont, sans-serif
+        }
+        body {
+            font-size: 14px;
+            background-color: #c3c7cb;
+            color: black;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .calendar-container {
+             height: 100%;
+             width: 100%;
+            padding: 10px;
+            background: white;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .calendar div {
+            padding: 5px;
+            border: 2px solid #c3c7cb;
+            background: #e4e4e4;
+            box-shadow: inset -1px -1px 0px #ffffff, inset 1px 1px 0px #000000;
+        }
+
+        .calendar .day {
+            font-weight: bold;
+            background: #c3c7cb;
+        }
+
+        .calendar .current-day {
+            background: #000080;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar-container">
+        <div id="current-date"></div>
+        <div class="calendar">
+            <div class="day"></div>
+            <div class="day"></div>
+            <div class="day"></div>
+            <div class="day"></div>
+            <div class="day"></div>
+            <div class="day"></div>
+            <div class="day"></div>
+        </div>
+    </div>
+
+    <script>
+        // Simple calendar script, nothing special
+        function generateCalendar() {
+            const calendarContainer = document.querySelector('.calendar');
+            const currentDateDisplay = document.getElementById('current-date');
+
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const day = now.getDate();
+
+            currentDateDisplay.textContent = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Clear previous days
+            calendarContainer.innerHTML = calendarContainer.innerHTML.slice(0, calendarContainer.innerHTML.indexOf('</div>') + 6);
+
+            // Add empty days before first day
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                calendarContainer.appendChild(emptyCell);
+            }
+
+            // Add days of the month
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayCell = document.createElement('div');
+                dayCell.textContent = i;
+                if (i === day) {
+                    dayCell.classList.add('current-day');
+                }
+                calendarContainer.appendChild(dayCell);
+            }
+        }
+
+        generateCalendar();
+    </script>
+</body>
+</html>

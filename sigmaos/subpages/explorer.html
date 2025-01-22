@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Explorer</title>
+    <style>
+        @font-face {
+            font-family: "msfont";
+            src: url("../assets/fonts/msfont.ttf") format("truetype"), url("../assets/fonts/msfont.woff") format("woff");
+        }
+        * {
+            font-family: msfont, sans-serif;
+        }
+        body {
+            margin: 0;
+        }
+        .ribbon {
+            display: flex;
+            background-color: #c0c0c0;
+            padding: 5px;
+            border-bottom: 2px solid #808080;
+        }
+        .ribbon button {
+            margin-right: 5px;
+            padding: 5px 10px;
+            background: #e0e0e0;
+            border: 1px solid #808080;
+            cursor: pointer;
+        }
+        .ribbon button:hover {
+            background: #d0d0d0;
+        }
+        .explorer {
+            display: flex;
+            height: calc(100vh - 40px);
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #f0f0f0;
+            border-right: 2px solid #808080;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .main {
+            flex: 1;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            cursor: pointer;
+        }
+        .item:hover {
+            background-color: #d0d0d0;
+        }
+        .item.selected {
+            background-color: #a0a0ff;
+        }
+        .item-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .folder-icon {
+            background-color: #ffc107;
+        }
+        .file-icon {
+            background-color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="ribbon">
+        <button onclick="createItem('folder')">New Folder</button>
+        <button onclick="createItem('file')">New File</button>
+        <button onclick="deleteSelected()">Delete</button>
+        <button onclick="refreshView()">Refresh</button>
+    </div>
+    <div class="explorer">
+        <div class="sidebar" id="path"></div>
+        <div class="main" id="explorer"></div>
+    </div>
+    <script>
+const fsKey = 'retroTerminalFS';
+let currentPath = ['root'];
+let selectedItems = new Set();
+let lastClickTime = 0;
+
+
+
+function loadFileSystem() {
+    const storedFS = localStorage.getItem(fsKey);
+    return storedFS ? JSON.parse(storedFS) : { root: {} };
+}
+
+function saveFileSystem(fs) {
+    localStorage.setItem(fsKey, JSON.stringify(fs));
+}
+
+function getCurrentDirectory(fs) {
+    return currentPath.reduce((dir, segment) => dir[segment], fs);
+}
+
+function initializeFileSystem() {
+    const fs = loadFileSystem();
+
+    // Create default folders and files if they don't exist or the user deleted them
+    // This is to simulate using the actual system, and each switch-case in the below function is it's own seperate binary
+    if (!fs.root.sbin) {
+        fs.root.sbin = { "ls": "", "pwd": "", "mkdir": "", "rmdir": "", "touch": "", "cd": "", "help": "", "clear": "" };
+    }
+    if (!fs.root.bin) {
+        fs.root.bin = { "xeyes": "", "z-settings": "" };
+    }
+    if (!fs.root.boot) {
+        fs.root.boot = { "sigmaos.initramfs": "", "sigmaos.index": "" };
+    }
+    if (!fs.root.home) {
+        fs.root.home = { "Downloads": {}, "Documents": {}, "Music": {}, "Videos": {} };
+    }
+
+    saveFileSystem(fs); // Save the initialized file system
+}
+
+initializeFileSystem();
+
+function refreshView() {
+    const fs = loadFileSystem();
+    const dir = getCurrentDirectory(fs);
+
+    // Update path view
+    const pathEl = document.getElementById('path');
+    pathEl.innerHTML = currentPath.map((seg, i) =>
+        `<span onclick="navigateTo(${i})">${seg}</span>`).join(' / ');
+
+    // Update main explorer view
+    const explorerEl = document.getElementById('explorer');
+    explorerEl.innerHTML = '';
+    Object.entries(dir).forEach(([name, content]) => {
+        const itemEl = document.createElement('div');
+        itemEl.className = `item ${selectedItems.has(name) ? 'selected' : ''}`;
+        itemEl.onclick = (e) => handleItemClick(name, content, e);
+        const iconEl = document.createElement('div');
+        iconEl.className = `item-icon ${typeof content === 'object' ? 'folder-icon' : 'file-icon'}`;
+        itemEl.appendChild(iconEl);
+        const nameEl = document.createElement('div');
+        nameEl.textContent = name;
+        itemEl.appendChild(nameEl);
+        explorerEl.appendChild(itemEl);
+    });
+}
+
+function handleItemClick(name, content, event) {
+    const clickTime = event.timeStamp;
+
+    // Handle double-click
+    if (clickTime - lastClickTime < 300) { // 300ms threshold for double-click
+        if (typeof content !== 'object') {
+            // Trigger the double-click action for files
+            handleFileDoubleClick(name);
+            return;
+        }
+    }
+
+    lastClickTime = clickTime;
+
+    // Handle folder navigation or selection
+    if (selectedItems.has(name) && typeof content === 'object') {
+        currentPath.push(name);
+        selectedItems.clear();
+    } else {
+        if (selectedItems.has(name)) {
+            selectedItems.delete(name);
+        } else {
+            selectedItems.clear();
+            selectedItems.add(name);
+        }
+    }
+    refreshView();
+}
+
+function handleFileDoubleClick(fileName) {
+    // TODO: when user double clicks on file, open text editor 
+    // alert(`Double-clicked file: ${fileName}`);
+    // openProgram('notes.html', 'Notes')
+}
+
+function navigateTo(index) {
+    currentPath = currentPath.slice(0, index + 1);
+    selectedItems.clear();
+    refreshView();
+}
+
+function createItem(type) {
+    const name = prompt(`Enter ${type} name:`);
+    if (!name) return;
+
+    const fs = loadFileSystem();
+    const dir = getCurrentDirectory(fs);
+
+    if (dir[name]) {
+        alert(`${type} already exists.`);
+        return;
+    }
+
+    dir[name] = type === 'folder' ? {} : "";
+    saveFileSystem(fs);
+    refreshView();
+}
+
+function deleteSelected() {
+    const fs = loadFileSystem();
+    const dir = getCurrentDirectory(fs);
+
+    selectedItems.forEach(item => delete dir[item]);
+    selectedItems.clear();
+    saveFileSystem(fs);
+    refreshView();
+}
+
+// Initialize view on load
+
+refreshView();
+
+    </script>
+</body>
+</html>

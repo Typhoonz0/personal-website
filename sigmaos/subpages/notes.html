@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes</title>
+    <style>
+        @font-face {
+            font-family:"msfont";
+            src: url("../assets/fonts/msfont.ttf") format("truetype"), url("../assets/fonts/msfont.woff") format("woff");
+        }
+        * {
+            font-family: msfont, sans-serif
+        }
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        header {
+            background-color: #818181;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        button {
+            font-size: 14px;
+            background-color: #0827f5;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 2px;
+            margin-right: 2px;
+        }
+        button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        #file-explorer {
+            border-radius: 10px;
+            background-color: #818181;
+            border: 1px solid #ccc;
+            padding: 10px;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            display: none;
+        }
+        #file-explorer ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #file-explorer ul li {
+            border-radius: 10px;
+            color: white;
+            padding: 5px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+            background-color: #0827f5;
+        }
+        #file-explorer ul li:hover {
+            color: white;
+            background-color: rgba(0, 0, 0, 0.8)
+        }
+        textarea {
+            flex: 1;
+            border: none;
+            resize: none;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        footer {
+            background-color: #818181;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div>
+            <button onclick="saveFile()">Save</button>
+            <button onclick="openFileExplorer()">Open File</button>
+        </div>
+        <div id="status">No file is open</div>
+    </header>
+    <div id="file-explorer" style="display:none;">
+        <button id="go-up" style="display:none;" onclick="goUp()">Go Up</button>
+        <ul id="file-list"></ul>
+        <button onclick="closeFileExplorer()">Cancel</button>
+    </div>
+
+    <textarea id="editor" placeholder="Type here..."></textarea>
+    <footer>
+        You may need to save multiple times. be patient please.
+    </footer>
+
+    <script>
+// This notes program saves text into JSON which is loaded into the users localstorage
+// The item is called retroTerminalFS because it was originally used for the shell, but I expanded it into a GUI file explorer and then this text editor
+// Find the filesystem in localstorage
+let retroTerminalFS = JSON.parse(localStorage.getItem("retroTerminalFS"));
+let currentPath = ["root"];
+
+// Find the HTML elements we're going to modify
+const editor = document.getElementById("editor");
+const status = document.getElementById("status");
+const fileExplorer = document.getElementById("file-explorer");
+const fileList = document.getElementById("file-list");
+const goUpButton = document.getElementById("go-up");
+
+// Returns the stripped file/folder structure
+function getCurrentDirectory() {
+    return currentPath.reduce((dir, folder) => dir[folder], retroTerminalFS);
+}
+
+function saveFile() {
+    const content = editor.value; 
+    let currentDir = getCurrentDirectory();
+
+    // If current directory is null, fall back to 'root/home' - This usually happens when users open a file with a direcotry with nothing else in it, and the getcurrentdirectory can't find it
+    if (!currentDir) {
+        alert("Invalid path detected. Saving in 'root/home' directory.");
+        currentDir = retroTerminalFS.root.home; 
+        currentPath = ["root", "home"];
+    }
+
+    let fileName = currentPath[currentPath.length];
+
+    // Prompt for a file name if the path points to a folder, is invalid, or root/home
+    if (!fileName || typeof currentDir[fileName] === "object" || currentPath.length === 2) {
+        fileName = prompt("Enter a file name to save:");
+        if (!fileName) return; // Exit if no name is provided
+    }
+
+    // Check if the file or folder with the same name already exists
+    while (currentDir[fileName] !== undefined) {
+        alert(`A file or folder named '${fileName}' already exists.`);
+        fileName = prompt("Enter a new file name:");
+        if (!fileName) return; // Exit if no name is provided
+
+        // Bring up the file picker for directory selection
+        openFileExplorer();
+        return; // Exit the save process to let the user navigate and retry saving
+    }
+
+    // Save the content to the file
+    currentDir[fileName] = content;
+
+    // Update localStorage and status
+    localStorage.setItem("retroTerminalFS", JSON.stringify(retroTerminalFS));
+    status.textContent = `File saved: ${[...currentPath.slice(0, -1), fileName].join("/")}`;
+}
+
+// Function to go up a folder in the file picker
+function goUp() {
+    if (currentPath.length > 1) {
+        currentPath.pop();
+        refreshFileExplorer();
+    }
+}
+
+function refreshFileExplorer() {
+    openFileExplorer();
+}
+
+// Simplified file picker 
+function openFileExplorer() {
+    fileList.innerHTML = ""; // Clear the current list
+
+    const currentDir = getCurrentDirectory(); // Get the current directory
+    for (const fileName in currentDir) {
+        if (currentDir.hasOwnProperty(fileName)) {
+            const li = document.createElement("li");
+            li.textContent = fileName;
+            li.addEventListener("click", () => {
+                const content = currentDir[fileName];
+                if (typeof content === "object") {
+                    currentPath.push(fileName); // Navigate into the folder
+                    refreshFileExplorer();
+                } else {
+                    openFile(fileName); // Open the file
+                    closeFileExplorer();
+                }
+            });
+            fileList.appendChild(li);
+        }
+    }
+
+    fileExplorer.style.display = "block"; // Show the file explorer
+    goUpButton.style.display = currentPath.length > 1 ? "block" : "none"; // Show/hide the 'Go Up' button
+}
+
+function closeFileExplorer() {
+    fileExplorer.style.display = "none";
+}
+
+function openFile(fileName) {
+    const currentDir = getCurrentDirectory();
+    const content = currentDir[fileName]; // Retrieve the file contents
+
+    if (typeof content === "string") {
+        editor.value = content; // Display the file's contents in the editor
+        currentPath[currentPath.length - 1] = fileName; // Set the current file being edited
+        status.textContent = `Editing: ${currentPath}`;
+    } else {
+        alert("Cannot open: This is a folder, not a file.");
+    }
+}
+
+
+window.addEventListener("load", () => {
+    localStorage.setItem("retroTerminalFS", JSON.stringify(retroTerminalFS)); // Initialize the file system
+});
+    </script>
+</body>
+</html>

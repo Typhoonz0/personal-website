@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>shell</title>
+    <style>
+        @font-face {
+    font-family:"msfont";
+    src: url("../assets/fonts/msfont.ttf") format("truetype"), url("../assets/fonts/msfont.woff") format("woff");
+  }
+* {
+    overflow:hidden;
+    font-family: msfont, sans-serif
+}
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #terminal {
+            flex: 1;
+            overflow:hidden;
+            background-color: black;
+            color: #ffffff;
+            font-size: 13px;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        #input {
+            width: 100%;
+            border: none;
+            background-color: black;
+            color: #ffffff;
+            font-size: 16px;
+            padding: 10px;
+            box-sizing: border-box;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal"></div>
+    <input id="input" type="text" placeholder="Type a command and press Enter." autofocus>
+    <script>
+        const terminal = document.getElementById('terminal');
+        const input = document.getElementById('input');
+        
+        // Initialize the file system
+        const defaultFS = { root: {} };
+        const fsKey = 'retroTerminalFS';
+        let currentPath = ['root'];
+
+        
+        function loadFileSystem() {
+            const storedFS = localStorage.getItem(fsKey);
+            return storedFS ? JSON.parse(storedFS) : defaultFS;
+        }
+
+        function saveFileSystem(fs) {
+            localStorage.setItem(fsKey, JSON.stringify(fs));
+        }
+
+        function initializeFileSystem() {
+        const fs = loadFileSystem();
+
+        // Create default folders and files if they don't exist or the user deleted them
+        // This is to simulate using the actual system, and each switch-case in the below function is it's own seperate binary
+        if (!fs.root.sbin) {
+            fs.root.sbin = {"ls":"", "pwd":"", "mkdir":"", "rmdir":"", "touch":"","cd":"","help":"","clear":""};
+        }
+        if (!fs.root.bin) {
+            fs.root.bin = {"xeyes":"", "z-settings":""};
+        }
+        if (!fs.root.boot) {
+            fs.root.boot = {"sigmaos.initramfs":"", "sigmaos.index":""};
+        }
+        if (!fs.root.home) {
+            fs.root.home = {"Downloads":{},"Documents":{},"Music":{},"Videos":{}};
+        }
+        
+
+        
+        saveFileSystem(fs); // Save the initialized file system
+    }
+
+    // Initialize default directories on load
+    initializeFileSystem();
+
+        function getCurrentDirectory(fs) {
+            return currentPath.reduce((dir, segment) => dir[segment], fs);
+        }
+
+        function printToTerminal(text) {
+            const line = document.createElement('div');
+            line.textContent = text;
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function executeCommand(command) {
+            const args = command.trim().split(' ');
+            const cmd = args[0];
+            const fs = loadFileSystem();
+            const dir = getCurrentDirectory(fs);
+
+            switch (cmd) {
+                case 'ls':
+                    const items = Object.keys(dir);
+                    printToTerminal(items.length ? items.join('  ') : 'Empty directory');
+                    break;
+                case 'cd':
+                    if (!args[1]) {
+                        printToTerminal('Usage: cd <directory>');
+                    } else if (args[1] === '..') {
+                        if (currentPath.length > 1) currentPath.pop();
+                    } else if (dir[args[1]] && typeof dir[args[1]] === 'object') {
+                        currentPath.push(args[1]);
+                    } else {
+                        printToTerminal(`No such directory: ${args[1]}`);
+                    }
+                    break;
+                case 'mkdir':
+                    if (!args[1]) {
+                        printToTerminal('Usage: mkdir <directory>');
+                    } else if (dir[args[1]]) {
+                        printToTerminal(`Directory already exists: ${args[1]}`);
+                    } else {
+                        dir[args[1]] = {};
+                        saveFileSystem(fs);
+                        printToTerminal(`Directory created: ${args[1]}`);
+                    }
+                    break;
+                case 'rmdir':
+                    if (!args[1]) {
+                        printToTerminal('Usage: rmdir <directory>');
+                    } else if (dir[args[1]] && typeof dir[args[1]] === 'object') {
+                        delete dir[args[1]];
+                        saveFileSystem(fs);
+                        printToTerminal(`Directory removed: ${args[1]}`);
+                    } else {
+                        printToTerminal(`No such directory: ${args[1]}`);
+                    }
+                    break;
+                case 'touch':
+                    if (!args[1]) {
+                        printToTerminal('Usage: touch <file>');
+                    } else if (dir[args[1]]) {
+                        printToTerminal(`File or directory already exists: ${args[1]}`);
+                    } else {
+                        dir[args[1]] = null;
+                        saveFileSystem(fs);
+                        printToTerminal(`File created: ${args[1]}`);
+                    }
+                    break;
+                case 'pwd':
+                    printToTerminal('/' + currentPath.join('/'));
+                    break;
+                case 'xeyes':
+                    printToTerminal('Error: Cannot launch xeyes. Try launching from GUI?');
+                    break;
+                case 'lsblk':
+                    printToTerminal(`Filesystems, Label,  Type, MOUNTPOINT`);
+                    printToTerminal(`┗ sda              Disk    `);
+                    printToTerminal(`┗ sda1     bootfs  Part    `);
+                    printToTerminal(`┗ sda2     rootfs  Part    /root`);
+                    printToTerminal(`┗ sda3       ---   Part    /home`);
+                    break;
+                case 'neofetch':
+                    printToTerminal(`root@sigmaos`);
+                    printToTerminal(`-------------------`);
+                    printToTerminal(`OS: sigmaOS v0.1`);
+                    printToTerminal(`Kernel: 0125generic`);
+                    printToTerminal(``);
+                    break
+                case 'z-settings':
+                    printToTerminal('Error: Cannot launch z-settings. Try launching from GUI?');
+                    break;
+                case 'clear':
+                    terminal.innerHTML = '';
+                    break;
+                case 'help':
+                    printToTerminal(`Available commands: ls, cd, mkdir, rmdir, touch, pwd, clear, help, lsblk`);
+                    break;
+                default:
+                    printToTerminal(`Unknown command: ${cmd}`);
+            }
+        }
+
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const command = input.value.trim();
+                if (command) {
+                    printToTerminal(`$ ${command}`);
+                    executeCommand(command);
+                    input.value = '';
+                }
+            }
+        });
+
+        // Initialize terminal
+        printToTerminal('shell v1');
+        printToTerminal('Type "help" for a list of commands.');
+        printToTerminal('You are running as the root user. Be careful.');
+    </script>
+</body>
+</html>

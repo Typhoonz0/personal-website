@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 95 Style Manpage</title>
+    <style>
+        @font-face {
+            font-family:"msfont";
+            src: url("../assets/fonts/msfont.ttf") format("truetype"), url("../assets/fonts/msfont.woff") format("woff");
+        }
+        * {
+            font-family: msfont, sans-serif
+        }
+        body {
+            border-radius: 10px;
+            font-size: 12px;
+            color: black;
+            background-color: #818181;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu {
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            background-color: #818181;
+            padding: 10px;
+        }
+
+        .menu-button {
+            border-radius: 10px;
+            background-color: #C0C0C0;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        .menu-button:hover {
+            background-color: #A0A0A0;
+        }
+
+        .submenu {
+            border-radius: 10px;
+            display: none;
+            flex-direction: column;
+            margin-left: 20px;
+        }
+
+        .submenu-button {
+            color: white;
+            border-radius: 10px;
+            background-color: blue;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        .submenu-button:hover {
+            color: white;
+            background-color: rgb(1, 1, 163);
+        }
+
+        .submenu.open {
+            display: flex;
+        }
+
+        .content {
+            overflow: none;
+            display: none;
+            padding: 20px;
+            background-color: #FFFFFF;
+            height: calc(100vh - 50px);
+            overflow-y: auto;
+        }
+
+        .content.active {
+            overflow: none;
+            display: block;
+        }
+    
+        h1 {
+            font-size: 16px;
+            margin: 0;
+            padding-bottom: 4px;
+        }
+
+        .section {
+            margin: 15px 0;
+        }
+
+        .section h2 {
+            font-size: 14px;
+            margin: 0 0 5px 0;
+        }
+
+        .section p {
+            margin: 5px 0;
+        }
+    </style>
+    <script>
+        function toggleSubmenu(menuId) {
+            const submenu = document.getElementById(menuId);
+            submenu.classList.toggle('open');
+        }
+
+        function showContent(id) {
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => content.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+    </script>
+</head>
+<body>
+    <div class="menu">
+        <button class="menu-button" onclick="toggleSubmenu('submenu1')">What is sigmaOS?</button>
+        <div id="submenu1" class="submenu">
+            <button class="submenu-button" onclick="showContent('desktop')">Desktop</button>
+            <button class="submenu-button" onclick="showContent('filesystem')">Filesystem</button>
+            <button class="submenu-button" onclick="showContent('permissions')">Permissions</button>
+       </div>
+
+        <button class="menu-button" onclick="toggleSubmenu('submenu2')">Applications</button>
+        <div id="submenu2" class="submenu">
+            <button class="submenu-button" onclick="showContent('manual')">Manual</button>
+            <button class="submenu-button" onclick="showContent('explorer')">Explorer</button>
+            <button class="submenu-button" onclick="showContent('notes')">Notes</button>
+            <button class="submenu-button" onclick="showContent('settings')">Settings</button>
+            <button class="submenu-button" onclick="showContent('shell')">Shell</button>
+        </div>
+
+        <button class="menu-button" onclick="toggleSubmenu('submenu3')">Credits</button>
+        <div id="submenu3" class="submenu">
+            <button class="submenu-button" onclick="showContent('credits')">Credits</button>
+        </div>
+    </div>
+
+    <div id="manual" class="content active">
+        <h1>Manual</h1>
+
+        <div class="section">
+            <h2>NAME</h2>
+            <p>Manual</p>
+        </div>
+
+        <div class="section">
+            <h2>DESCRIPTION</h2>
+            <p>App used to keep documentation and usage instructions of sigmaOS</p>
+        </div>
+
+        <div class="section">
+            <h2>OPTIONS</h2>
+            <p>Click on each menu to reveal a dropdown</p>
+            <p>Click on an dropdown to reveal its manual page here</p>
+        </div>
+    </div>
+
+    <!-- SUBMENU 1 -->
+    <div id="desktop" class="content">
+        <h1>Desktop</h1>
+
+        <div class="section">
+            <h2>NAME</h2>
+            <p>Desktop</p>
+        </div>
+
+        <div class="section">
+            <h2>DESCRIPTION</h2>
+            <h4>Synopsis</h4>
+            <p>The desktop's look and feel is inspired by desktops of the 1990s, such as:</p>
+            <p>Windows 95 Explorer</p>
+            <p>GNOME v1</p>
+            <p>K Desktop Enviroment v1</p>
+
+            <h4>Window Control</h4>
+            <p>On the top right corner of each window, there are three buttons:</p>
+            <p>Minimise (-), Maximise ([]), Close(x) </p>
+            <p>Minimise hides the window to the taskbar (see Taskbar)</p>
+            <p>Maximise, in the case of the three window buttons, makes the window fullscreen</p>
+            <p>Maximise, in the case of the Taskbar, restores the window to the desktop</p>
+            <p>Close simply closes the application</p>
+            <p>Drag a window to a different place on the desktop by clicking and dragging the window header to its desired location</p>
+            <p>Resize a window manually by clicking and dragging the tab on the bottom right corner of the window</p>
+
+            <h4>Taskbar</h4>
+            <p>The taskbar is the block of colour that sits at the bottom of your screen</p>
+            <p>Click on the buttons to maximise (see Window Control) your open apps</p>
+            <p>Click on the "Start" button to access your Start Menu</p>
+
+            <h4>Start Menu</h4>
+            <p>The Start Menu is a menu that contains buttons to open your installed programs</p>
+            <p>It contains submenus such as "Installed Programs" and "Utilities", which can be navigated by hovering your cursor over them</p>
+            <p>To close it, simple click on the Start button again</p>
+
+            <h4>Wallpaper</h4>
+            <p>Change your wallpaper to a different solid color or a custom image in Settings > Wallpaper (see Applications)</p>
+        </div>
+    </div>
+    
+    <div id="filesystem" class="content">
+        <h1>Filesystem</h1>
+
+        <div class="section">
+            <h2>NAME</h2>
+            <p>Filesystem</p>
+        </div>
+
+        <div class="section">
+            <h2>DESCRIPTION</h2>
+            <h4>Synopsis</h4>
+            <p>sigmaOS's filesystem is different to a traditional filesystem, as instead of a physical location on a user's hard drive being written and read to, </p>
+            <p>sigmaOS simply uses JSON to store files and folders in the user's browser's localStorage cache</p>
+            <p>A basic sigmaOS filesystem typically looks like:</p>
+            <p>{"root":{"folder":"subfolder"}}</p>
+            <p>As JSON has a {"key":"value"} syntax</p>
+
+            <h4>Usage</h4>
+            <p>Users can interact with the filesystem by using the shell, Notes, or File Explorer (all see Applications)</p> 
+            <p>Where you are in the filesystem is determined by the file path</p>
+            <p>A typical filepath looks like:</p>
+            <p>root/home/Documents/coolstory.txt</p>
+            <p>The top of the filesystem is the path root/</p>
+        </div>
+    </div>
+
+    <div id="permissions" class="content">
+        <h1>Permissions</h1>
+
+        <div class="section">
+            <h2>NAME</h2>
+            <p>Permissions</p>
+        </div>
+
+        <div class="section">
+            <h2>DESCRIPTION</h2>
+            <h4>Synopsis</h4>
+            <p>All users of sigmaOS have the absolute highest privilege possible; all files and folders are modifiable and removable, even if vital to the system</p>
+            <p>sigmaOS repairs itself if any critical files are missing, however</p>
+        </div>
+    </div>
+
+    <div id="explorer" class="content">
+        <h1>Explorer</h1>
+
+        <div class="section">
+            <h2>NAME</h2>
+            <p>Explorer</p>
+        </div>
+
+        <div class="section">
+            <h2>DESCRIPTION</h2>
+            <h4>Synopsis</h4>
+            <p>Graphical File Explorer</p>
+            <p>On the left, shows the users path (see filesystem) where you can click on any part of it to go up towards the top of the filesystem</p>
+            <p>On the right are all the folders and files at that path</p>
+            <p>A folder is indicated by a yellow square, whereas a file is indicated by a blue square</p>
+            <p>Click on a file or folder to select it, double click on a folder to go into it</p>
+            <p>On the top, there is a ribbon bar to delete any selected items, create a new file or folder, or to refresh for any new files or folders modified by other programs</p>
+        </div>
+    </div>
+
+    <div id="notes" class="content">
+        <h1>Notes</h1>
+
+        <div class="section">
+            <h2>NAME</h2>
+            <p>Notes</p>
+        </div>
+
+        <div class="section">
+            <h2>DESCRIPTION</h2>
+            <h4>Synopsis</h4>
+            <p>Graphical Text Editor</p>
+            <p>Type or edit in the text box, when you are done, click the Save button. A minimalistic file picker will open, letting you save anywhere</p>
+            <p>(This can be buggy, and will default to your home folder (see filesystem) if it cannot find where the original file/path was/is)</p>
+            <p>Or to edit an existing file, click the Open File button and the same file picker will appear, letting you edit your documents</p>
+        </div>
+    </div>
+    <div id="shell" class="content">
+        <h1>Shell</h1>
+
+        <div class="section">
+            <h2>NAME</h2>
+            <p>Shell</p>
+        </div>
+
+        <div class="section">
+            <h2>DESCRIPTION</h2>
+            <h4>Synopsis</h4>
+            <p>A shell is a direct way to talk to the core (kernel) of your operating system</p>
+            <h4>Commands</h4>
+            <p>pwd - Print the current directory you are in</p>
+            <p>ls - List all folders and files in your current directory</p>
+            <p>cd (name) - change your current directory to an existing directory; to go up a directory, type cd ..</p>
+            <p>mkdir (name) - Make a directory</p>
+            <p>rmdir (name) - Remove a directory and all subdirectories within it</p>
+            <p>touch (name) - Create an empty file</p>
+            <p>lsblk - list all the "partitions" that sigmaOS is installed on (cosmetic purposes only)</p>
+            <p>clear - Clear the terminal</p>
+            <p>help - Print a list of commands whenever you need it</p>
+            <p>(By default, sigmaOS comes with: neofetch - Prints some system information)</p>
+        </div>
+    </div>
+    
+    <div id="settings" class="content">
+        <h1>Settings</h1>
+
+        <div class="section">
+            <h2>NAME</h2>
+            <p>Settings</p>
+        </div>
+
+        <div class="section">
+            <h2>DESCRIPTION</h2>
+            <h4>Synopsis</h4>
+            <p>Lets you customise the look, feel, and workings of sigmaOS</p>
+            <h4>Wallpaper</h4>
+            <p>Click on the file picker to load a picture from your real computer, or choose a solid colour</p>
+        </div>
+    </div>
+
+    <div id="credits" class="content">
+        <h1>Credits</h1>
+
+        <div class="section">
+            <h2>NAME</h2>
+            <p>Credits</p>
+        </div>
+
+        <div class="section">
+            <h2>DESCRIPTION</h2>
+            <h4>External Programs/Assets</h4>
+            <p>Credit to https://prantlf.github.io/web-xeyes/ for xeyes</p>
+            <p>Credit to https://github.com/trapd00r/win95-winxp_icons/ for all icons</p>
+            <p>Credit to https://www.dafont.com/w95fa.font for the Windows 95 inspired font</p>
+            <p>Credit to https://sketchpad.io/sketchpad for SketchPad - and all other external links I may add in the future</p> 
+            <h4>The Rest</h4>
+            <p>Made by Liam (:</p>
+            <p>Thanks for using sigmaOS</p>
+        </div>
+    </div>
+</body>
+</html>
