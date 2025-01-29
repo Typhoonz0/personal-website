@@ -28,14 +28,15 @@ body {
 }
 
 .taskbar button,
-
 #taskbar-clock {
     font-size: 14px;
-    background-color: #0827f5;
+    background-color: #969696;
+    box-shadow: 1px 1px 1px 1px black;
     color: white;
     border: none;
+    outline:1px solid #000000;
     padding: 5px 10px;
-    border-radius: 5px;
+    border-radius: 1px;
     cursor: pointer;
     margin-left: 2px;
     margin-right: 2px;
@@ -48,7 +49,7 @@ body {
     font-size: 16px;
     border: none;
     padding: 15px;
-    border-radius: 5px;
+    border-radius: 1px;
     cursor: pointer;
     width: 100%; /* This makes the button take up the whole width */
     box-sizing: border-box; /* Ensures padding is included in the width */
@@ -56,8 +57,9 @@ body {
 }
 
 
-.taskbar button:hover, #taskbar-clock:hover {
-    background-color: rgba(0, 0, 0, 0.8);
+.taskbar button:active, #taskbar-clock:active {
+    box-shadow: 1px 1px 1px 1px white;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .draggable {
@@ -72,13 +74,13 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     resize: both;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 1px;
     z-index: 10;
 }
 
 .header {
     padding: 10px;
-    background-color: #0827f5;
+    background-color: #000080;
     color: white;
     cursor: grab;
     display: flex;
@@ -98,6 +100,7 @@ body {
 }
 
 .header button {
+    box-shadow: 1px 1px 1px 1px black;
     background: none;
     border: none;
     color: white;
@@ -105,17 +108,40 @@ body {
     font-size: 16px;
 }
 
-.header button:hover {
-    color: #ff4d4d;
+.header .minimize {
+    border-radius: 1px;
+    background-color: #C0C0C0;
 }
 
-.header .maximize:hover {
-    color: #ffd700;
+.header button {
+    color: black;
+    border-radius: 1px;
+    background-color: #C0C0C0;
 }
 
-.header .minimize:hover {
-    color: #00ff00;
+.header .maximize {
+    border-radius: 1px;
+    background-color: #C0C0C0;
 }
+
+.header button:active {
+    box-shadow: 1px 1px 1px 1px white;
+    background-color: rgb(124, 123, 123);
+}
+
+.header .maximize:active {
+    box-shadow: 1px 1px 1px 1px white;
+    background-color: rgb(124, 123, 123);
+}
+
+.header .minimize:active {
+    box-shadow: 1px 1px 1px 1px white;
+    background-color: rgb(124, 123, 123);
+}
+
+
+
+
 
 .hidden {
     display: none;
@@ -131,7 +157,7 @@ body {
     background: #818181;
     padding: 20px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 1px;
 }
 
 #login-screen input {
@@ -139,7 +165,7 @@ body {
     margin: 10px 0;
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 1px;
 }
 
 #login-screen button {
@@ -147,12 +173,12 @@ body {
     background-color: #818181;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 1px;
     cursor: pointer;
 }
 
 #login-screen button:hover {
-    background-color: #0827f5;
+    background-color: #000080;
 }
 #logout-btn {
     width: 200px;
@@ -173,7 +199,7 @@ body {
 #logout-btn button:hover,
 #start-menu button:hover {
     color: white;
-    background-color: #0827f5;
+    background-color: #000080;
 }
 
 #sigmaOS {
