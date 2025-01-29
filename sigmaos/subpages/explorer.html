@@ -86,7 +86,7 @@
     </div>
     <script>
 const fsKey = 'retroTerminalFS';
-let currentPath = ['root'];
+let currentPath = ['/'];
 let selectedItems = new Set();
 let lastClickTime = 0;
 
@@ -94,7 +94,7 @@ let lastClickTime = 0;
 
 function loadFileSystem() {
     const storedFS = localStorage.getItem(fsKey);
-    return storedFS ? JSON.parse(storedFS) : { root: {} };
+    return storedFS ? JSON.parse(storedFS) : { "root": {} };
 }
 
 function saveFileSystem(fs) {
