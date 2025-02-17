@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Arch Install Script by Liam
-set -e
+set -e  # Exit on error
 
 echo "=== Arch Linux Automated Install Script ==="
 echo "Ensure you are in UEFI mode."
 
-# Verify UEFI
+# Verify UEFI mode
 if [[ $(cat /sys/firmware/efi/fw_platform_size) -ne 64 ]]; then
     echo "Error: System is not in UEFI mode. Exiting."
     exit 1
@@ -15,90 +15,67 @@ fi
 # Internet Setup
 echo "=== Setting up Internet ==="
 ip link
-echo "Press ENTER to continue..."
-read
-
-echo "Do you need to connect to Wi-Fi? (yes/no)"
-read WIFI_CHOICE
-if [[ "$WIFI_CHOICE" == "yes" ]]; then
-    iwctl
-    echo "Inside iwctl, type:"
-    echo "station wlan0 get-networks"
-    echo "station wlan0 connect \"Network Name\""
-    echo "Then type 'exit' to continue."
-    iwctl
-fi
+iwctl station wlan0 get-networks || true
+iwctl station wlan0 connect "$(iwctl station wlan0 get-networks | awk 'NR==5 {print $2}')" || true
 
 # Partitioning
 echo "=== Disk Partitioning ==="
 lsblk
-echo "Type the disk you want to partition (e.g., nvme0n1, sda) and press ENTER:"
-read DISK
-cfdisk /dev/$DISK
+echo "Manually partition your disk using cfdisk. Press ENTER when done."
+cfdisk
+echo "=== Partitioning Complete ==="
 
-echo "Press ENTER when partitioning is complete..."
-read
+# Detect Partitions Automatically
+DISK=$(lsblk -dpno NAME | grep -E '/dev/(nvme|sd)')  # Auto-detect main disk
+EFI_PART=$(lsblk -lpno NAME,FSTYPE | grep "vfat" | awk '{print $1}')  # Find EFI partition
+ROOT_PART=$(lsblk -lpno NAME,FSTYPE | grep "ext4" | awk '{print $1}')  # Find root partition
 
-# Ask for partitions
-lsblk
-echo "Enter the EFI partition (e.g., ${DISK}p1 or sda1) and press ENTER:"
-read EFI_PART
-echo "Enter the root partition (e.g., ${DISK}p2 or sda2) and press ENTER:"
-read ROOT_PART
-
-# Format partitions
+# Format Partitions
 echo "=== Formatting Partitions ==="
-mkfs.ext4 /dev/$ROOT_PART
-mount /dev/$ROOT_PART /mnt
+mkfs.ext4 "$ROOT_PART"
+mount "$ROOT_PART" /mnt
 mkdir -p /mnt/boot/efi
 
-echo "Format EFI partition? (yes/no)"
-read FORMAT_EFI
-if [[ "$FORMAT_EFI" == "yes" ]]; then
-    mkfs.fat -F 32 /dev/$EFI_PART
+if [[ -z "$EFI_PART" ]]; then
+    echo "No EFI partition detected, creating one..."
+    EFI_PART="${DISK}p1"
+    mkfs.fat -F 32 "$EFI_PART"
 fi
 
-mount /dev/$EFI_PART /mnt/boot/efi
-
-# Configure Mirrorlist
-echo "=== Configuring Mirrorlist ==="
-reflector --country Australia --latest 5 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+mount "$EFI_PART" /mnt/boot/efi
 
 # Install Base System
 echo "=== Installing Base System ==="
+reflector --country Australia --latest 5 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 pacstrap -K /mnt base grub efibootmgr linux linux-firmware sudo nano neovim firefox gnome networkmanager
 
 # Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 
-# Chroot into Installed System
+# Chroot and Configure System
 arch-chroot /mnt /bin/bash <<EOF
 
-echo "=== Setting Timezone ==="
+echo "=== Configuring System ==="
 ln -sf /usr/share/zoneinfo/Australia/Sydney /etc/localtime
 hwclock --systohc
 
-echo "=== Configuring Locale ==="
+# Configure Locale
 sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
-echo "=== Setting Hostname ==="
-echo "Enter a hostname for your system:"
-read HOSTNAME
-echo "\$HOSTNAME" > /etc/hostname
+# Set Hostname
+echo "archlinux" > /etc/hostname
 
-echo "=== Setting Root Password ==="
-passwd
+# Set Root Password
+echo "root:password" | chpasswd
 
-echo "=== Creating User ==="
-echo "Enter a username:"
-read USERNAME
-useradd -m -G wheel \$USERNAME
-passwd \$USERNAME
+# Create User
+useradd -m -G wheel liam
+echo "liam:password" | chpasswd
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
-echo "=== Configuring Bootloader ==="
+# Configure Bootloader
 mkinitcpio -P
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --modules="tpm" --disable-shim-lock
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -106,6 +83,6 @@ grub-mkconfig -o /boot/grub/grub.cfg
 EOF
 
 # Unmount and Finish
-echo "=== Finishing Installation ==="
+echo "=== Installation Complete ==="
 umount -R /mnt
 echo "Remove installation media and type 'reboot' to finish."
