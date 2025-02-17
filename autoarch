@@ -15,14 +15,16 @@ fi
 # Internet Setup
 echo "=== Setting up Internet ==="
 ip link
-echo "Enter your Wi-Fi network name (leave blank for Ethernet):"
-read WIFI_NAME
+echo "Press ENTER to continue..."
+read
 
-if [[ -n "$WIFI_NAME" ]]; then
+echo "Do you need to connect to Wi-Fi? (yes/no)"
+read WIFI_CHOICE
+if [[ "$WIFI_CHOICE" == "yes" ]]; then
     iwctl
     echo "Inside iwctl, type:"
     echo "station wlan0 get-networks"
-    echo "station wlan0 connect \"$WIFI_NAME\""
+    echo "station wlan0 connect \"Network Name\""
     echo "Then type 'exit' to continue."
     iwctl
 fi
@@ -30,14 +32,18 @@ fi
 # Partitioning
 echo "=== Disk Partitioning ==="
 lsblk
-echo "Enter the disk you want to partition (e.g., nvme0n1, sda):"
+echo "Type the disk you want to partition (e.g., nvme0n1, sda) and press ENTER:"
 read DISK
 cfdisk /dev/$DISK
 
+echo "Press ENTER when partitioning is complete..."
+read
+
 # Ask for partitions
-echo "Enter the EFI partition (e.g., ${DISK}p1 or sda1):"
+lsblk
+echo "Enter the EFI partition (e.g., ${DISK}p1 or sda1) and press ENTER:"
 read EFI_PART
-echo "Enter the root partition (e.g., ${DISK}p2 or sda2):"
+echo "Enter the root partition (e.g., ${DISK}p2 or sda2) and press ENTER:"
 read ROOT_PART
 
 # Format partitions
