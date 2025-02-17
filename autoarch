@@ -1,0 +1,113 @@
+#!/bin/bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Function to prompt for user input with a default value
+prompt() {
+    local PROMPT_TEXT=$1
+    local DEFAULT_VALUE=$2
+    read -p "$PROMPT_TEXT [$DEFAULT_VALUE]: " INPUT
+    echo "${INPUT:-$DEFAULT_VALUE}"
+}
+
+# Prompting for necessary information
+DISK=$(prompt "Enter the disk to install Arch Linux on (e.g., /dev/sda)" "/dev/sda")
+HOSTNAME=$(prompt "Enter the hostname for this installation" "archlinux")
+LOCALE=$(prompt "Enter the locale" "en_US.UTF-8")
+TIMEZONE=$(prompt "Enter the timezone" "Europe/Berlin")
+USERNAME=$(prompt "Enter the username for the new user" "user")
+
+# Prompting for passwords
+read -s -p "Enter password for $USERNAME: " USER_PASSWORD
+echo
+read -s -p "Confirm password: " USER_PASSWORD_CONFIRM
+echo
+if [ "$USER_PASSWORD" != "$USER_PASSWORD_CONFIRM" ]; then
+    echo "Passwords do not match."
+    exit 1
+fi
+
+# Updating system clock
+timedatectl set-ntp true
+
+# Partitioning the disk
+echo "Partitioning the disk..."
+(
+echo g # Create a new GPT partition table
+echo n # New partition
+echo   # Default partition number
+echo   # Default first sector
+echo +512M # 512MB EFI System Partition
+echo t # Change partition type
+echo 1 # EFI System
+echo n # New partition
+echo   # Default partition number
+echo   # Default first sector
+echo   # Default last sector (use rest of the disk)
+echo w # Write changes
+) | fdisk $DISK
+
+# Formatting partitions
+echo "Formatting partitions..."
+mkfs.fat -F32 "${DISK}1"
+mkfs.ext4 "${DISK}2"
+
+# Mounting partitions
+echo "Mounting partitions..."
+mount "${DISK}2" /mnt
+mkdir /mnt/boot
+mount "${DISK}1" /mnt/boot
+
+# Installing essential packages
+echo "Installing essential packages..."
+pacstrap /mnt base linux linux-firmware
+
+# Generating fstab
+echo "Generating fstab..."
+genfstab -U /mnt >> /mnt/etc/fstab
+
+# Chrooting into the new system
+echo "Entering chroot environment..."
+arch-chroot /mnt /bin/bash <<EOF
+
+# Setting timezone
+ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
+hwclock --systohc
+
+# Setting locale
+echo "$LOCALE UTF-8" >> /etc/locale.gen
+locale-gen
+echo "LANG=$LOCALE" > /etc/locale.conf
+
+# Setting hostname
+echo "$HOSTNAME" > /etc/hostname
+echo "127.0.0.1   localhost" >> /etc/hosts
+echo "::1         localhost" >> /etc/hosts
+echo "127.0.1.1   $HOSTNAME.localdomain $HOSTNAME" >> /etc/hosts
+
+# Setting root password
+echo "Set root password:"
+passwd
+
+# Creating new user
+useradd -m -G wheel -s /bin/bash $USERNAME
+echo "$USERNAME:$USER_PASSWORD" | chpasswd
+
+# Configuring sudoers
+echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
+
+# Installing and configuring bootloader
+pacman --noconfirm -S grub efibootmgr
+mkdir /boot/EFI
+mount "${DISK}1" /boot/EFI
+grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg
+
+EOF
+
+# Unmounting partitions
+echo "Unmounting partitions..."
+umount -R /mnt
+
+echo "Installation complete. You can now reboot."
