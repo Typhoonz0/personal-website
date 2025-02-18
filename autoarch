@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Arch Install Script by Liam
+# set -e  # Exit on error
 
 clear
 
@@ -124,13 +125,13 @@ echo "Finding the best mirrors..."
 country=${timezone%%/*}
 reflector --country $country --latest 5 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 clear 
-echo <<EOF
-This install script comes with the following packages:
-base linux linux-firmware grub efibootmgr sudo nano networkmanager
-Any additional packages? Space seperated, no commas. There is no check if the packages exist so type carefully.
-e.g: firefox vim gnome pulseaudio bluez
-Or hit ENTER to skip.
-EOF
+echo
+echo "This install script comes with the following packages:"
+echo "base linux linux-firmware grub efibootmgr sudo nano networkmanager"
+echo "This will leave you with a working computer, but you will certainly need more apps to be productive."
+echo "Any additional packages? Space seperated, no commas. There is no check if the packages exist so type carefully."
+echo "e.g: firefox vim gnome pulseaudio bluez"
+echo "Or hit ENTER to skip."
 prompt
 read additional
 pacstrap -K /mnt base grub efibootmgr linux linux-firmware sudo nano networkmanager $additional
