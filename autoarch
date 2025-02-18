@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Arch Install Script by Liam
-# set -e  # Exit on error
 
 clear
 
@@ -13,10 +12,10 @@ cat <<EOF
 ██╔══██║██║   ██║   ██║   ██║   ██║██╔══██║██╔══██╗██║     ██╔══██║
 ██║  ██║╚██████╔╝   ██║   ╚██████╔╝██║  ██║██║  ██║╚██████╗██║  ██║
 ╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
+        === Arch Linux Automated Install Script ===
 
 EOF
 
-echo "=== Arch Linux Automated Install Script ==="
 
 if [[ $(cat /sys/firmware/efi/fw_platform_size) -ne 64 ]]; then
     echo "Error: System is not in UEFI mode. Exiting."
@@ -27,13 +26,10 @@ prompt() {
     echo -ne "[\e[31m$usr\e[0m@\e[32mautoarch\e[0m] \e[36m$\e[0m "
 }
 
-echo "Press <ENTER> to continue"
-read now
-
 echo "These questions apply to the new setup system, not any current systems you may have."
 
 echo "Your username? "
-echo -ne "[\e[31muser\e[0m@\e[32mautoarch\e[0m] \e[36m$\e[0m "
+echo -ne "[\e[31muser\e[0m@\e[32mautoarch\e[0m] \e[36m$\e[0m \r"
 read usr
 
 echo "Your computer's hostname? "
@@ -74,7 +70,7 @@ read DISK
 echo "You are going to manually partition your disk using cfdisk. Type 'help' WITHOUT QUOTES if you need it, otherwise just press ENTER."
 read A
 
-if [[ "$A" == "help" ]]; then
+if [[ "$input" == "help" ]]; then
     echo "If you plan to only use Linux:"
     echo "Create a 250m partition and change the type to EFI system, then use the remaining space to create a Linux Filesystem partition."
     echo "If you plan to use Linux alongside something else:"
@@ -128,12 +124,13 @@ echo "Finding the best mirrors..."
 country=${timezone%%/*}
 reflector --country $country --latest 5 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 clear 
-echo 
-echo "This install script comes with the following packages:"
-echo "base linux linux-firmware grub efibootmgr sudo nano networkmanager"
-echo "Any additional packages? Space seperated, no commas. There is no check if the packages exist so type carefully."
-echo "e.g: firefox vim gnome pulseaudio bluez"
-echo "Or hit ENTER to skip."
+echo <<EOF
+This install script comes with the following packages:
+base linux linux-firmware grub efibootmgr sudo nano networkmanager
+Any additional packages? Space seperated, no commas. There is no check if the packages exist so type carefully.
+e.g: firefox vim gnome pulseaudio bluez
+Or hit ENTER to skip.
+EOF
 prompt
 read additional
 pacstrap -K /mnt base grub efibootmgr linux linux-firmware sudo nano networkmanager $additional
@@ -170,7 +167,31 @@ EOF
 # Unmount and Finish
 clear 
 
+cat <<EOF > /home/$usr/POSTINSTALL.txt
+After Installation:
+
+I have no internet?
+Type sudo systemctl enable --now NetworkManager to enable the network utility, then use the settings app on your computer to connect, or alternatively, type nmcli into the command line.
+
+How do I install apps?
+Apps on Linux are called packages, and you install them on the command line through a package manager.
+Arch Linux uses the pacman package manager.
+Type sudo pacman -S <package> to install a package.
+
+How do I remove apps?
+Type sudo pacman -R <package>.
+
+How do I update my computer?
+Type sudo pacman -Syu.
+
+I'm still in a black box? 
+Install a graphical enviroment such as plasma-desktop or gnome.
+
+thanks for using autoarch - liam
+EOF
+
 cat <<EOF
+Thanks for using...
 
  █████╗ ██╗   ██╗████████╗ ██████╗  █████╗ ██████╗  ██████╗██╗  ██╗
 ██╔══██╗██║   ██║╚══██╔══╝██╔═══██╗██╔══██╗██╔══██╗██╔════╝██║  ██║
@@ -185,3 +206,4 @@ EOF
 echo "=== Installation Complete ==="
 umount -R /mnt
 echo "Remove installation media and type 'reboot' to finish."
+echo "After rebooting, cat /home/$usr/POSTINSTALL.txt for instructions after the installation."
