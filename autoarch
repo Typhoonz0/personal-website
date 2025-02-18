@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Arch Install Script by Liam
-set -e  # Exit on error
+# set -e  # Exit on error
 
 clear
 echo "=== Arch Linux Automated Install Script ==="
@@ -56,10 +56,27 @@ fi
 
 mount "$EFI_PART" /mnt/boot/efi
 
-# Install Base System
+PACMAN_CONF="/etc/pacman.conf"
+
+if [[ ! -f "$PACMAN_CONF" ]]; then
+    echo "Error: $PACMAN_CONF not found!"
+    exit 1
+fi
+
+cp "$PACMAN_CONF" "${PACMAN_CONF}.bak"
+
+sed -i 's/^SigLevel = Required DatabaseOptional/SigLevel = Never/' "$PACMAN_CONF"
+
+if grep -q "SigLevel = Never" "$PACMAN_CONF"; then
+    echo 
+else
+    echo "Failed to change SigLevel."
+fi
+
+
 echo "=== Installing Base System ==="
 reflector --country Australia --latest 5 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-pacstrap -K /mnt base grub efibootmgr linux linux-firmware sudo nano neovim firefox gnome networkmanager
+pacstrap -K /mnt base grub efibootmgr linux linux-firmware sudo nano bash networkmanager
 
 # Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
