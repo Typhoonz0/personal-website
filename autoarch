@@ -12,6 +12,18 @@ if [[ $(cat /sys/firmware/efi/fw_platform_size) -ne 64 ]]; then
     exit 1
 fi
 
+echo "USERNAME?"
+read usr
+
+echo "COMPUTERS NAME?"
+read hostnm
+
+echo "ROOT PASSWORD?"
+read rootps
+
+echo "USER (sudo) PASSWORD?"
+read userps
+
 clear
 # Internet Setup
 echo "=== Setting up Internet ==="
@@ -87,7 +99,7 @@ pacstrap -K /mnt base grub efibootmgr linux linux-firmware sudo nano bash networ
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # Chroot and Configure System
-arch-chroot /mnt /bin/bash 
+arch-chroot /mnt /bin/bash <<EOF
 
 echo "=== Configuring System ==="
 ln -sf /usr/share/zoneinfo/Australia/Sydney /etc/localtime
@@ -97,19 +109,13 @@ sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
-echo "COMPUTERS NAME?"
-read hostnm
 echo "$hostnm" > /etc/hostname
 
-echo "ROOT PASSWORD?"
-read rootps
 echo "root:$rootps" | chpasswd
 
-echo "USERNAME?"
-read usr
+
 useradd -m -G wheel $usr
-echo "USER (sudo) PASSWORD?"
-read userps
+
 echo "liam:$userps" | chpasswd
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
@@ -118,6 +124,7 @@ mkinitcpio -P
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --modules="tpm" --disable-shim-lock
 grub-mkconfig -o /boot/grub/grub.cfg
 
+EOF
 # Unmount and Finish
 echo "=== Installation Complete ==="
 umount -R /mnt
