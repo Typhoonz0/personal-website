@@ -1,3 +1,88 @@
 #!/bin/bash
 
-read -p "test? "
+# Arch Install Script by Liam
+set -e  # Exit on error
+
+echo "=== Arch Linux Automated Install Script ==="
+echo "Ensure you are in UEFI mode."
+
+# Verify UEFI mode
+if [[ $(cat /sys/firmware/efi/fw_platform_size) -ne 64 ]]; then
+    echo "Error: System is not in UEFI mode. Exiting."
+    exit 1
+fi
+
+# Internet Setup
+echo "=== Setting up Internet ==="
+ip link
+iwctl station wlan0 get-networks || true
+iwctl station wlan0 connect "$(iwctl station wlan0 get-networks | awk 'NR==5 {print $2}')" || true
+
+# Partitioning
+echo "=== Disk Partitioning ==="
+lsblk
+echo "Manually partition your disk using cfdisk. Press ENTER when done."
+cfdisk
+echo "=== Partitioning Complete ==="
+
+# Detect Partitions Automatically
+DISK=$(lsblk -dpno NAME | grep -E '/dev/(nvme|sd)')  # Auto-detect main disk
+EFI_PART=$(lsblk -lpno NAME,FSTYPE | grep "vfat" | awk '{print $1}')  # Find EFI partition
+ROOT_PART=$(lsblk -lpno NAME,FSTYPE | grep "ext4" | awk '{print $1}')  # Find root partition
+
+# Format Partitions
+echo "=== Formatting Partitions ==="
+mkfs.ext4 "$ROOT_PART"
+mount "$ROOT_PART" /mnt
+mkdir -p /mnt/boot/efi
+
+if [[ -z "$EFI_PART" ]]; then
+    echo "No EFI partition detected, creating one..."
+    EFI_PART="${DISK}p1"
+    mkfs.fat -F 32 "$EFI_PART"
+fi
+
+mount "$EFI_PART" /mnt/boot/efi
+
+# Install Base System
+echo "=== Installing Base System ==="
+reflector --country Australia --latest 5 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+pacstrap -K /mnt base grub efibootmgr linux linux-firmware sudo nano neovim firefox gnome networkmanager
+
+# Generate fstab
+genfstab -U /mnt >> /mnt/etc/fstab
+
+# Chroot and Configure System
+arch-chroot /mnt /bin/bash <<EOF
+
+echo "=== Configuring System ==="
+ln -sf /usr/share/zoneinfo/Australia/Sydney /etc/localtime
+hwclock --systohc
+
+# Configure Locale
+sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+locale-gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+
+# Set Hostname
+echo "archlinux" > /etc/hostname
+
+# Set Root Password
+echo "root:password" | chpasswd
+
+# Create User
+useradd -m -G wheel liam
+echo "liam:password" | chpasswd
+sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+
+# Configure Bootloader
+mkinitcpio -P
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --modules="tpm" --disable-shim-lock
+grub-mkconfig -o /boot/grub/grub.cfg
+
+EOF
+
+# Unmount and Finish
+echo "=== Installation Complete ==="
+umount -R /mnt
+echo "Remove installation media and type 'reboot' to finish."
