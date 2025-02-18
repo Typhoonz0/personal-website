@@ -72,6 +72,7 @@ echo "Choose the DISK (vda, sda, nvme0n1 etc.) you wish to install Arch on."
 prompt
 read DISK
 echo "You are going to manually partition your disk using cfdisk. Type 'help' WITHOUT QUOTES if you need it, otherwise just press ENTER."
+echo "Choose the gpt table option if it asks you."
 read A
 
 if [[ "$A" == "help" ]]; then
