@@ -24,12 +24,13 @@ lsblk
 echo "Manually partition your disk using cfdisk. Press ENTER when done."
 cfdisk
 echo "=== Partitioning Complete ==="
-
-# Detect Partitions Automatically
-DISK=$(lsblk -dpno NAME | grep -E '/dev/(nvme|sd)')  # Auto-detect main disk
-EFI_PART=$(lsblk -lpno NAME,FSTYPE | grep "vfat" | awk '{print $1}')  # Find EFI partition
-ROOT_PART=$(lsblk -lpno NAME,FSTYPE | grep "ext4" | awk '{print $1}')  # Find root partition
-
+lsblk
+echo "DISK?"
+read DISK
+echo "EFI PART?"
+read EFI_PART
+echo "ROOT PART?"
+read ROOT_PART
 # Format Partitions
 echo "=== Formatting Partitions ==="
 mkfs.ext4 "$ROOT_PART"
@@ -38,7 +39,7 @@ mkdir -p /mnt/boot/efi
 
 if [[ -z "$EFI_PART" ]]; then
     echo "No EFI partition detected, creating one..."
-    EFI_PART="${DISK}p1"
+    EFI_PART="${DISK}1"
     mkfs.fat -F 32 "$EFI_PART"
 fi
 
