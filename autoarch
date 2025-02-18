@@ -4,29 +4,62 @@
 # set -e  # Exit on error
 
 clear
+
+cat <<EOF
+
+ █████╗ ██╗   ██╗████████╗ ██████╗  █████╗ ██████╗  ██████╗██╗  ██╗
+██╔══██╗██║   ██║╚══██╔══╝██╔═══██╗██╔══██╗██╔══██╗██╔════╝██║  ██║
+███████║██║   ██║   ██║   ██║   ██║███████║██████╔╝██║     ███████║
+██╔══██║██║   ██║   ██║   ██║   ██║██╔══██║██╔══██╗██║     ██╔══██║
+██║  ██║╚██████╔╝   ██║   ╚██████╔╝██║  ██║██║  ██║╚██████╗██║  ██║
+╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
+
+EOF
+
 echo "=== Arch Linux Automated Install Script ==="
 
-# Verify UEFI mode
 if [[ $(cat /sys/firmware/efi/fw_platform_size) -ne 64 ]]; then
     echo "Error: System is not in UEFI mode. Exiting."
     exit 1
 fi
 
-echo "USERNAME?"
+prompt() {
+    echo -ne "[\e[31m$usr\e[0m@\e[32mautoarch\e[0m] \e[36m$\e[0m "
+}
+
+echo "Press <ENTER> to continue"
+read now
+
+echo "These questions apply to the new setup system, not any current systems you may have."
+
+echo "Your username? "
+echo -ne "[\e[31muser\e[0m@\e[32mautoarch\e[0m] \e[36m$\e[0m \r"
 read usr
 
-echo "COMPUTERS NAME?"
+echo "Your computer's hostname? "
+prompt
 read hostnm
 
-echo "ROOT PASSWORD?"
+echo "Your user's password (sudo)? "
+prompt
+read userps
+
+echo "Your root password (su root)? "
+prompt
 read rootps
 
-echo "USER (sudo) PASSWORD?"
-read userps
+echo "Your locale (Type 'en_US.UTF-8 UTF-8' WITHOUT QUOTES if you are unsure)? "
+prompt
+read locale
+
+echo "Your timezone (e.g. Australia/Sydney, Europe/Amsterdam etc)? "
+prompt
+read timezone
 
 clear
 # Internet Setup
 echo "=== Setting up Internet ==="
+echo "If you downloaded this script over cURL, you wont need this but it does not matter and we will just skip over it."
 ip link
 iwctl station wlan0 get-networks || true
 iwctl station wlan0 connect "$(iwctl station wlan0 get-networks | awk 'NR==5 {print $2}')" || true
@@ -35,34 +68,45 @@ clear
 # Partitioning
 echo "=== Disk Partitioning ==="
 lsblk
-echo "Manually partition your disk using cfdisk. Press ENTER when you are ready."
-read A
-cfdisk
-echo "=== Partitioning Complete ==="
-lsblk
-echo "Above are all your disks. What is the DISK that you want to use? (e.g. vda, sda, nvme0n1 etc)" 
-echo "DISK?"
+echo "Choose the DISK (vda, sda, nvme0n1 etc.) you wish to install Arch on."
+prompt
 read DISK
-DISK="/dev/$DISK"
+echo "You are going to manually partition your disk using cfdisk. Type 'help' WITHOUT QUOTES if you need it, otherwise just press ENTER."
+read A
 
-echo "EFI PARTITION? (e.g. vda1, sda1, nvme0n1p1 etc)"
+if [[ "$input" == "help" ]]; then
+    echo "If you plan to only use Linux:"
+    echo "Create a 250m partition and change the type to EFI system, then use the remaining space to create a Linux Filesystem partition."
+    echo "If you plan to use Linux alongside something else:"
+    echo "Shrink a partition of your choice (choose the largest if unsure) then in the new space, create a Linux Filesystem partition."
+    echo "If you need more info than this, google 'cfdisk tutorial'"
+    echo "Press ENTER to continue."
+    read A
+fi
+cfdisk /dev/$DISK
+echo "=== Partitioning Complete ==="
+sleep 1
+lsblk
+echo "EFI PARTITION? (e.g. vda1, sda1, nvme0n1p1 etc) "
+prompt
 read EFI_PART
 EFI_PART="/dev/$EFI_PART"
 
-echo "ROOT PARTITION? (e.g. vda2, sda2, nvme0n1p2 etc)"
+echo "ROOT PARTITION? (e.g. vda2, sda2, nvme0n1p2 etc) "
+prompt
 read ROOT_PART
 ROOT_PART="/dev/$ROOT_PART"
 
-# Format Partitions
 echo "=== Formatting Partitions ==="
 mkfs.ext4 "$ROOT_PART"
 mount "$ROOT_PART" /mnt
 mkdir -p /mnt/boot/efi
-echo "Do you want to keep other bootloaders (Windows etc.) (y/n)?"
+echo "Do you want to keep other bootloaders (Windows etc.) (y/n)? "
+prompt
 read CHOOSE
+
 if [[ "$CHOOSE" == "n" || "$CHOOSE" == "N" ]]; then
-    echo "No EFI partition detected, creating one..."
-    EFI_PART="${DISK}1"
+    echo "User has chosen to format $EFI_PART"
     mkfs.fat -F 32 "$EFI_PART"
 fi
 
@@ -70,53 +114,52 @@ mount "$EFI_PART" /mnt/boot/efi
 
 PACMAN_CONF="/etc/pacman.conf"
 
-# Verify the file exists
-if [[ ! -f "$PACMAN_CONF" ]]; then
-    echo "Error: $PACMAN_CONF not found!"
-    exit 1
-fi
-
-# Backup the original file
-cp "$PACMAN_CONF" "${PACMAN_CONF}.bak"
-echo "Backup created at ${PACMAN_CONF}.bak"
-
-# Replace any line starting with 'SigLevel' with 'SigLevel = Never'
 sed -i '/^SigLevel/c\SigLevel = Never' "$PACMAN_CONF"
 
-# Verify the change
 if grep -q "^SigLevel = Never" "$PACMAN_CONF"; then
-    echo "Successfully replaced the SigLevel line with 'SigLevel = Never'."
+    echo 
 else
     echo "Failed to modify the SigLevel line in $PACMAN_CONF."
 fi
-
+clear 
 
 echo "=== Installing Base System ==="
-reflector --country Australia --latest 5 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-pacstrap -K /mnt base grub efibootmgr linux linux-firmware sudo nano bash networkmanager
+echo "Finding the best mirrors..."
+country=${timezone%%/*}
+reflector --country $country --latest 5 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+clear 
+echo <<EOF
+This install script comes with the following packages:
+base linux linux-firmware grub efibootmgr sudo nano networkmanager
+Any additional packages? Space seperated, no commas. There is no check if the packages exist so type carefully.
+e.g: firefox vim gnome pulseaudio bluez
+Or hit ENTER to skip.
+EOF
+prompt
+read additional
+pacstrap -K /mnt base grub efibootmgr linux linux-firmware sudo nano networkmanager $additional
 
 # Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # Chroot and Configure System
 arch-chroot /mnt /bin/bash <<EOF
-
 echo "=== Configuring System ==="
-ln -sf /usr/share/zoneinfo/Australia/Sydney /etc/localtime
+ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
 hwclock --systohc
 
-sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+sed -i 's/#$locale/$locale/' /etc/locale.gen
 locale-gen
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
+
+localetwo=${locale%% *}
+
+echo "LANG=$localetwo" > /etc/locale.conf
 
 echo "$hostnm" > /etc/hostname
-
 echo "root:$rootps" | chpasswd
-
-
 useradd -m -G wheel $usr
 
-echo "liam:$userps" | chpasswd
+echo "$usr:$userps" | chpasswd
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 # Configure Bootloader
@@ -126,6 +169,20 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 EOF
 # Unmount and Finish
+clear 
+
+cat <<EOF
+
+ █████╗ ██╗   ██╗████████╗ ██████╗  █████╗ ██████╗  ██████╗██╗  ██╗
+██╔══██╗██║   ██║╚══██╔══╝██╔═══██╗██╔══██╗██╔══██╗██╔════╝██║  ██║
+███████║██║   ██║   ██║   ██║   ██║███████║██████╔╝██║     ███████║
+██╔══██║██║   ██║   ██║   ██║   ██║██╔══██║██╔══██╗██║     ██╔══██║
+██║  ██║╚██████╔╝   ██║   ╚██████╔╝██║  ██║██║  ██║╚██████╗██║  ██║
+╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
+
+EOF
+
+
 echo "=== Installation Complete ==="
 umount -R /mnt
 echo "Remove installation media and type 'reboot' to finish."
