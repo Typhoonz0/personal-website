@@ -3,8 +3,8 @@
 # Arch Install Script by Liam
 set -e  # Exit on error
 
+clear
 echo "=== Arch Linux Automated Install Script ==="
-echo "Ensure you are in UEFI mode."
 
 # Verify UEFI mode
 if [[ $(cat /sys/firmware/efi/fw_platform_size) -ne 64 ]]; then
@@ -12,32 +12,43 @@ if [[ $(cat /sys/firmware/efi/fw_platform_size) -ne 64 ]]; then
     exit 1
 fi
 
+clear
 # Internet Setup
 echo "=== Setting up Internet ==="
 ip link
 iwctl station wlan0 get-networks || true
 iwctl station wlan0 connect "$(iwctl station wlan0 get-networks | awk 'NR==5 {print $2}')" || true
 
+clear
 # Partitioning
 echo "=== Disk Partitioning ==="
 lsblk
-echo "Manually partition your disk using cfdisk. Press ENTER when done."
+echo "Manually partition your disk using cfdisk. Press ENTER when you are ready."
+read A
 cfdisk
 echo "=== Partitioning Complete ==="
 lsblk
+echo "Above are all your disks. What is the DISK that you want to use? (e.g. vda, sda, nvme0n1 etc)" 
 echo "DISK?"
 read DISK
-echo "EFI PART?"
+DISK="/dev/$DISK"
+
+echo "EFI PARTITION? (e.g. vda1, sda1, nvme0n1p1 etc)"
 read EFI_PART
-echo "ROOT PART?"
+EFI_PART="/dev/$EFI_PART"
+
+echo "ROOT PARTITION? (e.g. vda2, sda2, nvme0n1p2 etc)"
 read ROOT_PART
+ROOT_PART="/dev/$ROOT_PART"
+
 # Format Partitions
 echo "=== Formatting Partitions ==="
 mkfs.ext4 "$ROOT_PART"
 mount "$ROOT_PART" /mnt
 mkdir -p /mnt/boot/efi
-
-if [[ -z "$EFI_PART" ]]; then
+echo "Do you want to keep other bootloaders (Windows etc.) (y/n)?"
+read CHOOSE
+if [[ "$CHOOSE" == "n" || "$CHOOSE" == "N" ]]; then
     echo "No EFI partition detected, creating one..."
     EFI_PART="${DISK}1"
     mkfs.fat -F 32 "$EFI_PART"
@@ -60,20 +71,24 @@ echo "=== Configuring System ==="
 ln -sf /usr/share/zoneinfo/Australia/Sydney /etc/localtime
 hwclock --systohc
 
-# Configure Locale
 sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
-# Set Hostname
-echo "archlinux" > /etc/hostname
+echo "COMPUTERS NAME?"
+read hostnm
+echo "$hostnm" > /etc/hostname
 
-# Set Root Password
-echo "root:password" | chpasswd
+echo "ROOT PASSWORD?"
+read rootps
+echo "root:$rootps" | chpasswd
 
-# Create User
-useradd -m -G wheel liam
-echo "liam:password" | chpasswd
+echo "USERNAME?"
+read usr
+useradd -m -G wheel $usr
+echo "USER (sudo) PASSWORD?"
+read userps
+echo "liam:$userps" | chpasswd
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 # Configure Bootloader
