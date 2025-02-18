@@ -56,7 +56,7 @@ fi
 
 mount "$EFI_PART" /mnt/boot/efi
 
-PACMAN_CONF = "/etc/pacman.conf"
+PACMAN_CONF="/etc/pacman.conf"
 
 # Verify the file exists
 if [[ ! -f "$PACMAN_CONF" ]]; then
