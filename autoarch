@@ -139,7 +139,7 @@ echo "This install script comes with the following packages:"
 echo "base linux linux-firmware grub efibootmgr sudo nano networkmanager"
 echo "This will leave you with a working computer, but you will certainly need more apps to be productive."
 echo "Any additional packages? Space seperated, no commas. There is no check if the packages exist so type carefully."
-echo "e.g: firefox vim gnome pulseaudio bluez"
+echo "e.g: firefox vim pulseaudio bluez"
 echo "Or hit ENTER to skip."
 prompt
 read additionaltw
