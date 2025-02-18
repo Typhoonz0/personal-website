@@ -1,88 +1,97 @@
 #!/bin/bash
 
-# Arch Install Script by Liam
-set -e  # Exit on error
+# Function to prompt for user confirmation
+prompt_confirmation() {
+    read -p "$1 (y/n): " response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+        echo "Operation aborted."
+        exit 1
+    fi
+}
 
-echo "=== Arch Linux Automated Install Script ==="
-echo "Ensure you are in UEFI mode."
+# Prompt user to confirm the start of the installation
+prompt_confirmation "This script will guide you through the Arch Linux installation process. Do you want to continue?"
 
-# Verify UEFI mode
-if [[ $(cat /sys/firmware/efi/fw_platform_size) -ne 64 ]]; then
-    echo "Error: System is not in UEFI mode. Exiting."
-    exit 1
-fi
-
-# Internet Setup
-echo "=== Setting up Internet ==="
-ip link
-iwctl station wlan0 get-networks || true
-iwctl station wlan0 connect "$(iwctl station wlan0 get-networks | awk 'NR==5 {print $2}')" || true
-
-# Partitioning
-echo "=== Disk Partitioning ==="
-lsblk
-echo "Manually partition your disk using cfdisk. Press ENTER when done."
+# Launch cfdisk for manual partitioning
+echo "Launching cfdisk for manual partitioning..."
 cfdisk
-echo "=== Partitioning Complete ==="
 
-# Detect Partitions Automatically
-DISK=$(lsblk -dpno NAME | grep -E '/dev/(nvme|sd)')  # Auto-detect main disk
-EFI_PART=$(lsblk -lpno NAME,FSTYPE | grep "vfat" | awk '{print $1}')  # Find EFI partition
-ROOT_PART=$(lsblk -lpno NAME,FSTYPE | grep "ext4" | awk '{print $1}')  # Find root partition
+# Prompt user to confirm partitioning
+prompt_confirmation "Have you completed partitioning with cfdisk and are ready to proceed?"
 
-# Format Partitions
-echo "=== Formatting Partitions ==="
-mkfs.ext4 "$ROOT_PART"
-mount "$ROOT_PART" /mnt
-mkdir -p /mnt/boot/efi
+# Prompt user to specify the root partition
+read -p "Enter the device name of the root partition (e.g., /dev/sda1): " root_partition
 
-if [[ -z "$EFI_PART" ]]; then
-    echo "No EFI partition detected, creating one..."
-    EFI_PART="${DISK}p1"
-    mkfs.fat -F 32 "$EFI_PART"
+# Format the root partition
+echo "Formatting the root partition..."
+mkfs.ext4 "$root_partition"
+
+# Prompt user to specify the EFI partition (if applicable)
+read -p "Enter the device name of the EFI partition (e.g., /dev/sda2) or press Enter to skip: " efi_partition
+
+if [ -n "$efi_partition" ]; then
+    # Format the EFI partition
+    echo "Formatting the EFI partition..."
+    mkfs.fat -F32 "$efi_partition"
 fi
 
-mount "$EFI_PART" /mnt/boot/efi
+# Mount the root partition
+echo "Mounting the root partition..."
+mount "$root_partition" /mnt
 
-# Install Base System
-echo "=== Installing Base System ==="
-reflector --country Australia --latest 5 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-pacstrap -K /mnt base grub efibootmgr linux linux-firmware sudo nano neovim firefox gnome networkmanager
+if [ -n "$efi_partition" ]; then
+    # Create EFI mount point and mount the EFI partition
+    echo "Creating EFI mount point and mounting the EFI partition..."
+    mkdir -p /mnt/boot/efi
+    mount "$efi_partition" /mnt/boot/efi
+fi
+
+# Install the base system
+echo "Installing the base system..."
+pacstrap /mnt base linux linux-firmware
 
 # Generate fstab
+echo "Generating fstab..."
 genfstab -U /mnt >> /mnt/etc/fstab
 
-# Chroot and Configure System
+# Chroot into the new system
+echo "Chrooting into the new system..."
 arch-chroot /mnt /bin/bash <<EOF
-
-echo "=== Configuring System ==="
-ln -sf /usr/share/zoneinfo/Australia/Sydney /etc/localtime
+# Set the timezone
+echo "Setting the timezone..."
+ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 hwclock --systohc
 
-# Configure Locale
-sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+# Set the locale
+echo "Setting the locale..."
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
-# Set Hostname
-echo "archlinux" > /etc/hostname
+# Set the hostname
+read -p "Enter the hostname: " hostname
+echo "$hostname" > /etc/hostname
 
-# Set Root Password
-echo "root:password" | chpasswd
+# Configure hosts file
+cat <<EOL > /etc/hosts
+127.0.0.1    localhost
+::1          localhost
+127.0.1.1    $hostname.localdomain    $hostname
+EOL
 
-# Create User
-useradd -m -G wheel liam
-echo "liam:password" | chpasswd
-sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+# Set the root password
+echo "Setting the root password..."
+passwd
 
-# Configure Bootloader
-mkinitcpio -P
-grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --modules="tpm" --disable-shim-lock
+# Install and configure the bootloader
+echo "Installing and configuring the bootloader..."
+pacman -S --noconfirm grub
+grub-install --target=i386-pc /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
 
 EOF
 
-# Unmount and Finish
-echo "=== Installation Complete ==="
+# Unmount and reboot
+echo "Unmounting and rebooting..."
 umount -R /mnt
-echo "Remove installation media and type 'reboot' to finish."
+reboot
