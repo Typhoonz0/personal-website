@@ -1,10 +1,6 @@
 #!/bin/bash
 
-# Arch Install Script by Liam
-# set -e  # Exit on error
-
 clear
-
 cat <<EOF
 
  █████╗ ██╗   ██╗████████╗ ██████╗  █████╗ ██████╗  ██████╗██╗  ██╗
@@ -27,10 +23,8 @@ prompt() {
     echo -ne "[\e[31m$usr\e[0m@\e[32mautoarch\e[0m] \e[36m$\e[0m "
 }
 
-echo "These questions apply to the new setup system, not any current systems you may have."
-
 echo "Your username? "
-echo -ne "[\e[31muser\e[0m@\e[32mautoarch\e[0m] \e[36m$\e[0m \r"
+echo -ne "[\e[31muser\e[0m@\e[32mautoarch\e[0m] \e[36m$\e[0m"
 read usr
 
 echo "Your computer's hostname? "
@@ -49,17 +43,26 @@ echo "Your locale (Type 'en_US.UTF-8 UTF-8' WITHOUT QUOTES if you are unsure)? "
 prompt
 read locale
 
-echo "Your timezone (e.g. Australia/Sydney, Europe/Amsterdam, UTC, etc)? "
+echo "Your timezone (e.g. UTC, Canada/Vancouver, Australia/Sydney, Europe/Amsterdam, etc)? "
 prompt
 read timezone
 
 clear
-# Internet Setup
 echo "=== Setting up Internet ==="
-echo "If you downloaded this script over cURL, you wont need this but it does not matter and we will just skip over it."
-ip link
-iwctl station wlan0 get-networks || true
-iwctl station wlan0 connect "$(iwctl station wlan0 get-networks | awk 'NR==5 {print $2}')" || true
+
+if ping -c 1 -W 2 8.8.8.8 >/dev/null 2>&1; then
+    echo "Internet is available, proceeding"
+else
+    ip link
+    echo "Choose the network interface you wish to use (choose wlan0 if it is above and you are unsure)?"
+    prompt
+    read ifce
+    iwctl station $ifce get-networks
+    echo "Choose the network to connect above?"
+    prompt
+    read networkname
+    iwctl station $ifce connect $networkname
+fi
 
 clear
 # Partitioning
@@ -71,7 +74,7 @@ read DISK
 echo "You are going to manually partition your disk using cfdisk. Type 'help' WITHOUT QUOTES if you need it, otherwise just press ENTER."
 read A
 
-if [[ "$input" == "help" ]]; then
+if [[ "$A" == "help" ]]; then
     echo "If you plan to only use Linux:"
     echo "Create a 250m partition and change the type to EFI system, then use the remaining space to create a Linux Filesystem partition."
     echo "If you plan to use Linux alongside something else:"
