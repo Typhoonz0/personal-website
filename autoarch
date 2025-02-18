@@ -71,7 +71,7 @@ read DISK
 echo "You are going to manually partition your disk using cfdisk. Type 'help' WITHOUT QUOTES if you need it, otherwise just press ENTER."
 read A
 
-if [[ "$input" == "help" ]]; then
+if [[ "$A" == "help" ]]; then
     echo "If you plan to only use Linux:"
     echo "Create a 250m partition and change the type to EFI system, then use the remaining space to create a Linux Filesystem partition."
     echo "If you plan to use Linux alongside something else:"
