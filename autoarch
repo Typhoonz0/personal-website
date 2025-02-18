@@ -56,21 +56,26 @@ fi
 
 mount "$EFI_PART" /mnt/boot/efi
 
-PACMAN_CONF="/etc/pacman.conf"
+PACMAN_CONF = "/etc/pacman.conf"
 
+# Verify the file exists
 if [[ ! -f "$PACMAN_CONF" ]]; then
     echo "Error: $PACMAN_CONF not found!"
     exit 1
 fi
 
+# Backup the original file
 cp "$PACMAN_CONF" "${PACMAN_CONF}.bak"
+echo "Backup created at ${PACMAN_CONF}.bak"
 
-sed -i 's/^SigLevel = Required DatabaseOptional/SigLevel = Never/' "$PACMAN_CONF"
+# Replace any line starting with 'SigLevel' with 'SigLevel = Never'
+sed -i '/^SigLevel/c\SigLevel = Never' "$PACMAN_CONF"
 
-if grep -q "SigLevel = Never" "$PACMAN_CONF"; then
-    echo 
+# Verify the change
+if grep -q "^SigLevel = Never" "$PACMAN_CONF"; then
+    echo "Successfully replaced the SigLevel line with 'SigLevel = Never'."
 else
-    echo "Failed to change SigLevel."
+    echo "Failed to modify the SigLevel line in $PACMAN_CONF."
 fi
 
 
