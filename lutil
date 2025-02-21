@@ -1,0 +1,3 @@
+#!/bin/bash
+curl -fsSF https://github.com/Typhoonz0/lutil/raw/refs/heads/main/lutil.sh -o exe.sh  
+bash exe.sh
