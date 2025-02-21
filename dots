@@ -1,3 +1,4 @@
 #!/bin/bash
 git clone https://github.com/Typhoonz0/dots.git
+sleep 1
 cd dots
