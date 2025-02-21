@@ -1,3 +1,126 @@
 #!/bin/bash
-git clone https://github.com/Typhoonz0/dots.git && cd "$(basename "$_" .git)"
-sleep 1
+
+# Clone the repository and navigate into the directory
+git clone https://github.com/Typhoonz0/dots.git && cd dots
+
+# Function to print the prompt
+prompt() {
+     echo -ne "\e[31m$USER\e[0m@dotsinstall\e[0m # "
+}
+
+# List of config directories
+config_dirs=(
+    "~/.config/fastfetch"
+    "~/.config/ghostty"
+    "~/.config/hypr"
+    "~/.config/nvim"
+    "~/.config/tmux"
+    "~/.config/waybar"
+    "~/.config/wlogout"
+    "~/.config/zsh"
+)
+
+# Clear the screen and display a banner
+clear
+cat <<EOF
+__________                         _________     _____        
+___  /__(_)_____ _______ ___       ______  /_______  /________
+__  /__  /_  __ \_  __ \__ \_______  __  /_  __ \  __/_  ___/
+_  / _  / / /_/ /  / / / / //_____/ /_/ / / /_/ / /_ _(__  ) 
+/_/  /_/  \__,_/  /_/ /_/ /_/       \__,_/  \____/\__/ /____/  
+
+This will install:
+fastfetch, ghostty, hyprland, neovim, tmux, waybar, wlogout,
+zsh, rofi, swaybg, blueberry and other dependencies. 
+The script will ask if you want to overwrite, but I take no
+responsibility for the loss of data.
+
+Do you want to continue? (y/n)
+EOF
+
+prompt && read confirm 
+if [[ "$confirm" == "n" || "$confirm" == "no" ]]; then 
+    exit
+fi
+
+
+# Array to store required packages
+required=()
+
+# Loop through each config directory
+for dir in "${config_dirs[@]}"; do
+    # Expand the tilde to the home directory
+    expanded_dir="${dir/#\~/$HOME}"
+    
+    # Check if the directory exists and is not empty
+    if [ -d "$expanded_dir" ] && [ "$(ls -A "$expanded_dir")" ]; then
+        echo "Configuration found in $expanded_dir."
+        echo "Do you want to keep your config in $expanded_dir? (y/n)"
+        prompt && read choice
+        
+        if [[ "$choice" =~ ^[Nn]$ ]]; then
+            echo "Copying files from $(pwd) to $expanded_dir..."
+            cp -r ./* "$expanded_dir/"
+            echo "Files copied."
+        else
+            echo "Keeping existing config in $expanded_dir."
+        fi
+    else 
+
+        case $expanded_dir in
+            "$HOME/.config/fastfetch")
+                required+=("fastfetch")  
+                ;;
+            "$HOME/.config/ghostty")
+                required+=("ghostty")
+                ;;
+            "$HOME/.config/hypr")
+                required+=("hyprland")
+                required+=("ghostty")
+                required+=("nautilus")
+                required+=("firefox")
+                required+=("rofi")
+                required+=("swaybg")
+                required+=("waybar")
+                required+=("blueberry")
+                ;;
+            "$HOME/.config/nvim")
+                required+=("neovim")
+                ;;
+            "$HOME/.config/tmux")
+                required+=("tmux")
+                ;;
+            "$HOME/.config/waybar")
+                required+=("waybar")
+                ;;
+            "$HOME/.config/wlogout")
+                required+=("wlogout")
+                ;;
+            "$HOME/.config/zsh")
+                required+=("zsh")
+                
+                ;;
+                
+            *)
+                echo "No installation logic defined for $expanded_dir."
+                ;;
+        esac
+    fi
+done
+
+if [ ${#required[@]} -ne 0 ]; then
+    echo "Installing required packages: ${required[@]}..."
+    if [[ " ${required[@]} " =~ " wlogout " || " ${required[@]} " =~ " wlogout " ]]; then
+        yay -S "${required[@]}"
+    else 
+        sudo pacman -S "${required[@]}"
+    fi
+    
+    if [[ " ${required[@]} " =~ " zsh " ]]; then
+        chsh -s "$(which zsh)"
+    fi
+else
+    echo "No additional packages are required."
+fi
+
+echo Installation finished.
