@@ -110,8 +110,14 @@ done
 
 if [ ${#required[@]} -ne 0 ]; then
     echo "Installing required packages: ${required[@]}..."
-    if [[ " ${required[@]} " =~ " wlogout " || " ${required[@]} " =~ " wlogout " ]]; then
-        yay -S "${required[@]}"
+    if [[ " ${required[@]} " =~ " wlogout " ]]; then
+        yay > /dev/null 2>&1
+        if [ $? -eq 0 ]; then
+              yay -S wlogout
+        else
+              sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+              yay -S wlogout
+        fi 
     else 
         sudo pacman -S "${required[@]}"
     fi
