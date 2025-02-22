@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Clone the repository and navigate into the directory
-git clone https://github.com/Typhoonz0/dots.git && cd dots
+git clone https://github.com/Typhoonz0/dots.git && cd dots || exit
 
 # Function to print the prompt
 prompt() {
@@ -10,14 +10,14 @@ prompt() {
 
 # List of config directories
 config_dirs=(
-    "~/.config/fastfetch"
-    "~/.config/ghostty"
-    "~/.config/hypr"
-    "~/.config/nvim"
-    "~/.config/tmux"
-    "~/.config/waybar"
-    "~/.config/wlogout"
-    "~/.config/zsh"
+    "$HOME/.config/fastfetch"
+    "$HOME/.config/ghostty"
+    "$HOME/.config/hypr"
+    "$HOME/.config/nvim"
+    "$HOME/.config/tmux"
+    "$HOME/.config/waybar"
+    "$HOME/.config/wlogout"
+    "$HOME/.config/zsh"
 )
 
 # Clear the screen and display a banner
@@ -38,95 +38,82 @@ responsibility for the loss of data.
 Do you want to continue? (y/n)
 EOF
 
-prompt && read confirm 
-if [[ "$confirm" == "n" || "$confirm" == "no" ]]; then 
+prompt && read -r confirm 
+if [[ "$confirm" =~ ^[Nn]$ ]]; then 
     exit
 fi
-
 
 # Array to store required packages
 required=()
 
 # Loop through each config directory
-for dir in "${config_dirs[@]}"; do
-    # Expand the tilde to the home directory
-    expanded_dir="${dir/#\~/$HOME}"
-    
-    # Check if the directory exists and is not empty
+for expanded_dir in "${config_dirs[@]}"; do
+    config_name=$(basename "$expanded_dir")  # Extract folder name
+
     if [ -d "$expanded_dir" ] && [ "$(ls -A "$expanded_dir")" ]; then
         echo "Configuration found in $expanded_dir."
-        echo "Do you want to keep your config in $expanded_dir? (y/n)"
-        prompt && read choice
+        echo "Do you want to overwrite it? (y/n)"
+        prompt && read -r choice
         
         if [[ "$choice" =~ ^[Nn]$ ]]; then
-            echo "Copying files from $(pwd) to $expanded_dir..."
-            cp -r ./* "$expanded_dir/"
-            echo "Files copied."
-        else
             echo "Keeping existing config in $expanded_dir."
+            continue
         fi
-    else 
-
-        case $expanded_dir in
-            "$HOME/.config/fastfetch")
-                required+=("fastfetch")  
-                ;;
-            "$HOME/.config/ghostty")
-                required+=("ghostty")
-                ;;
-            "$HOME/.config/hypr")
-                required+=("hyprland")
-                required+=("ghostty")
-                required+=("nautilus")
-                required+=("firefox")
-                required+=("rofi")
-                required+=("swaybg")
-                required+=("waybar")
-                required+=("blueberry")
-                ;;
-            "$HOME/.config/nvim")
-                required+=("neovim")
-                ;;
-            "$HOME/.config/tmux")
-                required+=("tmux")
-                ;;
-            "$HOME/.config/waybar")
-                required+=("waybar")
-                ;;
-            "$HOME/.config/wlogout")
-                required+=("wlogout")
-                ;;
-            "$HOME/.config/zsh")
-                required+=("zsh")
-                
-                ;;
-                
-            *)
-                echo "No installation logic defined for $expanded_dir."
-                ;;
-        esac
     fi
+
+    echo "Copying $config_name to $expanded_dir..."
+    mkdir -p "$expanded_dir"
+    cp -r "$config_name/" "$expanded_dir/" || true  
+    echo "Copied $config_name to $expanded_dir."
+
+    # Package installation logic
+    case "$expanded_dir" in
+        "$HOME/.config/fastfetch")
+            required+=("fastfetch")  
+            ;;
+        "$HOME/.config/ghostty")
+            required+=("ghostty")
+            ;;
+        "$HOME/.config/hypr")
+            required+=("hyprland" "ghostty" "nautilus" "firefox" "rofi" "swaybg" "waybar" "blueberry")
+            ;;
+        "$HOME/.config/nvim")
+            required+=("neovim")
+            ;;
+        "$HOME/.config/tmux")
+            required+=("tmux")
+            ;;
+        "$HOME/.config/waybar")
+            required+=("waybar")
+            ;;
+        "$HOME/.config/wlogout")
+            required+=("wlogout")
+            ;;
+        "$HOME/.config/zsh")
+            required+=("zsh")
+            ;;
+        *)
+            echo "No installation logic defined for $expanded_dir."
+            ;;
+    esac
 done
 
+# Install required packages
 if [ ${#required[@]} -ne 0 ]; then
-    echo "Installing required packages: ${required[@]}..."
-    if [[ " ${required[@]} " =~ " wlogout " ]]; then
-        yay > /dev/null 2>&1
-        if [ $? -eq 0 ]; then
-              yay -S wlogout
-        else
-              sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
-              yay -S wlogout
-        fi 
-    else 
-        sudo pacman -S "${required[@]}"
-    fi
+    echo "Installing required packages: ${required[*]}..."
     
-    if [[ " ${required[@]} " =~ " zsh " ]]; then
-        chsh -s "$(which zsh)"
+    if [[ " ${required[*]} " =~ " wlogout " ]]; then
+        yay -S --noconfirm "${required[@]}" || true
+    else
+        sudo pacman -S --noconfirm "${required[@]}" || true
+    fi
+
+    if [[ " ${required[*]} " =~ " zsh " ]]; then
+        sudo pacman -S --noconfirm zsh || true
+        chsh -s "$(which zsh)" || true
     fi
 else
     echo "No additional packages are required."
 fi
 
-echo Installation finished.
+echo "Installation finished."
