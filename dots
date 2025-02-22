@@ -14,10 +14,10 @@ config_dirs=(
     "$HOME/.config/ghostty"
     "$HOME/.config/hypr"
     "$HOME/.config/nvim"
+    "$HOME/.config/rofi"
     "$HOME/.config/tmux"
     "$HOME/.config/waybar"
     "$HOME/.config/zsh"
-    "$HOME/.zshrc"
 )
 
 # Clear the screen and display a banner
@@ -60,6 +60,9 @@ for expanded_dir in "${config_dirs[@]}"; do
         "$HOME/.config/nvim")
             required+=("neovim")
             ;;
+        "$HOME/.config/rofi")
+            required+=("rofi")
+            ;;
         "$HOME/.config/tmux")
             required+=("tmux")
             ;;
@@ -83,6 +86,7 @@ if [ ${#required[@]} -ne 0 ]; then
     if [[ " ${required[*]} " =~ " zsh " ]]; then
         sudo pacman -S --noconfirm zsh || true
         chsh -s "/usr/bin/zsh" || true
+        cp .zshrc ~/.zshrc
     fi
 else
     echo "No additional packages are required."
@@ -101,5 +105,8 @@ for expanded_dir in "${config_dirs[@]}"; do
     
     echo "Copied $config_name to $expanded_dir."
 done
+
+sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay-bin.git && cd yay-bin && makepkg -si
+yay -S wlogout
 
 echo "Installation and configuration setup complete."
