@@ -1,4 +1,4 @@
 #!/bin/bash
-echo "Downloading lutil..."
-curl -fsSL https://github.com/Typhoonz0/lutil/raw/refs/heads/main/lutil.sh -o exe.sh  
-echo "RUN: bash exe.sh"
+curl -fsSL https://github.com/Typhoonz0/lutil/raw/refs/heads/main/lutil -o lutil
+chmod +x lutil
+./lutil
