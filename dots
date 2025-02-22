@@ -32,8 +32,7 @@ _  / _  / / /_/ /  / / / / //_____/ /_/ / / /_/ / /_ _(__  )
 This will install:
 fastfetch, ghostty, hyprland, neovim, tmux, waybar, wlogout,
 zsh, rofi, swaybg, blueberry and other dependencies. 
-The script will ask if you want to overwrite, but I take no
-responsibility for the loss of data.
+This script **WILL OVERWRITE** any existing configs.
 
 Do you want to continue? (y/n)
 EOF
@@ -46,27 +45,8 @@ fi
 # Array to store required packages
 required=()
 
-# Loop through each config directory
+# Package installation logic
 for expanded_dir in "${config_dirs[@]}"; do
-    config_name=$(basename "$expanded_dir")  # Extract folder name
-
-    if [ -d "$expanded_dir" ] && [ "$(ls -A "$expanded_dir")" ]; then
-        echo "Configuration found in $expanded_dir."
-        echo "Do you want to overwrite it? (y/n)"
-        prompt && read -r choice
-        
-        if [[ "$choice" =~ ^[Nn]$ ]]; then
-            echo "Keeping existing config in $expanded_dir."
-            continue
-        fi
-    fi
-
-    echo "Copying $config_name to $expanded_dir..."
-    mkdir -p "$expanded_dir"
-    cp -r "$config_name/" "$expanded_dir/" || true  
-    echo "Copied $config_name to $expanded_dir."
-
-    # Package installation logic
     case "$expanded_dir" in
         "$HOME/.config/fastfetch")
             required+=("fastfetch")  
@@ -116,4 +96,18 @@ else
     echo "No additional packages are required."
 fi
 
-echo "Installation finished."
+# Overwrite configs after package installation
+echo "Overwriting configuration files..."
+for expanded_dir in "${config_dirs[@]}"; do
+    config_name=$(basename "$expanded_dir")  # Extract folder name
+
+    echo "Copying $config_name to $expanded_dir..."
+    mkdir -p "$expanded_dir"
+    
+    # Copy contents instead of the directory itself
+    cp -r "$config_name/"* "$expanded_dir/" || true  
+    
+    echo "Copied $config_name to $expanded_dir."
+done
+
+echo "Installation and configuration setup complete."
