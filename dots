@@ -17,6 +17,7 @@ config_dirs=(
     "$HOME/.config/tmux"
     "$HOME/.config/waybar"
     "$HOME/.config/zsh"
+    "$HOME/.zshrc"
 )
 
 # Clear the screen and display a banner
