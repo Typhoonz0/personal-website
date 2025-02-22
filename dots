@@ -90,7 +90,7 @@ if [ ${#required[@]} -ne 0 ]; then
 
     if [[ " ${required[*]} " =~ " zsh " ]]; then
         sudo pacman -S --noconfirm zsh || true
-        chsh -s "$(which zsh)" || true
+       # chsh -s "$(which zsh)" || true
     fi
 else
     echo "No additional packages are required."
