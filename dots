@@ -16,7 +16,6 @@ config_dirs=(
     "$HOME/.config/nvim"
     "$HOME/.config/tmux"
     "$HOME/.config/waybar"
-    "$HOME/.config/wlogout"
     "$HOME/.config/zsh"
 )
 
@@ -30,8 +29,8 @@ _  / _  / / /_/ /  / / / / //_____/ /_/ / / /_/ / /_ _(__  )
 /_/  /_/  \__,_/  /_/ /_/ /_/       \__,_/  \____/\__/ /____/  
 
 This will install:
-fastfetch, ghostty, hyprland, neovim, tmux, waybar, wlogout,
-zsh, rofi, swaybg, blueberry and other dependencies. 
+fastfetch, ghostty, hyprland, neovim, tmux, waybar, 
+zsh, rofi, swaybg, blueberry, and other dependencies. 
 This script **WILL OVERWRITE** any existing configs.
 
 Do you want to continue? (y/n)
@@ -66,9 +65,6 @@ for expanded_dir in "${config_dirs[@]}"; do
         "$HOME/.config/waybar")
             required+=("waybar")
             ;;
-        "$HOME/.config/wlogout")
-            required+=("wlogout")
-            ;;
         "$HOME/.config/zsh")
             required+=("zsh")
             ;;
@@ -81,16 +77,11 @@ done
 # Install required packages
 if [ ${#required[@]} -ne 0 ]; then
     echo "Installing required packages: ${required[*]}..."
-    
-    if [[ " ${required[*]} " =~ " wlogout " ]]; then
-        yay -S --noconfirm "${required[@]}" || true
-    else
-        sudo pacman -S --noconfirm "${required[@]}" || true
-    fi
+    sudo pacman -S --noconfirm "${required[@]}" || true
 
     if [[ " ${required[*]} " =~ " zsh " ]]; then
         sudo pacman -S --noconfirm zsh || true
-       # chsh -s "$(which zsh)" || true
+        chsh -s "/usr/bin/zsh" || true
     fi
 else
     echo "No additional packages are required."
