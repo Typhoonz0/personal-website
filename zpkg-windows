@@ -6,5 +6,6 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
 # Clone the repo
 git clone https://github.com/Typhoonz0/zpkg.git zpkg
 Set-Location zpkg
-$prnt = (Get-Item .).FullName
-echo "Run $prnt/setup.bat in an admin cmd.exe terminal."
+Start-Process -FilePath "setup.bat" -Verb RunAs -Wait
+#$prnt = (Get-Item .).FullName
+#echo "Run $prnt/setup.bat in an admin cmd.exe terminal."
