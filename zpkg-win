@@ -1,0 +1,10 @@
+if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+    Write-Host "Please install Git before continuing."
+    exit
+}
+
+# Clone the repo
+git clone https://github.com/Typhoonz0/zpkg.git zpkg
+Set-Location zpkg
+
+Start-Process -FilePath "setup.bat" -Verb RunAs -Wait
