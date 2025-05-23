@@ -1,0 +1,4 @@
+#!/bin/bash
+
+curl -fsSL https://github.com/Typhoonz0/archfr/raw/refs/heads/main/install.sh -o archfr.sh
+bash archfr.sh
