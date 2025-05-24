@@ -1,4 +1,4 @@
 #!/bin/bash
 
 curl -fsSL https://github.com/Typhoonz0/archfr/raw/refs/heads/main/postinstall.sh -o postinstall.sh
-bash postinstall.sh
+sudo bash postinstall.sh
