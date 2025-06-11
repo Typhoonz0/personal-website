@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+if [[ ! git ]]; then
+    echo "Please download git."
+    exit
+fi
+
+git clone https://github.com/Typhoonz0/ypkg.git ypkg
+cd ypkg
+chmod +x setup.sh
+bash setup.sh
