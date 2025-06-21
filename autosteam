@@ -1,4 +1,0 @@
-#!/bin/bash
-
-curl -fsSL https://github.com/Typhoonz0/autoarch/raw/refs/heads/main/steamscript.sh -o autosteam.sh
-bash autosteam.sh
