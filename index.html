@@ -1,211 +1,75 @@
+<!-- A new iteration of my website. I decided that all the flashy animations was too much. -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Honk&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="discord-avatar.ico">
+    <link rel="stylesheet" href="style.css">
     <title>@xliam1</title>
-    <style>
-body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: auto;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-a {
-    color: white;
-    text-decoration: none;
-}
-
-#video-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-}
-
-#container, #container2 {
-    margin: 20px auto; /* Center horizontally and add vertical spacing */
-    display: flex;
-    flex-direction: column; /* Ensure vertical stacking of children */
-    align-items: center; /* Center children horizontally */
-    width: 90%;
-    max-width: 800px; /* Optional: limit maximum width for a cleaner layout */
-    color: white;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 20px;
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.rectangles-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: space-around;
-}
-
-.small-rectangle {
-    flex: 1 1 calc(100% - 20px);
-    margin: 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 10px;
-}
-
-@media (min-width: 768px) {
-    #container {
-        flex-direction: row;
-    }
-
-    .small-rectangle {
-        flex: 1 1 calc(33% - 20px);
-    }
-}
-/* Avatar in #container */
-#container > img {
-    width: 200px; /* Ensure the avatar is 100px */
-    height: auto;
-    border-radius: 10px;
-    display: block;
-}
-
-/* Social icons */
-.social-icons img {
-    width: 50px; /* Ensure the social icons are 50px */
-    height: auto; /* Maintain aspect ratio */
-    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-    cursor: pointer;
-    border-radius: 10px;
-}
-
-.social-icons img:hover {
-    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-    transform: translateY(-2px);
-}
-
-.social-icons img:active {
-    box-shadow: none;
-    transform: translateY(0);
-}
-
-
-.button {
-    appearance: none;
-    background-color: #000000;
-    border: 2px solid #1A1A1A;
-    border-radius: 15px;
-    box-sizing: border-box;
-    color: #FFFFFF;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: normal;
-    margin: 0;
-    min-height: 60px;
-    outline: none;
-    padding: 16px 24px;
-    text-align: center;
-    text-decoration: none;
-    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-    width: 100%;
-}
-
-.button:hover {
-    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-    transform: translateY(-2px);
-}
-
-.button:active {
-    box-shadow: none;
-    transform: translateY(0);
-}
-
-
-    </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const name = "@xliam";
-            let index = 1;
-
-            const changeTitle = () => {
-                let currentTitle = name.slice(0, index) + " ";
-                document.title = currentTitle;
-
-                index++;
-
-                if (index > name.length) {
-                    index = 1;
-                }
-
-                setTimeout(changeTitle, 500);
-            };
-
-            changeTitle();
-        });
-    </script>
 </head>
+
 <body>
-    <video id="video-background" autoplay muted loop>
-        <source src="assets/wallpaper.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <!-- Start of the actual website. I place everything in the body tag for ease of use. -->
 
-    <div id="container">
-        <img src="assets/discord-avatar.png" alt="my discord avatar">
-        <div class="text-content">
-            <h1>xliam1</h1>
-            <div class="social-icons">
-                <a href="https://github.com/Typhoonz0" target="_blank">
-                    <img src="assets/git.png" alt="GitHub">
-                </a>
-                <a href="https://open.spotify.com/user/31f73romnhft7pojjsiwy3g5e54e?si=20d0d0c6756341f0" target="_blank">
-                    <img src="assets/spot1.png" alt="Spotify">
-                </a>
-            </div>
-        </div>
-    </div>
+    <h1>Liam's Website</h1>
+    <p>I code things (:</p>
 
+    <h3>Stuff</h3>
+    <dl>
+        <dt>
+            <a href="programs.html">Programs</a>
+        </dt>
+        <dd> 
+            Software I use
+        </dd>
+        <dt>
+            <a href="https://github.com/Typhoonz0">Github</a>
+        </dt>
+        <dd>
+            My Github profile
+        </dd>
+        <dt>
+            <a href="https://open.spotify.com/user/31f73romnhft7pojjsiwy3g5e54e?si=20d0d0c6756341f0">Spotify</a>
+        </dt>
+        <dd>
+            Music I listen/listened to
+        </dd>
+        <dt>
+            <a href="legacy">The Old Website</a>
+        </dt>
+        <dd> 
+            I opted for a more minimal style. You can still see the old one here.
+        </dd>
+    </dl>
 
-    <div id="container2">
-        <div class="text-content">
-            <h1>My Projects</h1>
-        </div>
-        <div class="rectangles-container">
-            <div class="small-rectangle">
-                <h3>sigmaOS</h3>
-                <p>A retro style OS emulator with a filesystem stored in cookies!</p>
-                <a class="button"href="sigmaos/index.html" target="_blank">
-                    Visit Now!
-                </a>
-            </div>   
-            <div class="small-rectangle">
-                <h3>TX</h3>
-                <p>Many dream of making a programming language, this is mine</p>
-                <a class="button"href="https://github.com/Typhoonz0/tx-language" target="_blank">
-                    Download
-                </a>
-            </div>
-        </div>
-    </div>
-    
-    
+    <h3>Featured Code</h3>
+    <dl>
+        <dt>
+            <a href="https://github.com/Typhoonz0/archfr">ArchFR</a>
+        </dt>
+        <dd>
+            Automated Arch Linux install scripts with my config
+        </dd>
+        <dt>
+            <a href="https://github.com/Typhoonz0/ypkg">ypkg</a>
+        </dt>
+        <dd>
+            My very simple, very insecure package manager
+        </dd>
+        <dt>
+            <a href="https://github.com/Typhoonz0/tx-language">TX</a>
+        </dt>
+        <dd>
+            My interpreted language interpreted by an interpreted language. Cause why not?
+        </dd>
+        <dt>
+            <a href="sigmaos">Sigma'OS'</a>
+        </dt>
+        <dd>
+            A windows 95 esque operating system simulator in the browser 
+        </dd>
+    </dl>
 </body>
 </html>
