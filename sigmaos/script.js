@@ -1,6 +1,6 @@
 // Check if user credentials exist
 let credentials = JSON.parse(localStorage.getItem('credentials'));
-let loggedIn = sessionStorage.getItem('loggedin') === 'true';
+let loggedIn =  'true';
 
 const loginScreen = document.getElementById('login-screen');
 const sigmaOS = document.getElementById('sigmaOS');
@@ -231,3 +231,4 @@ function updateClock() {
 // Initialize and update the clock every second
 updateClock();
 setInterval(updateClock, 1000);
+
