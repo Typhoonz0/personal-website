@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.1
 // @description  Inline GUI in news-scrollbar-black / update-box.scrollbar-black
-// @match        *://copterroyale2.coolmathgames.com/*
+// @match        *://*.coolmathgames.com/*
 
 // @grant        none
 // ==/UserScript==
