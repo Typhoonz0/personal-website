@@ -122,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const cursor = document.createElement('div');
     cursor.classList.add('cursor');
     document.body.appendChild(cursor);
-
     document.addEventListener('mousemove', (e) => {
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
@@ -135,38 +134,34 @@ document.addEventListener("DOMContentLoaded", () => {
         if (menu) menu.style.display = "none";
     });
 
-const bgMusic = document.getElementById('bg-music');
-let playing = false;
+    // --- Music / Link buttons ---
+    const bgMusic = document.getElementById('bg-music');
+    let playing = false;
+    const buttons = document.querySelectorAll('.music-btn');
+    const spacing = 20;
 
-const buttons = document.querySelectorAll('.music-btn');
-const spacing = 20; // px space between buttons
+    buttons.forEach((btn, index) => {
+        btn.style.position = "fixed";
+        btn.style.right = "20px";
+        btn.style.bottom = `${20 + index * (btn.offsetHeight + spacing)}px`;
 
-buttons.forEach((btn, index) => {
-    // Stack buttons vertically
-    btn.style.position = "fixed";
-    btn.style.right = "20px";
-    btn.style.bottom = `${20 + index * (btn.offsetHeight + spacing)}px`;
-
-    // Assign behavior based on data-action attribute
-    const action = btn.getAttribute('data-action');
-
-    btn.addEventListener('click', () => {
-        if (action === 'music') {
-            if (!playing) {
-                bgMusic.play();
-                btn.style.fontSize = "1rem";
-                btn.textContent = "Now Playing - Resonance ⏸";
-            } else {
-                bgMusic.pause();
-                btn.textContent = "▶";
+        const action = btn.getAttribute('data-action');
+        btn.addEventListener('click', () => {
+            if (action === 'music') {
+                if (!playing) {
+                    bgMusic.play();
+                    btn.style.fontSize = "1rem";
+                    btn.textContent = "Now Playing - Resonance ⏸";
+                } else {
+                    bgMusic.pause();
+                    btn.textContent = "▶";
+                }
+                playing = !playing;
+            } else if (action === 'link') {
+                window.open("https://github.com/Typhoonz0/personal-website", "_blank");
             }
-            playing = !playing;
-        } else if (action === 'link') {
-            window.open("https://github.com/Typhoonz0/personal-website", "_blank");
-        }
+        });
     });
-});
-
 
     // --- Scrolling title effect ---
     const siteName = "Liam's Website - ";
@@ -178,40 +173,29 @@ buttons.forEach((btn, index) => {
     };
     scrollTitleFunc();
 
-    // --- Video / poster handling ---
+    // --- Background handling (poster / video) ---
     const desktopVideo = document.getElementById("bg-desktop");
     const poster = document.getElementById("video-poster");
-
     const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
-    let bgElement = null;
+    let bgElement = poster;
+    if (desktopVideo) desktopVideo.style.display = "none";
 
-    if (isMobile) {
-        if (desktopVideo) desktopVideo.style.display = "none";
-        if (poster) {
-            poster.style.display = "block";
-            bgElement = poster;
-            applyBlur(poster);
-        }
-    } else {
-        if (desktopVideo && poster) {
-            desktopVideo.style.display = "none";
-            desktopVideo.addEventListener("canplay", () => {
-                poster.style.display = "none";
-                desktopVideo.style.display = "block";
-                desktopVideo.play();
-            });
+    if (!isMobile && desktopVideo) {
+        desktopVideo.addEventListener("canplay", () => {
+            if (poster) poster.style.display = "none";
+            desktopVideo.style.display = "block";
+            desktopVideo.play();
             bgElement = desktopVideo;
-            applyBlur(desktopVideo);
-        }
+        });
+    } else if (poster) {
+        poster.style.display = "block";
     }
 
-    // --- Blur effect for background media (video or image) ---
+    // --- Blur effect ---
     function applyBlur(element) {
         if (!element) return;
-
         let ticking = false;
-
         window.addEventListener("scroll", () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
@@ -224,15 +208,28 @@ buttons.forEach((btn, index) => {
             }
         });
     }
+    applyBlur(bgElement);
 
-    // --- Parallax effect for background ---
-    if (bgElement) {
-        document.addEventListener("mousemove", (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 10;  // range: -5px to 5px
-            const y = (e.clientY / window.innerHeight - 0.5) * 20; // range: -5px to 5px
-            bgElement.style.transform = `translate(${x}px, ${y}px) scale(1.05)`; 
-        });
+    // --- Parallax effect ---
+    let targetX = 0, targetY = 0;
+    let currentX = 0, currentY = 0;
+    const parallaxFactorX = 10;
+    const parallaxFactorY = 20;
+    const easing = 0.1;
+
+    document.addEventListener("mousemove", (e) => {
+        targetX = (e.clientX / window.innerWidth - 0.5) * parallaxFactorX;
+        targetY = (e.clientY / window.innerHeight - 0.5) * parallaxFactorY;
+    });
+
+    function animateParallax() {
+        if (!bgElement) return;
+        currentX += (targetX - currentX) * easing;
+        currentY += (targetY - currentY) * easing;
+        bgElement.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.05)`;
+        requestAnimationFrame(animateParallax);
     }
+    animateParallax();
 });
 
 
