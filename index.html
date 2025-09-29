@@ -8,9 +8,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <video id="bg-video" autoplay muted loop playsinline preload="auto">
-    <source src="assets/bocchi.mp4" type="video/mp4">
+<!-- Desktop video -->
+<video id="bg-desktop" autoplay muted loop playsinline>
+  <source src="assets/bocchi.mp4" type="video/mp4">
 </video>
+
+<!-- Mobile GIF fallback -->
+<img id="bg-mobile" src="assets/bocchi.gif" alt="bocchi GIF">
+
     <!-- Top Bar -->
     <div class="tagfr"><h1 class="about-title" style="text-align: center;">Liam's Website</h1></div>
 
@@ -109,6 +114,8 @@
 </html>
 
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+    // --- Custom cursor ---
     const cursor = document.createElement('div');
     cursor.classList.add('cursor');
     document.body.appendChild(cursor);
@@ -117,57 +124,74 @@
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
     });
+
+    // --- Custom right-click menu ---
     const menu = document.getElementById("custom-menu");
-
-    document.addEventListener("contextmenu", (e) => {
-        e.preventDefault(); 
-    });
-
+    document.addEventListener("contextmenu", (e) => e.preventDefault());
     document.addEventListener("click", () => {
-        menu.style.display = "none"; 
+        if (menu) menu.style.display = "none";
     });
 
+    // --- Music button ---
     const musicBtn = document.getElementById('music-btn');
     const bgMusic = document.getElementById('bg-music');
     let playing = false;
 
-    musicBtn.addEventListener('click', () => {
-        if (!playing) {
-            bgMusic.play();
-            musicBtn.style.fontSize = "1rem";
-            musicBtn.textContent = "Now Playing - Resonance ⏸";
+    if (musicBtn && bgMusic) {
+        musicBtn.addEventListener('click', () => {
+            if (!playing) {
+                bgMusic.play();
+                musicBtn.style.fontSize = "1rem";
+                musicBtn.textContent = "Now Playing - Resonance ⏸";
+            } else {
+                bgMusic.pause();
+                musicBtn.textContent = "▶";
+            }
+            playing = !playing;
+        });
+    }
 
-        } else {
-            bgMusic.pause();
-            musicBtn.textContent = "▶"; 
-        }
-        playing = !playing;
-    });
+    // --- Scrolling title effect ---
+    const siteName = "Liam's Website - ";
+    let scrollTitle = siteName;
+    const scrollTitleFunc = () => {
+        document.title = scrollTitle;
+        scrollTitle = scrollTitle.slice(1) + scrollTitle.charAt(0);
+        setTimeout(scrollTitleFunc, 150);
+    };
+    scrollTitleFunc();
 
-document.addEventListener("DOMContentLoaded", () => {
-    const name = "Liam's Website - ";
-    let title = name;
+    const applyBlur = (videoElement) => {
+        if (!videoElement) return;
 
-    const scrollTitle = () => {
-        document.title = title;
-        title = title.slice(1) + title.charAt(0); 
-        setTimeout(scrollTitle, 150); 
+        videoElement.style.position = "fixed";
+        videoElement.style.top = "0";
+        videoElement.style.left = "0";
+        videoElement.style.width = "100%";
+        videoElement.style.height = "100%";
+        videoElement.style.objectFit = "cover";
+        videoElement.style.zIndex = "-1";
+
+        let ticking = false;
+
+        window.addEventListener("scroll", () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrollY = window.scrollY;
+                    const blurAmount = Math.min(scrollY / 50, 10);
+                    videoElement.style.filter = `blur(${blurAmount}px)`;
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
     };
 
-    scrollTitle();
+    const desktopVideo = document.getElementById("bg-desktop");
+    const mobileVideo = document.getElementById("bg-mobile");
 
-const video = document.getElementById("bg-video");
-
-window.addEventListener("scroll", () => {
-    // amount scrolled
-    const scrollY = window.scrollY;
-
-    // maximum blur capped at 10px
-    const blurAmount = Math.min(scrollY / 50, 10);
-
-    video.style.filter = `blur(${blurAmount}px)`;
-});
+    applyBlur(desktopVideo);
+    applyBlur(mobileVideo);
 
 });
-
 </script>
