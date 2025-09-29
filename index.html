@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div id="video-wrapper" style="position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; overflow:hidden;">
-    <img id="video-poster" src="assets/bocchi.png" style="width:100%; height:100%; object-fit:cover;">
-    
-    <video id="bg-desktop" autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover; display:none;">
-      <source src="assets/bocchi.mp4" type="video/mp4">
-    </video>
-</div>
-    <div class="tagfr"><h1 class="about-title" style="text-align: center;">Liam's Website</h1></div>
+    <div id="video-wrapper"
+        style="position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; overflow:hidden;">
+        <img id="video-poster" src="assets/bocchi.png" style="width:100%; height:100%; object-fit:cover;">
+
+        <video id="bg-desktop" autoplay muted loop playsinline
+            style="width:100%; height:100%; object-fit:cover; display:none;">
+            <source src="assets/bocchi.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="tagfr">
+        <h1 class="about-title" style="text-align: center;">Liam's Website</h1>
+    </div>
     <div class="scroll-prompt">⬇ Scroll Down ⬇</div>
 
     <section class="about-section">
@@ -24,229 +30,223 @@
             <h1 class="about-title">Who am I?</h1>
             <p>I'm a 15 year old developer from Australia. </p>
             <p>I'm interested in building real world projects that developers use every day,</p>
-            <p>like programming languages, packages managers and (eventually) an operating system, to understand how they work and how to make them better.</p>
+            <p>like programming languages, packages managers and (eventually) an operating system, to understand how
+                they work and how to make them better.</p>
             <p>I use Arch Linux and I am proficient in Python, Bash, and C.</p>
             <br>
             <a href="https://github.com/Typhoonz0" class="contact-btn" target="_blank">Look at my Github</a>
         </div>
     </section>
 
-    <section class="portfolio-section">
-        <h1 class="portfolio-title">Featured Code</h1>
-        
-        <div class="portfolio-grid">
-            <div class="project-tile">
-                <h3 class="project-name">Nebula Language</h3>
-                <div class="tags">
-                    <span class="tag">Python</span>
-                </div>
-                <p class="project-description">
-                    My simple, general purpose, object oriented programming language.
-                </p>
-                <a href="https://github.com/Typhoonz0/nebula-language" class="download-btn" target="_blank">View Project</a>
-            </div>
+<section class="portfolio-section">
+    <h1 class="portfolio-title">Featured Code</h1>
 
-            <div class="project-tile">
-                <h3 class="project-name">Cooked Language</h3>
-                <div class="tags">
-                    <span class="tag">Python</span>
-                </div>
-                <p class="project-description">
-                    My programming language with a clean syntax for writing HTML. (Currently rewriting the parser.)
-                </p>
-                <a href="https://github.com/Typhoonz0/cooked-language" class="download-btn" target="_blank">View Project</a>
-            </div>
+    <div class="portfolio-grid">
+        <a href="https://github.com/Typhoonz0/nebula-language" class="project-tile" target="_blank">
+            <h3 class="project-name">Nebula Language</h3>
+            <p class="project-description">
+                My simple, general purpose, object oriented programming language.
+            </p>
+        </a>
 
-            <div class="project-tile">
-                <h3 class="project-name">ArchFR</h3>
-                <div class="tags">
-                    <span class="tag">Bash</span>
-                </div>
-                <p class="project-description">
-                    Automated Arch Linux install scripts with my personal configuration.
-                </p>
-                <a href="https://github.com/Typhoonz0/archfr" class="download-btn" target="_blank">View Project</a>
-            </div>
+        <a href="https://github.com/Typhoonz0/cooked-language" class="project-tile" target="_blank">
+            <h3 class="project-name">Cooked Language</h3>
+            <p class="project-description">
+                My programming language with a clean syntax for writing HTML. (Currently rewriting the parser.)
+            </p>
+        </a>
 
-            <div class="project-tile">
-                <h3 class="project-name">ypkg</h3>
-                <div class="tags">
-                    <span class="tag">Python</span>
-                </div>
-                <p class="project-description">
-                    A very simple package manager I built.
-                </p>
-                <a href="https://github.com/Typhoonz0/ypkg" class="download-btn" target="_blank">View Project</a>
-            </div>
+        <a href="https://github.com/Typhoonz0/archfr" class="project-tile" target="_blank">
+            <h3 class="project-name">ArchFR</h3>
+            <p class="project-description">
+                Automated Arch Linux install scripts with my personal configuration.
+            </p>
+        </a>
 
-            <div class="project-tile">
-                <h3 class="project-name">Sigma'OS'</h3>
-                <div class="tags">
-                    <span class="tag">JavaScript</span>
-                </div>
-                <p class="project-description">
-                    A Windows 95-esque operating system simulator in the browser.
-                </p>
-                <a href="sigmaos/index.html" class="download-btn" target="_blank">View Project</a>
-            </div>
+        <a href="https://github.com/Typhoonz0/ypkg" class="project-tile" target="_blank">
+            <h3 class="project-name">ypkg</h3>
+            <p class="project-description">
+                A very simple package manager I built.
+            </p>
+        </a>
 
-            <div class="project-tile">
-                <h3 class="project-name">Copter Royale Tweaks</h3>
-                <div class="tags">
-                    <span class="tag">JavaScript</span>
-                </div>
-                <p class="project-description">
-                    A simple userscript to change behaviour when playing Copter Royale on Coolmath Games.
-                </p>
-                <a href="copter.user.js" class="download-btn" target="_blank">View Project</a>
-            </div>
-        </div>
-    </section>
+        <a href="sigmaos/index.html" class="project-tile" target="_blank">
+            <h3 class="project-name">Sigma'OS'</h3>
+            <p class="project-description">
+                A Windows 95-esque operating system simulator in the browser.
+            </p>
+        </a>
+
+        <a href="copter.user.js" class="project-tile" target="_blank">
+            <h3 class="project-name">Copter Royale Tweaks</h3>
+            <p class="project-description">
+                A simple userscript to change behaviour when playing Copter Royale on Coolmath Games.
+            </p>
+        </a>
+    </div>
+</section>
+
     <footer>
-    I'm @xliam111 on IG | Bocchi the Rock and Touhou are both peak, check them out in your spare time | "We're so back!"
-</footer>
+        I'm @xliam111 on IG | Bocchi the Rock and Touhou are both peak, check them out in your spare time | "We're so
+        back!"
+    </footer>
 </body>
 <audio id="bg-music" src="assets/resonance.mp3" preload="auto"></audio>
 <button class="music-btn" data-action="music">▶</button>
-<button class="music-btn" data-action="link"><img src="assets/code.svg" alt="angle symbol" width="24" height="24"></button>
+<button class="music-btn" data-action="link"><img src="assets/code.svg" alt="angle symbol" width="24"
+        height="24"></button>
+
 </html>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => {
 
-    // Custom cursor
-    const cursor = document.createElement('div');
-    cursor.classList.add('cursor');
-    document.body.appendChild(cursor);
+        // Custom cursor
+        const cursor = document.createElement('div');
+        cursor.classList.add('cursor');
+        document.body.appendChild(cursor);
 
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-    });
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
 
-    // TODO: Custom right-click menu 
-    const menu = document.getElementById("custom-menu");
-    document.addEventListener("contextmenu", (e) => e.preventDefault());
-    document.addEventListener("click", () => {
-        if (menu) menu.style.display = "none";
-    });
+        // TODO: Custom right-click menu 
+        const menu = document.getElementById("custom-menu");
+        document.addEventListener("contextmenu", (e) => e.preventDefault());
+        document.addEventListener("click", () => {
+            if (menu) menu.style.display = "none";
+        });
 
-    // Music and link buttons 
-    const bgMusic = document.getElementById('bg-music');
-    let playing = false;
+        // Music and link buttons 
+        const bgMusic = document.getElementById('bg-music');
+        let playing = false;
 
-    const buttons = document.querySelectorAll('.music-btn');
-    const spacing = 20; 
+        const buttons = document.querySelectorAll('.music-btn');
+        const spacing = 20;
 
-    buttons.forEach((btn, index) => {
-        btn.style.position = "fixed";
-        btn.style.right = "20px";
-        btn.style.bottom = `${20 + index * (btn.offsetHeight + spacing)}px`;
+        buttons.forEach((btn, index) => {
+            btn.style.position = "fixed";
+            btn.style.right = "20px";
+            btn.style.bottom = `${20 + index * (btn.offsetHeight + spacing)}px`;
 
-        const action = btn.getAttribute('data-action');
+            const action = btn.getAttribute('data-action');
 
-        btn.addEventListener('click', () => {
-            if (action === 'music') {
-                if (!playing) {
-                    bgMusic.play();
-                    btn.style.fontSize = "1rem";
-                    btn.textContent = "Now Playing - Resonance ⏸";
-                } else {
-                    bgMusic.pause();
-                    btn.textContent = "▶";
+            btn.addEventListener('click', () => {
+                if (action === 'music') {
+                    if (!playing) {
+                        bgMusic.play();
+                        btn.style.fontSize = "1rem";
+                        btn.textContent = "Now Playing - Resonance ⏸";
+                    } else {
+                        bgMusic.pause();
+                        btn.textContent = "▶";
+                    }
+                    playing = !playing;
+                } else if (action === 'link') {
+                    window.open("https://github.com/Typhoonz0/personal-website", "_blank");
                 }
-                playing = !playing;
-            } else if (action === 'link') {
-                window.open("https://github.com/Typhoonz0/personal-website", "_blank");
-            }
+            });
         });
-    });
 
-    // scrolling title effect
-    const siteName = "Liam's Website - ";
-    let scrollTitle = siteName;
-    const scrollTitleFunc = () => {
-        document.title = scrollTitle;
-        scrollTitle = scrollTitle.slice(1) + scrollTitle.charAt(0);
-        setTimeout(scrollTitleFunc, 150);
-    };
-    scrollTitleFunc();
-
-    // bg handling
-    const desktopVideo = document.getElementById("bg-desktop");
-    const poster = document.getElementById("video-poster");
-
-    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-
-    let bgElement = poster; 
-
-    if (isMobile) {
-        if (desktopVideo) desktopVideo.style.display = "none";
-        if (poster) {
-            poster.style.display = "block";
-            bgElement = poster;
-            applyBlur(poster);
-        }
-    } else if (desktopVideo && poster) {
-
-        poster.style.display = "block";
-        bgElement = poster;
-        applyBlur(poster);
-
-        desktopVideo.style.display = "none";
-        desktopVideo.addEventListener("canplay", () => {
-            poster.style.display = "none";
-            desktopVideo.style.display = "block";
-            desktopVideo.play();
-            bgElement = desktopVideo;
-            applyBlur(desktopVideo);
-        });
-    }
-
-
-    // Blur effect 
-    function applyBlur(element) {
-        if (!element) return;
-
-        const updateBlur = () => {
-            const scrollY = window.scrollY;
-            const blurAmount = Math.min(scrollY / 50, 10);
-            element.style.filter = `blur(${blurAmount}px)`;
+        // scrolling title effect
+        const siteName = "Liam's Website - ";
+        let scrollTitle = siteName;
+        const scrollTitleFunc = () => {
+            document.title = scrollTitle;
+            scrollTitle = scrollTitle.slice(1) + scrollTitle.charAt(0);
+            setTimeout(scrollTitleFunc, 150);
         };
+        scrollTitleFunc();
 
-        updateBlur(); // init blur
+        const desktopVideo = document.getElementById("bg-desktop");
+        const poster = document.getElementById("video-poster");
+        const titleElement = document.querySelector(".tagfr .about-title");
 
-        let ticking = false;
-        window.addEventListener("scroll", () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    updateBlur();
-                    ticking = false;
+        const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+
+        let bgElement = poster;
+
+        if (isMobile) {
+            if (desktopVideo) desktopVideo.style.display = "none";
+            if (poster) {
+                poster.style.display = "block";
+                bgElement = poster;
+                applyBlur(poster);
+                titleElement.textContent = "Liam's Website"; 
+            }
+        } else {
+            if (poster) {
+                poster.style.display = "block";
+                bgElement = poster;
+                applyBlur(poster);
+                titleElement.textContent = "Liam's Website (loading movie)";
+            }
+
+            if (desktopVideo) {
+                desktopVideo.style.display = "none";
+
+                // wait for video to be ready
+                desktopVideo.addEventListener("canplaythrough", () => {
+                    poster.style.display = "none";
+                    desktopVideo.style.display = "block";
+                    desktopVideo.play();
+                    bgElement = desktopVideo;
+                    applyBlur(desktopVideo);
+
+                    titleElement.textContent = "Liam's Website";
                 });
-                ticking = true;
             }
-        });
-    }
+        }
 
-    // Paralax mouse move fx
-    if (bgElement) {
-        let targetX = 0, targetY = 0;
-        let currentX = 0, currentY = 0;
 
-        document.addEventListener("mousemove", (e) => {
-            targetX = (e.clientX / window.innerWidth - 0.5) * 10;
-            targetY = (e.clientY / window.innerHeight - 0.5) * 10;
-        });
 
-        const animateParallax = () => {
-            currentX += (targetX - currentX) * 0.1;
-            currentY += (targetY - currentY) * 0.1;
-            bgElement.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.05)`;
-            requestAnimationFrame(animateParallax);
-        };
-        animateParallax();
-    }
-});
+
+        // Blur effect 
+        function applyBlur(element) {
+            if (!element) return;
+
+            const updateBlur = () => {
+                const scrollY = window.scrollY;
+                const blurAmount = Math.min(scrollY / 50, 10);  
+                const darkAmount = Math.min(scrollY / 500, 0.3); 
+                element.style.filter = `blur(${blurAmount}px) brightness(${1 - darkAmount})`;
+            };
+
+
+            updateBlur(); // init blur
+
+            let ticking = false;
+            window.addEventListener("scroll", () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        updateBlur();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        }
+
+        // Paralax mouse move fx
+        if (bgElement) {
+            let targetX = 0, targetY = 0;
+            let currentX = 0, currentY = 0;
+
+            document.addEventListener("mousemove", (e) => {
+                targetX = (e.clientX / window.innerWidth - 0.5) * 10;
+                targetY = (e.clientY / window.innerHeight - 0.5) * 10;
+            });
+
+            const animateParallax = () => {
+                currentX += (targetX - currentX) * 0.1;
+                currentY += (targetY - currentY) * 0.1;
+                bgElement.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.05)`;
+                requestAnimationFrame(animateParallax);
+            };
+            animateParallax();
+        }
+    });
 
 
 </script>
