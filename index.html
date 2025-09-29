@@ -184,9 +184,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (desktopVideo) desktopVideo.style.display = "none";
         if (poster) {
             poster.style.display = "block";
+            bgElement = poster;
             applyBlur(poster);
         }
     } else if (desktopVideo && poster) {
+
+        poster.style.display = "block";
+        bgElement = poster;
+        applyBlur(poster);
+
         desktopVideo.style.display = "none";
         desktopVideo.addEventListener("canplay", () => {
             poster.style.display = "none";
@@ -196,6 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
             applyBlur(desktopVideo);
         });
     }
+
 
     // Blur effect 
     function applyBlur(element) {
