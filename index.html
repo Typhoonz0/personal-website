@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
+    <title>Loading website...</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- Video wrapper -->
+
 <div id="video-wrapper" style="position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; overflow:hidden;">
     <img id="video-poster" src="assets/bocchi.png" style="width:100%; height:100%; object-fit:cover;">
     
@@ -16,12 +16,7 @@
       <source src="assets/bocchi.mp4" type="video/mp4">
     </video>
 </div>
-
-
-    <!-- Top Bar -->
     <div class="tagfr"><h1 class="about-title" style="text-align: center;">Liam's Website</h1></div>
-
-    <!-- Scroll Down Prompt -->
     <div class="scroll-prompt">⬇ Scroll Down ⬇</div>
 
     <section class="about-section">
@@ -118,27 +113,30 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    // --- Custom cursor ---
+
+    // Custom cursor
     const cursor = document.createElement('div');
     cursor.classList.add('cursor');
     document.body.appendChild(cursor);
+
     document.addEventListener('mousemove', (e) => {
         cursor.style.left = e.clientX + 'px';
         cursor.style.top = e.clientY + 'px';
     });
 
-    // --- Custom right-click menu ---
+    // TODO: Custom right-click menu 
     const menu = document.getElementById("custom-menu");
     document.addEventListener("contextmenu", (e) => e.preventDefault());
     document.addEventListener("click", () => {
         if (menu) menu.style.display = "none";
     });
 
-    // --- Music / Link buttons ---
+    // Music and link buttons 
     const bgMusic = document.getElementById('bg-music');
     let playing = false;
+
     const buttons = document.querySelectorAll('.music-btn');
-    const spacing = 20;
+    const spacing = 20; 
 
     buttons.forEach((btn, index) => {
         btn.style.position = "fixed";
@@ -146,6 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.style.bottom = `${20 + index * (btn.offsetHeight + spacing)}px`;
 
         const action = btn.getAttribute('data-action');
+
         btn.addEventListener('click', () => {
             if (action === 'music') {
                 if (!playing) {
@@ -163,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // --- Scrolling title effect ---
+    // scrolling title effect
     const siteName = "Liam's Website - ";
     let scrollTitle = siteName;
     const scrollTitleFunc = () => {
@@ -173,63 +172,73 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     scrollTitleFunc();
 
-    // --- Background handling (poster / video) ---
+    // bg handling
     const desktopVideo = document.getElementById("bg-desktop");
     const poster = document.getElementById("video-poster");
+
     const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
-    let bgElement = poster;
-    if (desktopVideo) desktopVideo.style.display = "none";
+    let bgElement = poster; 
 
-    if (!isMobile && desktopVideo) {
+    if (isMobile) {
+        if (desktopVideo) desktopVideo.style.display = "none";
+        if (poster) {
+            poster.style.display = "block";
+            applyBlur(poster);
+        }
+    } else if (desktopVideo && poster) {
+        desktopVideo.style.display = "none";
         desktopVideo.addEventListener("canplay", () => {
-            if (poster) poster.style.display = "none";
+            poster.style.display = "none";
             desktopVideo.style.display = "block";
             desktopVideo.play();
             bgElement = desktopVideo;
+            applyBlur(desktopVideo);
         });
-    } else if (poster) {
-        poster.style.display = "block";
     }
 
-    // --- Blur effect ---
+    // Blur effect 
     function applyBlur(element) {
         if (!element) return;
+
+        const updateBlur = () => {
+            const scrollY = window.scrollY;
+            const blurAmount = Math.min(scrollY / 50, 10);
+            element.style.filter = `blur(${blurAmount}px)`;
+        };
+
+        updateBlur(); // init blur
+
         let ticking = false;
         window.addEventListener("scroll", () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
-                    const scrollY = window.scrollY;
-                    const blurAmount = Math.min(scrollY / 50, 10);
-                    element.style.filter = `blur(${blurAmount}px)`;
+                    updateBlur();
                     ticking = false;
                 });
                 ticking = true;
             }
         });
     }
-    applyBlur(bgElement);
 
-    // --- Parallax effect ---
-    let targetX = 0, targetY = 0;
-    let currentX = 0, currentY = 0;
-    const parallaxFactorX = 10;
-    const parallaxFactorY = 20;
-    const easing = 0.1;
+    // Paralax mouse move fx
+    if (bgElement) {
+        let targetX = 0, targetY = 0;
+        let currentX = 0, currentY = 0;
 
-    document.addEventListener("mousemove", (e) => {
-        targetX = (e.clientX / window.innerWidth - 0.5) * parallaxFactorX;
-        targetY = (e.clientY / window.innerHeight - 0.5) * parallaxFactorY;
-    });
+        document.addEventListener("mousemove", (e) => {
+            targetX = (e.clientX / window.innerWidth - 0.5) * 10;
+            targetY = (e.clientY / window.innerHeight - 0.5) * 10;
+        });
 
-    function animateParallax() {
-        if (!bgElement) return;
-        currentX += (targetX - currentX) * easing;
-        currentY += (targetY - currentY) * easing;
-        bgElement.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.05)`;
-        requestAnimationFrame(animateParallax);
+        const animateParallax = () => {
+            currentX += (targetX - currentX) * 0.1;
+            currentY += (targetY - currentY) * 0.1;
+            bgElement.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.05)`;
+            requestAnimationFrame(animateParallax);
+        };
+        animateParallax();
     }
-    animateParallax();
 });
 
 
