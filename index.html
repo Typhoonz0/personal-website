@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- Desktop video -->
-<video id="bg-desktop" autoplay muted loop playsinline>
-  <source src="assets/bocchi.mp4" type="video/mp4">
-</video>
+<!-- Video wrapper -->
+<div id="video-wrapper" style="position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; overflow:hidden;">
+    <img id="video-poster" src="assets/bocchi.png" style="width:100%; height:100%; object-fit:cover;">
+    
+    <video id="bg-desktop" autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover; display:none;">
+      <source src="assets/bocchi.mp4" type="video/mp4">
+    </video>
+</div>
 
-<!-- Mobile GIF fallback -->
-<img id="bg-mobile" src="assets/bocchi.gif" alt="bocchi GIF">
 
     <!-- Top Bar -->
     <div class="tagfr"><h1 class="about-title" style="text-align: center;">Liam's Website</h1></div>
@@ -110,7 +112,8 @@
 </footer>
 </body>
 <audio id="bg-music" src="assets/resonance.mp3" preload="auto"></audio>
-<button id="music-btn" class="download-btn">▶</button>
+<button class="music-btn" data-action="music">▶</button>
+<button class="music-btn" data-action="link"><img src="assets/code.svg" alt="angle symbol" width="24" height="24"></button>
 </html>
 
 <script>
@@ -132,24 +135,38 @@ document.addEventListener("DOMContentLoaded", () => {
         if (menu) menu.style.display = "none";
     });
 
-    // --- Music button ---
-    const musicBtn = document.getElementById('music-btn');
-    const bgMusic = document.getElementById('bg-music');
-    let playing = false;
+const bgMusic = document.getElementById('bg-music');
+let playing = false;
 
-    if (musicBtn && bgMusic) {
-        musicBtn.addEventListener('click', () => {
+const buttons = document.querySelectorAll('.music-btn');
+const spacing = 20; // px space between buttons
+
+buttons.forEach((btn, index) => {
+    // Stack buttons vertically
+    btn.style.position = "fixed";
+    btn.style.right = "20px";
+    btn.style.bottom = `${20 + index * (btn.offsetHeight + spacing)}px`;
+
+    // Assign behavior based on data-action attribute
+    const action = btn.getAttribute('data-action');
+
+    btn.addEventListener('click', () => {
+        if (action === 'music') {
             if (!playing) {
                 bgMusic.play();
-                musicBtn.style.fontSize = "1rem";
-                musicBtn.textContent = "Now Playing - Resonance ⏸";
+                btn.style.fontSize = "1rem";
+                btn.textContent = "Now Playing - Resonance ⏸";
             } else {
                 bgMusic.pause();
-                musicBtn.textContent = "▶";
+                btn.textContent = "▶";
             }
             playing = !playing;
-        });
-    }
+        } else if (action === 'link') {
+            window.open("https://github.com/Typhoonz0/personal-website", "_blank");
+        }
+    });
+});
+
 
     // --- Scrolling title effect ---
     const siteName = "Liam's Website - ";
@@ -161,16 +178,37 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     scrollTitleFunc();
 
-    const applyBlur = (videoElement) => {
-        if (!videoElement) return;
+    // --- Video / poster handling ---
+    const desktopVideo = document.getElementById("bg-desktop");
+    const poster = document.getElementById("video-poster");
 
-        videoElement.style.position = "fixed";
-        videoElement.style.top = "0";
-        videoElement.style.left = "0";
-        videoElement.style.width = "100%";
-        videoElement.style.height = "100%";
-        videoElement.style.objectFit = "cover";
-        videoElement.style.zIndex = "-1";
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+
+    let bgElement = null;
+
+    if (isMobile) {
+        if (desktopVideo) desktopVideo.style.display = "none";
+        if (poster) {
+            poster.style.display = "block";
+            bgElement = poster;
+            applyBlur(poster);
+        }
+    } else {
+        if (desktopVideo && poster) {
+            desktopVideo.style.display = "none";
+            desktopVideo.addEventListener("canplay", () => {
+                poster.style.display = "none";
+                desktopVideo.style.display = "block";
+                desktopVideo.play();
+            });
+            bgElement = desktopVideo;
+            applyBlur(desktopVideo);
+        }
+    }
+
+    // --- Blur effect for background media (video or image) ---
+    function applyBlur(element) {
+        if (!element) return;
 
         let ticking = false;
 
@@ -179,19 +217,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.requestAnimationFrame(() => {
                     const scrollY = window.scrollY;
                     const blurAmount = Math.min(scrollY / 50, 10);
-                    videoElement.style.filter = `blur(${blurAmount}px)`;
+                    element.style.filter = `blur(${blurAmount}px)`;
                     ticking = false;
                 });
                 ticking = true;
             }
         });
-    };
+    }
 
-    const desktopVideo = document.getElementById("bg-desktop");
-    const mobileVideo = document.getElementById("bg-mobile");
-
-    applyBlur(desktopVideo);
-    applyBlur(mobileVideo);
-
+    // --- Parallax effect for background ---
+    if (bgElement) {
+        document.addEventListener("mousemove", (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 10;  // range: -5px to 5px
+            const y = (e.clientY / window.innerHeight - 0.5) * 20; // range: -5px to 5px
+            bgElement.style.transform = `translate(${x}px, ${y}px) scale(1.05)`; 
+        });
+    }
 });
+
+
 </script>

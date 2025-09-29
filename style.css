@@ -209,15 +209,14 @@ footer {
     }
 }
 
-#music-btn {
+.music-btn {
     position: fixed;
-    bottom: 20px;
     right: 20px;
     background-color: var(--gray-dark);
     color: #fff;
     border: 1px solid #374151;
-    border-radius: 50px; /* make it oval-friendly */
-    padding: 0 1rem; /* horizontal padding allows expansion */
+    border-radius: 50px;
+    padding: 0 1rem;
     min-width: 60px;
     height: 60px;
     font-size: 1.5rem;
@@ -225,11 +224,13 @@ footer {
     align-items: center;
     justify-content: center;
     z-index: 10000;
-    transition: all 0.3s ease; /* smooth resizing */
-    white-space: nowrap; /* prevents wrapping to multiple lines */
+    transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
-#music-btn:hover {
+
+
+.music-btn:hover {
     background-color: var(--white);
     color: var(--black);
 }
