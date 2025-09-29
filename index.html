@@ -8,9 +8,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <video autoplay muted loop id="bg-video">
+    <source src="assets/bocchi.mp4" type="video/mp4">
+</video>
+    <!-- Top Bar -->
+    <div class="tagfr"><h1 class="about-title" style="text-align: center;">Liam's Website</h1></div>
+
+    <!-- Scroll Down Prompt -->
+    <div class="scroll-prompt">⬇ Scroll Down ⬇</div>
+
     <section class="about-section">
         <div class="about-content">
-            <h1 class="about-title">Liam's Website</h1>
+            <h1 class="about-title">Who am I?</h1>
             <p>I'm a 15 year old developer from Australia. </p>
             <p>I'm interested in building real world projects that developers use every day,</p>
             <p>like programming languages, packages managers and (eventually) an operating system, to understand how they work and how to make them better.</p>
@@ -95,8 +104,8 @@
     I'm @xliam111 on IG | Bocchi the Rock and Touhou are both peak, check them out in your spare time | "We're so back!"
 </footer>
 </body>
-<audio id="bg-music" src="assets/homecoming.mp3" preload="auto"></audio>
-<button id="music-btn">▶</button>
+<audio id="bg-music" src="assets/resonance.mp3" preload="auto"></audio>
+<button id="music-btn" class="download-btn">▶</button>
 </html>
 
 <script>
@@ -126,7 +135,7 @@
         if (!playing) {
             bgMusic.play();
             musicBtn.style.fontSize = "1rem";
-            musicBtn.textContent = "Now Playing - Homecoming by Kanye West ⏸";
+            musicBtn.textContent = "Now Playing - Resonance ⏸";
 
         } else {
             bgMusic.pause();
@@ -146,6 +155,19 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     scrollTitle();
+
+const video = document.getElementById("bg-video");
+
+window.addEventListener("scroll", () => {
+    // amount scrolled
+    const scrollY = window.scrollY;
+
+    // maximum blur capped at 10px
+    const blurAmount = Math.min(scrollY / 50, 10);
+
+    video.style.filter = `blur(${blurAmount}px)`;
+});
+
 });
 
 </script>

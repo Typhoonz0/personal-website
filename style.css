@@ -3,9 +3,9 @@
     --black2: #3a3a58;
     --white: #b4befe;
     --gray-light: #9ca3af;
-    --gray-dark: #181825;
+    --gray-dark: rgba(24, 24, 37, 0.4);
     --gray-border: #374151;
-    --gray-bg: #111111;
+    --gray-bg: rgb(17, 17, 17, 0.4);
 }
 
 * {
@@ -55,6 +55,22 @@ footer {
     transform: translate(-50%, -50%);
     transition: transform 0.3s ease; 
     z-index: 9999;
+}
+
+.tagfr {
+    min-height: 100vh; /* full viewport height */
+}
+
+/* Scroll Prompt */
+.scroll-prompt {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: 600;
+    animation: bounce 1.5s infinite;
 }
 
 .about-section {
@@ -197,7 +213,7 @@ footer {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: var(--black);
+    background-color: var(--gray-dark);
     color: #fff;
     border: 1px solid #374151;
     border-radius: 50px; /* make it oval-friendly */
@@ -216,4 +232,16 @@ footer {
 #music-btn:hover {
     background-color: var(--white);
     color: var(--black);
+}
+#bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* cover the entire viewport */
+    z-index: -1;       /* behind all content */
+    pointer-events: none; /* prevent interaction */
+    filter: blur(0px); /* initial blur */
+    transition: filter 0.3s ease; /* smooth blur on scroll */
 }
