@@ -1,4 +1,0 @@
-#!/bin/bash
-
-curl -fsSL https://github.com/Typhoonz0/autoarch/raw/refs/heads/main/autoarch.sh -o autoarch.sh
-bash autoarch.sh

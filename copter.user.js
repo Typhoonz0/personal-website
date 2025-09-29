@@ -2,7 +2,7 @@
 // @name         Copter Royale Inline Tweaks
 // @namespace    http://tampermonkey.net/
 // @version      1.1
-// @description  Inline GUI in news-scrollbar-black / update-box.scrollbar-black
+// @description  https://xliam.space
 // @match        *://*.coolmathgames.com/*
 
 // @grant        none

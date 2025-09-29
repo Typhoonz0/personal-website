@@ -1,75 +1,151 @@
-<!-- A new iteration of my website. I decided that all the flashy animations was too much. -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="discord-avatar.ico">
+    <title>My Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <title>@xliam111</title>
 </head>
-
 <body>
-    <h1>Liam's Website</h1>
-    <p>I code things (:</p>
-    <h3>Who am I?</h3>
-    <p>I'm a 15 year old developer from Australia. I'm interested in building real world projects that developers use every day,</p>
-    <p>like programming languages, packages managers and (eventually) an operating system, to understand how they work and how to make them better.</p>
-    <p>I use Arch Linux and I am proficient in Python, Bash, and C.</p>
-    
-    <h3>Stuff</h3>
-    <dl>
-        <dt>
-            <a href="https://github.com/Typhoonz0">Github</a>
-        </dt>
-        <dd>
-            My Github profile.
-        </dd>
-        <dt>
-            <a href="legacy/index.html">The Old Website</a>
-        </dt>
-        <dd> 
-            I opted for a more minimal style around June 2025. You can still see the old one here.
-        </dd>
-    </dl>
+    <section class="about-section">
+        <div class="about-content">
+            <h1 class="about-title">Liam's Website</h1>
+            <p>I'm a 15 year old developer from Australia. </p>
+            <p>I'm interested in building real world projects that developers use every day,</p>
+            <p>like programming languages, packages managers and (eventually) an operating system, to understand how they work and how to make them better.</p>
+            <p>I use Arch Linux and I am proficient in Python, Bash, and C.</p>
+            <br>
+            <a href="https://github.com/Typhoonz0" class="contact-btn" target="_blank">Look at my Github</a>
+        </div>
+    </section>
 
-    <h3>Featured Code</h3>
-    <dl>
-        <dt>
-            <a href="https://github.com/Typhoonz0/nebula-language">Nebula Language</a>
-        </dt>
-        <dd>
-            My simple, general purpose, object oriented programming language.
-        </dd>
-        <dt>
-            <a href="https://github.com/Typhoonz0/cooked-language">Cooked Language</a>
-        </dt>
-        <dd>
-            My programming language with a clean syntax for writing HTML. (I'm rewriting the parser at the moment.)
-        </dd>
-        <dt>
-            <a href="https://github.com/Typhoonz0/archfr">ArchFR</a>
-        </dt>
-        <dd>
-            Automated Arch Linux install scripts with my config.
-        </dd>
-        <dt>
-            <a href="https://github.com/Typhoonz0/ypkg">ypkg</a>
-        </dt>
-        <dd>
-            My very simple package manager.
-        </dd>
-        <dt>
-            <a href="sigmaos/index.html">Sigma'OS'</a>
-        </dt>
-        <dd>
-            A windows 95 esque operating system simulator in the browser.
-        </dd>
-    </dl>
-</body>
+    <section class="portfolio-section">
+        <h1 class="portfolio-title">Featured Code</h1>
+        
+        <div class="portfolio-grid">
+            <div class="project-tile">
+                <h3 class="project-name">Nebula Language</h3>
+                <div class="tags">
+                    <span class="tag">Python</span>
+                </div>
+                <p class="project-description">
+                    My simple, general purpose, object oriented programming language.
+                </p>
+                <a href="https://github.com/Typhoonz0/nebula-language" class="download-btn" target="_blank">View Project</a>
+            </div>
 
-<footer>
+            <div class="project-tile">
+                <h3 class="project-name">Cooked Language</h3>
+                <div class="tags">
+                    <span class="tag">Python</span>
+                </div>
+                <p class="project-description">
+                    My programming language with a clean syntax for writing HTML. (Currently rewriting the parser.)
+                </p>
+                <a href="https://github.com/Typhoonz0/cooked-language" class="download-btn" target="_blank">View Project</a>
+            </div>
+
+            <div class="project-tile">
+                <h3 class="project-name">ArchFR</h3>
+                <div class="tags">
+                    <span class="tag">Bash</span>
+                </div>
+                <p class="project-description">
+                    Automated Arch Linux install scripts with my personal configuration.
+                </p>
+                <a href="https://github.com/Typhoonz0/archfr" class="download-btn" target="_blank">View Project</a>
+            </div>
+
+            <div class="project-tile">
+                <h3 class="project-name">ypkg</h3>
+                <div class="tags">
+                    <span class="tag">Python</span>
+                </div>
+                <p class="project-description">
+                    A very simple package manager I built.
+                </p>
+                <a href="https://github.com/Typhoonz0/ypkg" class="download-btn" target="_blank">View Project</a>
+            </div>
+
+            <div class="project-tile">
+                <h3 class="project-name">Sigma'OS'</h3>
+                <div class="tags">
+                    <span class="tag">JavaScript</span>
+                </div>
+                <p class="project-description">
+                    A Windows 95-esque operating system simulator in the browser.
+                </p>
+                <a href="sigmaos/index.html" class="download-btn" target="_blank">View Project</a>
+            </div>
+
+            <div class="project-tile">
+                <h3 class="project-name">Copter Royale Tweaks</h3>
+                <div class="tags">
+                    <span class="tag">JavaScript</span>
+                </div>
+                <p class="project-description">
+                    A simple userscript to change behaviour when playing Copter Royale on Coolmath Games.
+                </p>
+                <a href="copter.user.js" class="download-btn" target="_blank">View Project</a>
+            </div>
+        </div>
+    </section>
+    <footer>
     I'm @xliam111 on IG | Bocchi the Rock and Touhou are both peak, check them out in your spare time | "We're so back!"
 </footer>
+</body>
+<audio id="bg-music" src="assets/homecoming.mp3" preload="auto"></audio>
+<button id="music-btn">▶</button>
 </html>
+
+<script>
+    const cursor = document.createElement('div');
+    cursor.classList.add('cursor');
+    document.body.appendChild(cursor);
+
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    });
+    const menu = document.getElementById("custom-menu");
+
+    document.addEventListener("contextmenu", (e) => {
+        e.preventDefault(); 
+    });
+
+    document.addEventListener("click", () => {
+        menu.style.display = "none"; 
+    });
+
+    const musicBtn = document.getElementById('music-btn');
+    const bgMusic = document.getElementById('bg-music');
+    let playing = false;
+
+    musicBtn.addEventListener('click', () => {
+        if (!playing) {
+            bgMusic.play();
+            musicBtn.style.fontSize = "1rem";
+            musicBtn.textContent = "Now Playing - Homecoming by Kanye West ⏸";
+
+        } else {
+            bgMusic.pause();
+            musicBtn.textContent = "▶"; 
+        }
+        playing = !playing;
+    });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const name = "Liam's Website - ";
+    let title = name;
+
+    const scrollTitle = () => {
+        document.title = title;
+        title = title.slice(1) + title.charAt(0); 
+        setTimeout(scrollTitle, 150); 
+    };
+
+    scrollTitle();
+});
+
+</script>
