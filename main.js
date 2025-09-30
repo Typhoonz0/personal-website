@@ -75,32 +75,51 @@ document.addEventListener("DOMContentLoaded", () => {
                 titleElement.textContent = "Liam's Website"; 
             }
         } else {
-           if (poster) {
+            if (poster) {
                 poster.style.display = "block";
                 bgElement = poster;
-                applyBlur(poster);
+                if (typeof applyBlur === "function") {
+                    applyBlur(poster);
+                }
                 titleElement.textContent = "Liam's Website (loading movie, reload if frozen)";
             }
 
             if (desktopVideo) {
                 desktopVideo.style.display = "none";
-                desktopVideo.addEventListener("canplaythrough", () => {
+
+                const reloaded = sessionStorage.getItem("videoReloaded");
+
+                // ai code
+                if (desktopVideo.readyState >= 3) {
                     poster.style.display = "none";
                     desktopVideo.style.display = "block";
-                    desktopVideo.play();
+                    desktopVideo.play().catch(() => {});
                     bgElement = desktopVideo;
-                    applyBlur(desktopVideo);
+                    if (typeof applyBlur === "function") {
+                        applyBlur(desktopVideo);
+                    }
                     titleElement.textContent = "Liam's Website";
-                });
+                } else {
+                    // Wait for video readiness
+                    desktopVideo.addEventListener("canplaythrough", () => {
+                        poster.style.display = "none";
+                        desktopVideo.style.display = "block";
+                        desktopVideo.play().catch(() => {});
+                        bgElement = desktopVideo;
+                        if (typeof applyBlur === "function") {
+                            applyBlur(desktopVideo);
+                        }
+                        titleElement.textContent = "Liam's Website";
+                    }, { once: true });
 
-                setTimeout(() => {
-                    if (desktopVideo.readyState < 3) { 
-                        if (!localStorage.getItem("videoReloaded")) {
-                            localStorage.setItem("videoReloaded", "true");
+                    // Reload once if it’s stuck
+                    setTimeout(() => {
+                        if (desktopVideo.readyState < 3 && !reloaded) {
+                            sessionStorage.setItem("videoReloaded", "true");
                             location.reload();
                         }
-                    }
-                }, 5000); 
+                    }, 2000);
+                }
             }
 
         }
