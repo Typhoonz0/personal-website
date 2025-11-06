@@ -1464,7 +1464,9 @@
                 color: theme.text1
             });
             mainGui.appendChild(downloadBtn);
-            downloadBtn.addEventListener('click', window.open("https://github.com/Typhoonz0/omniverse/releases", "_blank"));
+            downloadBtn.addEventListener('click', () => {
+                window.open("https://github.com/Typhoonz0/omniverse/releases", "_blank");
+            });
 
             // Helper to update visibility and button text/style
             function updateVisibility(id, settingsId) {
