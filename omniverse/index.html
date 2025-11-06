@@ -1450,6 +1450,21 @@
                 location.reload();
             });
 
+            // download button
+            const downloadBtn = utils.el('button', {
+                text: 'Download Omniverse for PC'
+            });
+            Object.assign(downloadBtn.style, {
+                padding: '6px 12px',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                background: theme.red3,
+                color: theme.text1
+            });
+            mainGui.appendChild(downloadBtn);
+            downloadBtn.addEventListener('click', window.open("https://github.com/Typhoonz0/omniverse/releases", "_blank"));
 
             // Helper to update visibility and button text/style
             function updateVisibility(id, settingsId) {
