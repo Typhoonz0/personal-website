@@ -24,7 +24,6 @@ h1 {
 }
 h1:hover {
     color: #c3cbff;
-    transform: translateY(-1px); 
 }
 
 body {
