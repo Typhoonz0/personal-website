@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deadshot.io Browser Version</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>omniverse</title>
     <style>
         html,
         body {
@@ -13,6 +14,13 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
+            background: var(--black);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            text-align: center;
+            flex-direction: column;
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
         }
 
         iframe {
@@ -20,13 +28,158 @@
             width: 100%;
             height: 100%;
         }
+        :root {
+            --black: #1e1e2e;
+            --black2: #3a3a58;
+            --white: #b4befe;
+            --gray-light: #9ca3af;
+            --gray-dark: rgba(24, 24, 37, 0.4);
+            --gray-border: #374151;
+            --gray-bg: rgba(17, 17, 17, 0.4);
+            --accent: #b4befe;
+        }
+
+
+        h1 {
+            font-size: 200px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 20px;
+            width: 100%;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        h1:hover {
+            color: #c3cbff;
+            transform: translateY(-2px);
+        }
+
+        h2 {
+            color: var(--white);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        input,
+        button {
+            font-family: inherit;
+            font-size: 1rem;
+            border-radius: 8px;
+        }
+
+        input {
+            width: calc(100% - 110px);
+            padding: 10px;
+            border: 1px solid var(--gray-border);
+            background: var(--gray-dark);
+            color: var(--white);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--white);
+        }
+
+        .button {
+            background: var(--white);
+            color: var(--black);
+            padding: 10px 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px var(--white);
+            transition: background 0.2s ease;
+        }
+
+        .button:hover {
+            background: var(--black);
+            color: var(--white);
+            border: 10px #c3cbff;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            font-size: 1rem;
+            color: var(--gray-light);
+            background: var(--gray-dark);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .tip-entry {
+            background: var(--gray-dark);
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--accent);
+            transition: transform 0.2s ease;
+        }
+
+        .tip-entry:hover {
+            transform: translateY(-2px);
+        }
+
+        .tip-entry h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.1rem;
+            color: var(--white);
+        }
+
+        .tip-entry p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--gray-light);
+            line-height: 1.6;
+        }
+
+        .omniverse {
+            background: var(--gray-bg);
+            color: var(--white);
+            text-align: left;
+        }
+
+        .omniverse img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--gray-border);
+        }
+
     </style>
 </head>
 
 <body>
-    <iframe src="https://deadshot.io" allowfullscreen id="gameFrame"></iframe>
+    <h1>Omniverse</h1>
+    <div id="sidefr">
+    <p>A simple, modern, feature rich Deadshot.io client</p>
+    
+<button class="button" id="playButton">Try in Browser</button>
+<button class="button" id="dlButton">Download Omniverse</button>
+</div>
+<iframe id="gameFrame" allowfullscreen style="display:none;"></iframe>
+</body>
+<script>
+    const playButton = document.getElementById('playButton');
+    const dlButton = document.getElementById('dlButton');
+    const iframe = document.getElementById('gameFrame');
+     const sidefr = document.getElementById('sidefr');
+    dlButton.addEventListener('click', () => {
+        window.open("https://github.com/Typhoonz0/omniverse/releases", "_blank");
+    });
 
-    <script>
+    playButton.addEventListener('click', () => {
+        // Hide landing page elements
+        playButton.style.display = 'none';
+        document.querySelector('h1')?.remove();
+ sidefr.style.display = 'none';
+        // Show iframe and load game
+        iframe.style.display = 'block';
+        iframe.src = 'https://deadshot.io';
+
+        // Custom script to run after clicking "Play in Browser"
+        (function customScript() {
+
         //  __   _  _  __ _  __  _  _  ____  ____  ____  ____
         // /  \ ( \/ )(  ( \(  )/ )( \(  __)(  _ \/ ___)(  __)
         //(  O )/ \/ \/    / )( \ \/ / ) _)  )   /\___ \ ) _) 
@@ -1609,7 +1762,8 @@
 
         document.body.appendChild(watermark);
 
-    </script>
-</body>
+        })();
+    });
+</script>
 
 </html>
