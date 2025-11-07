@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <title>omniverse</title>
     <style>
         html,
@@ -13,7 +13,6 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
             background: var(--black);
             color: var(--white);
             display: flex;
@@ -21,6 +20,8 @@
             text-align: center;
             flex-direction: column;
             font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            justify-content: flex-start;
+
         }
 
         iframe {
@@ -28,12 +29,13 @@
             width: 100%;
             height: 100%;
         }
+
         :root {
             --black: #1e1e2e;
             --black2: #3a3a58;
             --white: #b4befe;
             --gray-light: #9ca3af;
-            --gray-dark: rgba(24, 24, 37, 0.4);
+            --gray-dark: rgba(58, 29, 41, 0.4);
             --gray-border: #374151;
             --gray-bg: rgba(17, 17, 17, 0.4);
             --accent: #b4befe;
@@ -96,238 +98,413 @@
             color: var(--white);
             border: 10px #c3cbff;
         }
-
-        pre {
-            white-space: pre-wrap;
-            font-size: 1rem;
-            color: var(--gray-light);
-            background: var(--gray-dark);
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-
-        .tip-entry {
-            background: var(--gray-dark);
-            padding: 16px;
-            border-radius: 10px;
-            margin-bottom: 16px;
-            border-left: 4px solid var(--accent);
-            transition: transform 0.2s ease;
-        }
-
-        .tip-entry:hover {
-            transform: translateY(-2px);
-        }
-
-        .tip-entry h3 {
-            margin: 0 0 8px 0;
-            font-size: 1.1rem;
-            color: var(--white);
-        }
-
-        .tip-entry p {
-            margin: 0;
-            font-size: 0.95rem;
-            color: var(--gray-light);
-            line-height: 1.6;
-        }
-
-        .omniverse {
-            background: var(--gray-bg);
-            color: var(--white);
-            text-align: left;
-        }
-
-        .omniverse img {
-            width: 100%;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border: 1px solid var(--gray-border);
-        }
-
     </style>
 </head>
 
 <body>
-    <h1>Omniverse</h1>
-    <div id="sidefr">
-    <p>A simple, modern, feature rich Deadshot.io client</p>
+
+    <body>
+        <h1>Omniverse</h1>
+        <div id="sidefr">
+            <p>A simple, modern, feature rich Deadshot.io client</p>
+            <div class="butt">
+                <button class="button" id="playButton">Try in Browser</button>
+                <button class="button" id="dlButton">Download Omniverse</button>
+                <button class="button" id="whyButton">Why Omniverse?</button>
+            </div>
+        </div>
+
+        <button id="homeButton" class="button" style="  
+    display: none;
+        top: 16px;
+        left: 16px;
+        ">Back (right click to hide forever)</button>
+
+        <iframe id="gameFrame" allowfullscreen style="display:none; width:100vw; height:100vh; border:none;"></iframe>
+
+        <script>
+            const playButton = document.getElementById('playButton');
+            const dlButton = document.getElementById('dlButton');
+            const whyButton = document.getElementById('whyButton');
+            const iframe = document.getElementById('gameFrame');
+            const sidefr = document.getElementById('sidefr');
+            const homeButton = document.getElementById('homeButton');
+         
+
+            dlButton.addEventListener('click', () => {
+                window.open("https://github.com/Typhoonz0/omniverse/releases", "_blank");
+            });
+   whyButton.addEventListener('click', () => {
+                const overlay = document.createElement('div');
+                Object.assign(overlay.style, {
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    background: 'rgba(0,0,0,0.7)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    zIndex: 10000,
+                    overflow: 'auto'
+                });
+
+                const popup = document.createElement('div');
+                Object.assign(popup.style, {
+                    background: '#1e1e2e',
+                    padding: '24px',
+                    borderRadius: '12px',
+                    maxWidth: '600px',
+                    width: '90%',
+                    color: '#b4befe',
+                    display: 'flex',
+                    gap: '24px',
+                    alignItems: 'flex-start',
+                    opacity: 0,
+                    transform: 'scale(0.8)',
+                    transition: 'all 0.3s ease'
+                });
+
+                requestAnimationFrame(() => {
+                    popup.style.opacity = 1;
+                    popup.style.transform = 'scale(1)';
+                });
+
+                const textDiv = document.createElement('div');
+                textDiv.style.flex = '1';
+                textDiv.innerHTML = `
+                <h3>Features</h3>
+                <ul style="list-style:none; padding:0; margin:0; line-height:1.6;">
+                    <li>FPS Booster</li>
+                    <li>Keys Overlay</li>
+                    <li>Deadshot + PC Stats</li>
+                    <li>Gun Skin Swapper</li>
+                    <li>Customizable UI</li>
+                    <li>Leaderboard Scraper</li>
+                    <li>Auto Fullscreen</li>
+                    <li>Adblocker</li>
+                    <li>Discord RPC</li>
+                </ul>
+                <h3>Also...</h3>
+                <ul style="list-style:none; padding:0; margin:0; line-height:1.6;">
+                    <li>Omniverse is actively being maintained</li>
+                    <li>Omniverse is lightweight both RAM wise and UI wise</li>
+                    <li>I made it so its good (:</li>
+                    <li>You've read this far, why not try it?</li>
+                </ul>
+                `;
+
+
+                const rightDiv = document.createElement('div');
+                rightDiv.style.display = 'flex';
+                rightDiv.style.flexDirection = 'column';
+                rightDiv.style.alignItems = 'flex-end';
+                rightDiv.style.gap = '12px';
+
+                const closeBtn = document.createElement('span');
+                closeBtn.textContent = '×';
+                Object.assign(closeBtn.style, {
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    fontSize: '1.5rem'
+                });
+
+                const img = document.createElement('img');
+                img.src = 'image.png'; 
+                img.alt = 'Preview';
+                Object.assign(img.style, {
+                    width: '120px',
+                    borderRadius: '8px'
+                });
+
+                rightDiv.appendChild(closeBtn);
+                rightDiv.appendChild(img);
+
     
-<button class="button" id="playButton">Try in Browser</button>
-<button class="button" id="dlButton">Download Omniverse</button>
-</div>
-<iframe id="gameFrame" allowfullscreen style="display:none;"></iframe>
-</body>
-<script>
-    const playButton = document.getElementById('playButton');
-    const dlButton = document.getElementById('dlButton');
-    const iframe = document.getElementById('gameFrame');
-     const sidefr = document.getElementById('sidefr');
-    dlButton.addEventListener('click', () => {
-        window.open("https://github.com/Typhoonz0/omniverse/releases", "_blank");
-    });
+                popup.appendChild(textDiv);
+                popup.appendChild(rightDiv);
+                overlay.appendChild(popup);
+                document.body.appendChild(overlay);
 
-        // Hide landing page elements
-        playButton.style.display = 'none';
-        document.querySelector('h1')?.remove();
- sidefr.style.display = 'none';
-        // Show iframe and load game
-        iframe.style.display = 'block';
-        iframe.src = 'https://deadshot.io';
+                popup.getBoundingClientRect();
 
-        // Custom script to run after clicking "Play in Browser"
-        (function customScript() {
+                popup.style.opacity = 1;
+                popup.style.transform = 'scale(1)';
 
-        //  __   _  _  __ _  __  _  _  ____  ____  ____  ____
-        // /  \ ( \/ )(  ( \(  )/ )( \(  __)(  _ \/ ___)(  __)
-        //(  O )/ \/ \/    / )( \ \/ / ) _)  )   /\___ \ ) _) 
-        // \__/ \_)(_/\_)__)(__) \__/ (____)(__\_)(____/(____)
-        //
-        // DO NOT DISTRIBUTE WITHOUT CREDIT
-
-        // CREDITS:
-        // By xLiam1 | xliam.space
-        const version = "0.67 Web"
-        const utils = {
-            set(key, value) {
-                try {
-                    localStorage.setItem(key, JSON.stringify(value));
-                } catch { }
-            },
-            get(key, defaultVal = null) {
-                try {
-                    const raw = localStorage.getItem(key);
-                    return raw ? JSON.parse(raw) : defaultVal;
-                } catch {
-                    return defaultVal;
+                function closePopup() {
+                    popup.style.opacity = 0;
+                    popup.style.transform = 'scale(0.8)';
+                    setTimeout(() => document.body.removeChild(overlay), 300);
                 }
-            },
-            setRaw(key, value) {
-                try {
-                    localStorage.setItem(key, value);
-                } catch { }
-            },
-            getRaw(key, defaultVal = null) {
-                try {
-                    const raw = localStorage.getItem(key);
-                    return raw === null ? defaultVal : raw;
-                } catch {
-                    return defaultVal;
-                }
-            },
-            remove(key) {
-                try {
-                    localStorage.removeItem(key);
-                } catch { }
-            },
-            loadPosition(key) {
-                return utils.get(`${key}_pos`, null);
-            },
-            savePosition(key, x, y) {
-                utils.set(`${key}_pos`, {
-                    x,
-                    y
+
+                closeBtn.addEventListener('click', closePopup);
+                overlay.addEventListener('click', e => {
+                    if (e.target === overlay) closePopup();
                 });
-            },
-            injectStyle(css) {
-                const s = document.createElement('style');
-                s.textContent = css;
-                document.head.appendChild(s);
-                return s;
-            },
-            el(tag, opts = {}) {
-                const e = document.createElement(tag);
-                if (opts.id) e.id = opts.id;
-                if (opts.cls) e.className = opts.cls;
-                if (opts.html !== undefined) e.innerHTML = opts.html;
-                if (opts.text !== undefined) e.textContent = opts.text;
-                if (opts.attrs) {
-                    for (const [k, v] of Object.entries(opts.attrs)) e.setAttribute(k, v);
-                }
-                if (opts.style) {
-                    Object.assign(e.style, opts.style);
-                }
-                return e;
-            },
-            makeDraggable(targetEl, opts = {}) {
-                // opts: storageKey (string) - key to save pos, handle (Element) - optional handle element to start drag,
-                // onSave: callback(pos) optional
-                let dragging = false;
-                let offsetX = 0;
-                let offsetY = 0;
-                const handle = opts.handle || targetEl;
-                const storageKey = opts.storageKey || targetEl.id || null;
-                const onSave = opts.onSave || (() => { });
+            });
 
-                function start(e) {
-                    // only left mouse button or touch
-                    if ((e.type === 'mousedown' && e.button !== 0) && e.type !== 'touchstart') return;
-                    dragging = true;
-                    const rect = targetEl.getBoundingClientRect();
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    offsetX = clientX - rect.left;
-                    offsetY = clientY - rect.top;
+            homeButton.addEventListener('click', () => {
+                localStorage.removeItem('playedBefore');
+                location.reload();
+            });
+            // Check if user already clicked before
+            if (localStorage.getItem('playedBefore') === 'true') {
+                startGame();
+            } else {
+                playButton.addEventListener('click', () => {
+                    // Store flag
+                    localStorage.setItem('playedBefore', 'true');
+                    startGame();
+                });
+            }
+
+
+            // Return to landing page
+            homeButton.addEventListener('click', () => {
+                localStorage.removeItem('playedBefore');
+                location.reload();
+            });
+            function startGame() {
+  
+                playButton.style.display = 'none';
+                document.querySelector('h1')?.remove();
+                if (sidefr) sidefr.style.display = 'none';
+
+           
+                iframe.style.display = 'block';
+                iframe.src = 'https://deadshot.io';
+                if (localStorage.getItem('hideHomeButton') !== 'true') {
+                    homeButton.style.display = 'block';
+                }
+
+                homeButton.addEventListener('contextmenu', (e) => {
                     e.preventDefault();
-                }
-
-                function move(e) {
-                    if (!dragging) return;
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    targetEl.style.left = (clientX - offsetX) + 'px';
-                    targetEl.style.top = (clientY - offsetY) + 'px';
-                    targetEl.style.right = 'auto';
-                }
-
-                function end() {
-                    if (!dragging) return;
-                    dragging = false;
-                    if (storageKey) {
-                        utils.savePosition(storageKey, targetEl.offsetLeft, targetEl.offsetTop);
-                        onSave({
-                            x: targetEl.offsetLeft,
-                            y: targetEl.offsetTop
-                        });
-                    }
-                }
-
-                handle.addEventListener('mousedown', start);
-                handle.addEventListener('touchstart', start, {
-                    passive: false
+                    localStorage.setItem('hideHomeButton', 'true');
+                    homeButton.style.display = 'none';
                 });
-                window.addEventListener('mousemove', move);
-                window.addEventListener('touchmove', move, {
-                    passive: false
-                });
-                window.addEventListener('mouseup', end);
-                window.addEventListener('touchend', end);
 
-                // restore pos if any
-                if (storageKey) {
-                    const pos = utils.loadPosition(storageKey);
-                    if (pos && typeof pos.x === 'number' && typeof pos.y === 'number') {
+                //  __   _  _  __ _  __  _  _  ____  ____  ____  ____
+                // /  \ ( \/ )(  ( \(  )/ )( \(  __)(  _ \/ ___)(  __)
+                //(  O )/ \/ \/    / )( \ \/ / ) _)  )   /\___ \ ) _) 
+                // \__/ \_)(_/\_)__)(__) \__/ (____)(__\_)(____/(____)
+                //
+                // DO NOT DISTRIBUTE WITHOUT CREDIT
+
+                // CREDITS:
+                // By xLiam1 | xliam.space
+                const version = "0.67 Web"
+                const utils = {
+                    set(key, value) {
                         try {
-                            targetEl.style.left = pos.x + 'px';
-                            targetEl.style.top = pos.y + 'px';
-                            targetEl.style.right = 'auto';
+                            localStorage.setItem(key, JSON.stringify(value));
                         } catch { }
+                    },
+                    get(key, defaultVal = null) {
+                        try {
+                            const raw = localStorage.getItem(key);
+                            return raw ? JSON.parse(raw) : defaultVal;
+                        } catch {
+                            return defaultVal;
+                        }
+                    },
+                    setRaw(key, value) {
+                        try {
+                            localStorage.setItem(key, value);
+                        } catch { }
+                    },
+                    getRaw(key, defaultVal = null) {
+                        try {
+                            const raw = localStorage.getItem(key);
+                            return raw === null ? defaultVal : raw;
+                        } catch {
+                            return defaultVal;
+                        }
+                    },
+                    remove(key) {
+                        try {
+                            localStorage.removeItem(key);
+                        } catch { }
+                    },
+                    loadPosition(key) {
+                        return utils.get(`${key}_pos`, null);
+                    },
+                    savePosition(key, x, y) {
+                        utils.set(`${key}_pos`, {
+                            x,
+                            y
+                        });
+                    },
+                    injectStyle(css) {
+                        const s = document.createElement('style');
+                        s.textContent = css;
+                        document.head.appendChild(s);
+                        return s;
+                    },
+                    el(tag, opts = {}) {
+                        const e = document.createElement(tag);
+                        if (opts.id) e.id = opts.id;
+                        if (opts.cls) e.className = opts.cls;
+                        if (opts.html !== undefined) e.innerHTML = opts.html;
+                        if (opts.text !== undefined) e.textContent = opts.text;
+                        if (opts.attrs) {
+                            for (const [k, v] of Object.entries(opts.attrs)) e.setAttribute(k, v);
+                        }
+                        if (opts.style) {
+                            Object.assign(e.style, opts.style);
+                        }
+                        return e;
+                    },
+                    makeDraggable(targetEl, opts = {}) {
+                        // opts: storageKey (string) - key to save pos, handle (Element) - optional handle element to start drag,
+                        // onSave: callback(pos) optional
+                        let dragging = false;
+                        let offsetX = 0;
+                        let offsetY = 0;
+                        const handle = opts.handle || targetEl;
+                        const storageKey = opts.storageKey || targetEl.id || null;
+                        const onSave = opts.onSave || (() => { });
+
+                        function start(e) {
+                            // only left mouse button or touch
+                            if ((e.type === 'mousedown' && e.button !== 0) && e.type !== 'touchstart') return;
+                            dragging = true;
+                            const rect = targetEl.getBoundingClientRect();
+                            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                            offsetX = clientX - rect.left;
+                            offsetY = clientY - rect.top;
+                            e.preventDefault();
+                        }
+
+                        function move(e) {
+                            if (!dragging) return;
+                            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                            targetEl.style.left = (clientX - offsetX) + 'px';
+                            targetEl.style.top = (clientY - offsetY) + 'px';
+                            targetEl.style.right = 'auto';
+                        }
+
+                        function end() {
+                            if (!dragging) return;
+                            dragging = false;
+                            if (storageKey) {
+                                utils.savePosition(storageKey, targetEl.offsetLeft, targetEl.offsetTop);
+                                onSave({
+                                    x: targetEl.offsetLeft,
+                                    y: targetEl.offsetTop
+                                });
+                            }
+                        }
+
+                        handle.addEventListener('mousedown', start);
+                        handle.addEventListener('touchstart', start, {
+                            passive: false
+                        });
+                        window.addEventListener('mousemove', move);
+                        window.addEventListener('touchmove', move, {
+                            passive: false
+                        });
+                        window.addEventListener('mouseup', end);
+                        window.addEventListener('touchend', end);
+
+                        // restore pos if any
+                        if (storageKey) {
+                            const pos = utils.loadPosition(storageKey);
+                            if (pos && typeof pos.x === 'number' && typeof pos.y === 'number') {
+                                try {
+                                    targetEl.style.left = pos.x + 'px';
+                                    targetEl.style.top = pos.y + 'px';
+                                    targetEl.style.right = 'auto';
+                                } catch { }
+                            }
+                        }
+
+                        return {
+                            destroy() {
+                                handle.removeEventListener('mousedown', start);
+                                handle.removeEventListener('touchstart', start);
+                                window.removeEventListener('mousemove', move);
+                                window.removeEventListener('touchmove', move);
+                                window.removeEventListener('mouseup', end);
+                                window.removeEventListener('touchend', end);
+                            }
+                        };
+                    },
+                    getTheme(base) {
+                        const themes = {
+                            "default": {
+                                "red1": "#FF4C4C",
+                                "red2": "#c52424",
+                                "red3": "#f44336",
+                                "yellow1": "#ff9800",
+                                "green1": "#4caf50",
+                                "blue1": "#2196f3",
+                                "purple1": "#9c27b0",
+                                "text1": "#ffffff"
+                            },
+                            "dark": {
+                                "red1": "#ff4d4d",
+                                "red2": "#b71c1c",
+                                "red3": "#8b0000",
+                                "yellow1": "#f57f17",
+                                "green1": "#2e7d32",
+                                "blue1": "#0d47a1",
+                                "purple1": "#4a148c",
+                                "text1": "#e0e0e0"
+                            },
+                            "catppuccin": {
+                                "red1": "#181926",
+                                "red2": "#6e738d",
+                                "red3": "#363a4f",
+                                "yellow1": "#494d64",
+                                "green1": "#5b6078",
+                                "blue1": "#8087a2",
+                                "purple1": "#4c4f69",
+                                "text1": "#b7bdf8"
+                            },
+                            "neon": {
+                                "red1": "#ff0055",
+                                "red2": "#c70039",
+                                "red3": "#ff3366",
+                                "yellow1": "#ffcc00",
+                                "green1": "#00ff99",
+                                "blue1": "#00ccff",
+                                "purple1": "#cc33ff",
+                                "text1": "#ffffff"
+                            }
+                        }
+
+                        let themeRaw = utils.getRaw('theme');
+                        let theme;
+                        let currentPreset;
+
+                        try {
+                            if (!themeRaw) {
+                                theme = { ...themes.default };
+                                currentPreset = 'default';
+                            } else if (themes[themeRaw]) {
+                                theme = { ...themes[themeRaw] };
+                                currentPreset = themeRaw;
+                            } else {
+                                theme = JSON.parse(themeRaw);
+                                currentPreset = 'custom';
+                            }
+                        } catch {
+                            theme = { ...themes.default };
+                            currentPreset = 'default';
+                        }
+                        return theme, themes, currentPreset;
+                    },
+
+                    OSInfo() {
+                        return navigator.platform ? `${navigator.platform}` : 'N/A';
                     }
+
                 }
 
-                return {
-                    destroy() {
-                        handle.removeEventListener('mousedown', start);
-                        handle.removeEventListener('touchstart', start);
-                        window.removeEventListener('mousemove', move);
-                        window.removeEventListener('touchmove', move);
-                        window.removeEventListener('mouseup', end);
-                        window.removeEventListener('touchend', end);
-                    }
-                };
-            },
-            getTheme(base) {
+
                 const themes = {
                     "default": {
                         "red1": "#FF4C4C",
@@ -370,80 +547,8 @@
                         "text1": "#ffffff"
                     }
                 }
-
-                let themeRaw = utils.getRaw('theme');
-                let theme;
-                let currentPreset;
-
-                try {
-                    if (!themeRaw) {
-                        theme = { ...themes.default };
-                        currentPreset = 'default';
-                    } else if (themes[themeRaw]) {
-                        theme = { ...themes[themeRaw] };
-                        currentPreset = themeRaw;
-                    } else {
-                        theme = JSON.parse(themeRaw);
-                        currentPreset = 'custom';
-                    }
-                } catch {
-                    theme = { ...themes.default };
-                    currentPreset = 'default';
-                }
-                return theme, themes, currentPreset;
-            },
-
-            OSInfo() {
-                return navigator.platform ? `${navigator.platform}` : 'N/A';
-            }
-
-        }
-
-
-        const themes = {
-            "default": {
-                "red1": "#FF4C4C",
-                "red2": "#c52424",
-                "red3": "#f44336",
-                "yellow1": "#ff9800",
-                "green1": "#4caf50",
-                "blue1": "#2196f3",
-                "purple1": "#9c27b0",
-                "text1": "#ffffff"
-            },
-            "dark": {
-                "red1": "#ff4d4d",
-                "red2": "#b71c1c",
-                "red3": "#8b0000",
-                "yellow1": "#f57f17",
-                "green1": "#2e7d32",
-                "blue1": "#0d47a1",
-                "purple1": "#4a148c",
-                "text1": "#e0e0e0"
-            },
-            "catppuccin": {
-                "red1": "#181926",
-                "red2": "#6e738d",
-                "red3": "#363a4f",
-                "yellow1": "#494d64",
-                "green1": "#5b6078",
-                "blue1": "#8087a2",
-                "purple1": "#4c4f69",
-                "text1": "#b7bdf8"
-            },
-            "neon": {
-                "red1": "#ff0055",
-                "red2": "#c70039",
-                "red3": "#ff3366",
-                "yellow1": "#ffcc00",
-                "green1": "#00ff99",
-                "blue1": "#00ccff",
-                "purple1": "#cc33ff",
-                "text1": "#ffffff"
-            }
-        }
-function StatsOverlay(utils, theme) {
-    const statsCSS = `
+                function StatsOverlay(utils, theme) {
+                    const statsCSS = `
     #dsOverlayStats {
         position: fixed;
         top: 80px;
@@ -458,148 +563,148 @@ function StatsOverlay(utils, theme) {
         white-space: nowrap;
     }`;
 
-    utils.injectStyle(statsCSS);
+                    utils.injectStyle(statsCSS);
 
-    const overlayStats = utils.el('div', {
-        id: 'dsOverlayStats',
-        text: 'Loading stats...'
-    });
-    document.body.appendChild(overlayStats);
+                    const overlayStats = utils.el('div', {
+                        id: 'dsOverlayStats',
+                        text: 'Loading stats...'
+                    });
+                    document.body.appendChild(overlayStats);
 
-    let fps = 0;
-    (function fpsLoop() {
-        let last = performance.now();
-        function tick() {
-            const now = performance.now();
-            fps = Math.round(1000 / (now - last));
-            last = now;
-            requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-    })();
+                    let fps = 0;
+                    (function fpsLoop() {
+                        let last = performance.now();
+                        function tick() {
+                            const now = performance.now();
+                            fps = Math.round(1000 / (now - last));
+                            last = now;
+                            requestAnimationFrame(tick);
+                        }
+                        requestAnimationFrame(tick);
+                    })();
 
-    let ping = 0;
-    async function updatePing() {
-        const start = performance.now();
-        try {
-            await fetch("https://deadshot.io/favicon.ico", {
-                method: "HEAD",
-                cache: "no-store"
-            });
-            ping = Math.round(performance.now() - start);
-        } catch {
-            ping = -1;
-        }
-    }
+                    let ping = 0;
+                    async function updatePing() {
+                        const start = performance.now();
+                        try {
+                            await fetch("https://deadshot.io/favicon.ico", {
+                                method: "HEAD",
+                                cache: "no-store"
+                            });
+                            ping = Math.round(performance.now() - start);
+                        } catch {
+                            ping = -1;
+                        }
+                    }
 
-    function getCPU() {
-        return navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} cores` : 'N/A';
-    }
+                    function getCPU() {
+                        return navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} cores` : 'N/A';
+                    }
 
-    function getOS() {
-        return navigator.platform ? `${navigator.platform}` : 'N/A';
-    }
+                    function getOS() {
+                        return navigator.platform ? `${navigator.platform}` : 'N/A';
+                    }
 
-    function getSens() {
-        return utils.get('settings', {})?.sensitivity ?? 'N/A';
-    }
+                    function getSens() {
+                        return utils.get('settings', {})?.sensitivity ?? 'N/A';
+                    }
 
-    const regionMap = {
-        "Europe": "EU",
-        "North America": "NA",
-        "Asia": "AS",
-        "South America": "SA",
-        "Australia": "AU",
-        "South India": "IN"
-    };
+                    const regionMap = {
+                        "Europe": "EU",
+                        "North America": "NA",
+                        "Asia": "AS",
+                        "South America": "SA",
+                        "Australia": "AU",
+                        "South India": "IN"
+                    };
 
-    function getServer() {
-        const region = utils.get('settings', {})?.region ?? 'N/A';
-        return regionMap[region] ?? "N/A";
-    }
+                    function getServer() {
+                        const region = utils.get('settings', {})?.region ?? 'N/A';
+                        return regionMap[region] ?? "N/A";
+                    }
 
-    function getDate() {
-        try {
-            const d = new Date();
-            const dd = String(d.getDate()).padStart(2, '0');
-            const mm = String(d.getMonth() + 1).padStart(2, '0');
-            const yyyy = d.getFullYear();
-            return `${yyyy}/${mm}/${dd}`;
-        } catch { return 'N/A'; }
-    }
+                    function getDate() {
+                        try {
+                            const d = new Date();
+                            const dd = String(d.getDate()).padStart(2, '0');
+                            const mm = String(d.getMonth() + 1).padStart(2, '0');
+                            const yyyy = d.getFullYear();
+                            return `${yyyy}/${mm}/${dd}`;
+                        } catch { return 'N/A'; }
+                    }
 
-    function getTime() {
-        try {
-            const d = new Date();
-            const hh = String(d.getHours()).padStart(2, '0');
-            const mm = String(d.getMinutes()).padStart(2, '0');
-            return `${hh}:${mm}`;
-        } catch { return 'N/A'; }
-    }
+                    function getTime() {
+                        try {
+                            const d = new Date();
+                            const hh = String(d.getHours()).padStart(2, '0');
+                            const mm = String(d.getMinutes()).padStart(2, '0');
+                            return `${hh}:${mm}`;
+                        } catch { return 'N/A'; }
+                    }
 
-    function updateStatsVisibility() {
-        const showDate = utils.getRaw("showDate") !== "false";
-        const showTime = utils.getRaw("showTime") !== "false";
-        const showOS = utils.getRaw("showOS") !== "false";
-        const showCPU = utils.getRaw("showCPU") !== "false";
-        const showServer = utils.getRaw("showServer") !== "false";
-        const showSens = utils.getRaw("showSens") !== "false";
-        const showFPS = utils.getRaw("showFPS") !== "false";
-        const showPing = utils.getRaw("showPing") !== "false";
-        
-        let html = '';
-        
-        if (showDate) html += `Date: ${getDate()}<br>`;
-        if (showTime) html += `Time: ${getTime()}<br>`;
-        if (showOS) html += `OS: ${getOS()}<br>`;
-        if (showCPU) html += `CPU: ${getCPU()}<br>`;
-        if (showServer) html += `Server: ${getServer()}<br>`;
-        if (showSens) html += `Sens: ${getSens()}<br>`;
-        if (showFPS) html += `FPS: ${fps}<br>`;
-        if (showPing) html += `Ping: ${ping === -1 ? 'offline' : ping + ' ms'}<br>`;
+                    function updateStatsVisibility() {
+                        const showDate = utils.getRaw("showDate") !== "false";
+                        const showTime = utils.getRaw("showTime") !== "false";
+                        const showOS = utils.getRaw("showOS") !== "false";
+                        const showCPU = utils.getRaw("showCPU") !== "false";
+                        const showServer = utils.getRaw("showServer") !== "false";
+                        const showSens = utils.getRaw("showSens") !== "false";
+                        const showFPS = utils.getRaw("showFPS") !== "false";
+                        const showPing = utils.getRaw("showPing") !== "false";
 
-        overlayStats.innerHTML = html.trim();
-    }
+                        let html = '';
 
-    setInterval(() => {
-        updatePing();
-        updateStatsVisibility();
-    }, 1000);
+                        if (showDate) html += `Date: ${getDate()}<br>`;
+                        if (showTime) html += `Time: ${getTime()}<br>`;
+                        if (showOS) html += `OS: ${getOS()}<br>`;
+                        if (showCPU) html += `CPU: ${getCPU()}<br>`;
+                        if (showServer) html += `Server: ${getServer()}<br>`;
+                        if (showSens) html += `Sens: ${getSens()}<br>`;
+                        if (showFPS) html += `FPS: ${fps}<br>`;
+                        if (showPing) html += `Ping: ${ping === -1 ? 'offline' : ping + ' ms'}<br>`;
 
-    utils.makeDraggable(overlayStats, { storageKey: 'dsOverlayStats' });
-}
+                        overlayStats.innerHTML = html.trim();
+                    }
 
-        function KeysOverlay(utils, theme) {
-            const keys = [
-                'c', 'w', 'r', ' ', 'shift',
-                'a', 's', 'd', 'mouseleft', 'mouseright'
-            ];
-            const keyLabels = {
-                'w': 'W',
-                'a': 'A',
-                's': 'S',
-                'd': 'D',
-                'r': 'R',
-                ' ': '␣',
-                'shift': '🠭',
-                'c': 'C',
-                'mouseleft': 'LMB',
-                'mouseright': 'RMB'
-            };
-            const keyColors = {
-                'w': theme.red1,
-                'a': theme.red1,
-                's': theme.red1,
-                'd': theme.red1,
-                'r': theme.red2,
-                ' ': theme.red2,
-                'shift': theme.red2,
-                'c': theme.red2,
-                'mouseleft': theme.red2,
-                'mouseright': theme.red2
-            };
+                    setInterval(() => {
+                        updatePing();
+                        updateStatsVisibility();
+                    }, 1000);
 
-            const styleKeys = `
+                    utils.makeDraggable(overlayStats, { storageKey: 'dsOverlayStats' });
+                }
+
+                function KeysOverlay(utils, theme) {
+                    const keys = [
+                        'c', 'w', 'r', ' ', 'shift',
+                        'a', 's', 'd', 'mouseleft', 'mouseright'
+                    ];
+                    const keyLabels = {
+                        'w': 'W',
+                        'a': 'A',
+                        's': 'S',
+                        'd': 'D',
+                        'r': 'R',
+                        ' ': '␣',
+                        'shift': '🠭',
+                        'c': 'C',
+                        'mouseleft': 'LMB',
+                        'mouseright': 'RMB'
+                    };
+                    const keyColors = {
+                        'w': theme.red1,
+                        'a': theme.red1,
+                        's': theme.red1,
+                        'd': theme.red1,
+                        'r': theme.red2,
+                        ' ': theme.red2,
+                        'shift': theme.red2,
+                        'c': theme.red2,
+                        'mouseleft': theme.red2,
+                        'mouseright': theme.red2
+                    };
+
+                    const styleKeys = `
     #keyDisplayOverlay {
         position: fixed;
         top: 150px;
@@ -633,82 +738,82 @@ function StatsOverlay(utils, theme) {
         transform: scale(1.1);
         box-shadow: 0 0 12px white;
     }`;
-            utils.injectStyle(styleKeys);
+                    utils.injectStyle(styleKeys);
 
-            const keyContainer = utils.el('div', {
-                id: 'keyDisplayOverlay'
-            });
-            document.body.appendChild(keyContainer);
+                    const keyContainer = utils.el('div', {
+                        id: 'keyDisplayOverlay'
+                    });
+                    document.body.appendChild(keyContainer);
 
-            const keyElements = {};
-            keys.forEach(k => {
-                const lower = k.toLowerCase();
-                const d = utils.el('div', {
-                    cls: 'keyDisplay',
-                    text: keyLabels[lower] || lower.toUpperCase()
-                });
-                d.style.borderColor = keyColors[lower] || '#fff';
-                keyContainer.appendChild(d);
-                keyElements[lower] = {
-                    el: d,
-                    color: keyColors[lower] || theme.red2
-                };
-            });
+                    const keyElements = {};
+                    keys.forEach(k => {
+                        const lower = k.toLowerCase();
+                        const d = utils.el('div', {
+                            cls: 'keyDisplay',
+                            text: keyLabels[lower] || lower.toUpperCase()
+                        });
+                        d.style.borderColor = keyColors[lower] || '#fff';
+                        keyContainer.appendChild(d);
+                        keyElements[lower] = {
+                            el: d,
+                            color: keyColors[lower] || theme.red2
+                        };
+                    });
 
-            function handleKey(action, key) {
-                const entry = keyElements[key];
-                if (!entry) return;
-                const {
-                    el: e,
-                    color
-                } = entry;
-                if (action === 'down') {
-                    e.classList.add('pressed');
-                    e.style.backgroundColor = color;
-                } else {
-                    e.classList.remove('pressed');
-                    e.style.backgroundColor = 'transparent';
+                    function handleKey(action, key) {
+                        const entry = keyElements[key];
+                        if (!entry) return;
+                        const {
+                            el: e,
+                            color
+                        } = entry;
+                        if (action === 'down') {
+                            e.classList.add('pressed');
+                            e.style.backgroundColor = color;
+                        } else {
+                            e.classList.remove('pressed');
+                            e.style.backgroundColor = 'transparent';
+                        }
+                    }
+
+                    window.addEventListener('keydown', (ev) => {
+                        const k = ev.key.toLowerCase();
+                        if (k === ' ') handleKey('down', ' ');
+                        else if (k === 'shift') handleKey('down', 'shift');
+                        else handleKey('down', k);
+                    });
+                    window.addEventListener('keyup', (ev) => {
+                        const k = ev.key.toLowerCase();
+                        if (k === ' ') handleKey('up', ' ');
+                        else if (k === 'shift') handleKey('up', 'shift');
+                        else handleKey('up', k);
+                    });
+
+                    window.addEventListener('mousedown', (e) => {
+                        if (e.button === 0) handleKey('down', 'mouseleft');
+                        if (e.button === 2) handleKey('down', 'mouseright');
+                    });
+                    window.addEventListener('mouseup', (e) => {
+                        if (e.button === 0) handleKey('up', 'mouseleft');
+                        if (e.button === 2) handleKey('up', 'mouseright');
+                    });
+
+                    utils.makeDraggable(keyContainer, {
+                        storageKey: 'keyDisplayOverlay'
+                    });
+
                 }
-            }
+                class CrosshairOverlay {
+                    constructor(utils) {
+                        this.utils = utils;
+                        this.STORAGE_KEY = 'crosshairSettings_v1';
+                        this.crosshairTypes = this.createCrosshairTypes();
+                        this.injectStyles();
+                    }
 
-            window.addEventListener('keydown', (ev) => {
-                const k = ev.key.toLowerCase();
-                if (k === ' ') handleKey('down', ' ');
-                else if (k === 'shift') handleKey('down', 'shift');
-                else handleKey('down', k);
-            });
-            window.addEventListener('keyup', (ev) => {
-                const k = ev.key.toLowerCase();
-                if (k === ' ') handleKey('up', ' ');
-                else if (k === 'shift') handleKey('up', 'shift');
-                else handleKey('up', k);
-            });
-
-            window.addEventListener('mousedown', (e) => {
-                if (e.button === 0) handleKey('down', 'mouseleft');
-                if (e.button === 2) handleKey('down', 'mouseright');
-            });
-            window.addEventListener('mouseup', (e) => {
-                if (e.button === 0) handleKey('up', 'mouseleft');
-                if (e.button === 2) handleKey('up', 'mouseright');
-            });
-
-            utils.makeDraggable(keyContainer, {
-                storageKey: 'keyDisplayOverlay'
-            });
-
-        }
-        class CrosshairOverlay {
-            constructor(utils) {
-                this.utils = utils;
-                this.STORAGE_KEY = 'crosshairSettings_v1';
-                this.crosshairTypes = this.createCrosshairTypes();
-                this.injectStyles();
-            }
-
-            // --- STYLES ---
-            injectStyles() {
-                const css = `
+                    // --- STYLES ---
+                    injectStyles() {
+                        const css = `
         #customCrosshair {
             position: fixed;
             top: 50%;
@@ -746,1126 +851,1126 @@ function StatsOverlay(utils, theme) {
             background: rgba(30,30,30,0.9);
             font-weight: bold;
         }`;
-                this.utils.injectStyle(css);
-            }
+                        this.utils.injectStyle(css);
+                    }
 
-            // --- SHAPES ---
-            createCrosshairTypes() {
-                return {
-                    "None": (s, c) => ``,
-                    "Dot": (s, c) => `<div style="width:${s}px;height:${s}px;background:${c};border-radius:50%;"></div>`,
-                    "Cross": (s, c, t) => `
+                    // --- SHAPES ---
+                    createCrosshairTypes() {
+                        return {
+                            "None": (s, c) => ``,
+                            "Dot": (s, c) => `<div style="width:${s}px;height:${s}px;background:${c};border-radius:50%;"></div>`,
+                            "Cross": (s, c, t) => `
             <div style="position:relative;width:${s}px;height:${s}px;">
                 <div style="position:absolute;top:50%;left:0;width:100%;height:${t}px;background:${c};transform:translateY(-50%)"></div>
                 <div style="position:absolute;left:50%;top:0;height:100%;width:${t}px;background:${c};transform:translateX(-50%)"></div>
             </div>`,
-                    "T-Shaped": (s, c, t) => `
+                            "T-Shaped": (s, c, t) => `
             <div style="position:relative;width:${s}px;height:${s}px;">
                 <div style="position:absolute;top:50%;left:0;width:100%;height:${t}px;background:${c};transform:translateY(-50%)"></div>
                 <div style="position:absolute;left:50%;top:50%;width:${t}px;height:50%;background:${c};transform:translate(-50%, -50%)"></div>
             </div>`,
-                    "Circle": (s, c, t) => `<div style="width:${s}px;height:${s}px;border:${t}px solid ${c};border-radius:50%;"></div>`,
-                    "Chevron": (s, c) => `<div style="width:0;height:0;border-left:${s / 2}px solid transparent;border-right:${s / 2}px solid transparent;border-bottom:${s}px solid ${c};"></div>`,
-                    "Box": (s, c, t) => `<div style="width:${s}px;height:${s}px;border:${t}px solid ${c};"></div>`,
-                    "X-Shaped": (s, c, t) => `
+                            "Circle": (s, c, t) => `<div style="width:${s}px;height:${s}px;border:${t}px solid ${c};border-radius:50%;"></div>`,
+                            "Chevron": (s, c) => `<div style="width:0;height:0;border-left:${s / 2}px solid transparent;border-right:${s / 2}px solid transparent;border-bottom:${s}px solid ${c};"></div>`,
+                            "Box": (s, c, t) => `<div style="width:${s}px;height:${s}px;border:${t}px solid ${c};"></div>`,
+                            "X-Shaped": (s, c, t) => `
             <div style="position:relative;width:${s}px;height:${s}px;">
                 <div style="position:absolute;width:${t}px;height:100%;background:${c};transform:rotate(45deg);left:50%;top:0;transform-origin:center;"></div>
                 <div style="position:absolute;width:${t}px;height:100%;background:${c};transform:rotate(-45deg);left:50%;top:0;transform-origin:center;"></div>
             </div>`,
-                    "Four Corners": (s, c, t) => `
+                            "Four Corners": (s, c, t) => `
             <div style="position:relative;width:${s}px;height:${s}px;">
                 ${["top:0;left:0", "top:0;right:0", "bottom:0;left:0", "bottom:0;right:0"].map(pos => `
                     <div style="position:absolute;${pos};width:${s / 4}px;height:${t}px;background:${c};"></div>
                     <div style="position:absolute;${pos};width:${t}px;height:${s / 4}px;background:${c};"></div>`).join('')}
             </div>`,
-                    "Split Cross": (s, c, t) => `
+                            "Split Cross": (s, c, t) => `
             <div style="position:relative;width:${s}px;height:${s}px;">
                 <div style="position:absolute;top:0;left:50%;width:${t}px;height:${s / 2 - 5}px;background:${c};transform:translateX(-50%)"></div>
                 <div style="position:absolute;bottom:0;left:50%;width:${t}px;height:${s / 2 - 5}px;background:${c};transform:translateX(-50%)"></div>
                 <div style="position:absolute;left:0;top:50%;width:${s / 2 - 5}px;height:${t}px;background:${c};transform:translateY(-50%)"></div>
                 <div style="position:absolute;right:0;top:50%;width:${s / 2 - 5}px;height:${t}px;background:${c};transform:translateY(-50%)"></div>
             </div>`,
-                    "Star": (s, c, t) => `
+                            "Star": (s, c, t) => `
             <div style="position:relative;width:${s}px;height:${s}px;">
                 <div style="position:absolute;left:50%;top:0;width:${t}px;height:100%;background:${c};transform:translateX(-50%)"></div>
                 <div style="position:absolute;top:50%;left:0;width:100%;height:${t}px;background:${c};transform:translateY(-50%)"></div>
                 <div style="position:absolute;width:${t}px;height:100%;background:${c};transform:rotate(45deg);left:50%;top:0;transform-origin:center;"></div>
                 <div style="position:absolute;width:${t}px;height:100%;background:${c};transform:rotate(-45deg);left:50%;top:0;transform-origin:center;"></div>
             </div>`,
-                    "Diamond": (s, c) => `<div style="width:${s}px;height:${s}px;background:${c};transform:rotate(45deg);"></div>`,
-                    "Triangle": (s, c) => `<div style="width:0;height:0;border-left:${s / 2}px solid transparent;border-right:${s / 2}px solid transparent;border-bottom:${s}px solid ${c};"></div>`,
-                    "Horizontal Line": (s, c, t) => `<div style="width:${s}px;height:${t}px;background:${c};"></div>`,
-                    "Vertical Line": (s, c, t) => `<div style="width:${t}px;height:${s}px;background:${c};"></div>`,
-                    "Circle with Dot": (s, c, t) => `
+                            "Diamond": (s, c) => `<div style="width:${s}px;height:${s}px;background:${c};transform:rotate(45deg);"></div>`,
+                            "Triangle": (s, c) => `<div style="width:0;height:0;border-left:${s / 2}px solid transparent;border-right:${s / 2}px solid transparent;border-bottom:${s}px solid ${c};"></div>`,
+                            "Horizontal Line": (s, c, t) => `<div style="width:${s}px;height:${t}px;background:${c};"></div>`,
+                            "Vertical Line": (s, c, t) => `<div style="width:${t}px;height:${s}px;background:${c};"></div>`,
+                            "Circle with Dot": (s, c, t) => `
             <div style="position:relative;width:${s}px;height:${s}px;border:${t}px solid ${c};border-radius:50%;">
                 <div style="position:absolute;top:50%;left:50%;width:${s / 5}px;height:${s / 5}px;background:${c};border-radius:50%;transform:translate(-50%,-50%);"></div>
             </div>`,
-                    "Ringed Cross": (s, c, t) => `
+                            "Ringed Cross": (s, c, t) => `
             <div style="position:relative;width:${s}px;height:${s}px;">
                 <div style="position:absolute;inset:0;border:${t}px solid ${c};border-radius:50%;box-sizing:border-box;"></div>
                 <div style="position:absolute;top:50%;left:${t * 1.5}px;width:calc(100% - ${t * 3}px);height:${t}px;background:${c};transform:translateY(-50%);"></div>
                 <div style="position:absolute;left:50%;top:${t * 1.5}px;height:calc(100% - ${t * 3}px);width:${t}px;background:${c};transform:translateX(-50%);"></div>
             </div>`
-                };
+                        };
 
-            }
+                    }
 
-            // --- CREATE ---
-            createCrosshair(type, size, color, thickness, opacity) {
-                const crosshair = this.utils.el('div', { id: 'customCrosshair' });
-                crosshair.style.opacity = opacity;
-                const generator = this.crosshairTypes[type] || (() => '');
-                crosshair.innerHTML = generator(size, color, thickness);
-                return crosshair;
-            }
+                    // --- CREATE ---
+                    createCrosshair(type, size, color, thickness, opacity) {
+                        const crosshair = this.utils.el('div', { id: 'customCrosshair' });
+                        crosshair.style.opacity = opacity;
+                        const generator = this.crosshairTypes[type] || (() => '');
+                        crosshair.innerHTML = generator(size, color, thickness);
+                        return crosshair;
+                    }
 
-            // --- SETTINGS STORAGE ---
-            saveSettings() {
-                const settings = {
-                    type: document.getElementById('chType').value,
-                    size: document.getElementById('chSize').value,
-                    color: document.getElementById('chColor').value,
-                    thickness: document.getElementById('chThickness').value,
-                    opacity: document.getElementById('chOpacity').value
-                };
-                this.utils.set(this.STORAGE_KEY, settings);
-            }
+                    // --- SETTINGS STORAGE ---
+                    saveSettings() {
+                        const settings = {
+                            type: document.getElementById('chType').value,
+                            size: document.getElementById('chSize').value,
+                            color: document.getElementById('chColor').value,
+                            thickness: document.getElementById('chThickness').value,
+                            opacity: document.getElementById('chOpacity').value
+                        };
+                        this.utils.set(this.STORAGE_KEY, settings);
+                    }
 
-            loadSettings() {
-                return this.utils.get(this.STORAGE_KEY, null);
-            }
+                    loadSettings() {
+                        return this.utils.get(this.STORAGE_KEY, null);
+                    }
 
-            // --- SETTINGS PANEL ---
-            createSettingsPanel() {
-                // Button to open floating crosshair picker
-                const panel = this.utils.el('div', { id: 'crosshairSettings' });
-                
-                const openPickerBtn = document.createElement('button');
-                openPickerBtn.textContent = 'Open Crosshair Picker';
-                Object.assign(openPickerBtn.style, { marginBottom: '10px', cursor: 'pointer' });
-                panel.appendChild(openPickerBtn);
+                    // --- SETTINGS PANEL ---
+                    createSettingsPanel() {
+                        // Button to open floating crosshair picker
+                        const panel = this.utils.el('div', { id: 'crosshairSettings' });
 
-                openPickerBtn.addEventListener('click', () => {
-                    // Remove existing floating panel if any
-                    const existing = document.getElementById('crosshairPickerWindow');
-                    if (existing) existing.remove();
+                        const openPickerBtn = document.createElement('button');
+                        openPickerBtn.textContent = 'Open Crosshair Picker';
+                        Object.assign(openPickerBtn.style, { marginBottom: '10px', cursor: 'pointer' });
+                        panel.appendChild(openPickerBtn);
 
-                    const floatingPanel = document.createElement('div');
-                    floatingPanel.id = 'crosshairPickerWindow';
-                    Object.assign(floatingPanel.style, {
-                        position: 'absolute',
-                        top: '50px',
-                        left: '50px',
-                        width: '220px',
-                        padding: '10px',
-                        background: '#222',
-                        color: '#fff',
-                        border: '1px solid #fff',
-                        borderRadius: '8px',
-                        zIndex: '9999',
-                        boxShadow: '0 0 10px rgba(0,0,0,0.7)',
-                        cursor: 'move'
-                    });
-                    document.body.appendChild(floatingPanel);
+                        openPickerBtn.addEventListener('click', () => {
+                            // Remove existing floating panel if any
+                            const existing = document.getElementById('crosshairPickerWindow');
+                            if (existing) existing.remove();
 
-                    const title = document.createElement('h4');
-                    title.textContent = 'Crosshair Picker';
-                    Object.assign(title.style, { margin: '0 0 10px 0', fontSize: '1em', cursor: 'move' });
-                    floatingPanel.appendChild(title);
-
-                    const inputsConfig = [
-                        { label: 'Type:', id: 'chType', type: 'select', options: Object.keys(this.crosshairTypes) },
-                        { label: 'Size (px):', id: 'chSize', type: 'number', value: 30, min: 5, max: 200 },
-                        { label: 'Color:', id: 'chColor', type: 'color', value: '#ff0000' },
-                        { label: 'Thickness (px):', id: 'chThickness', type: 'number', value: 2, min: 1, max: 10 },
-                        { label: 'Opacity (0–1):', id: 'chOpacity', type: 'number', value: 1, step: 0.1, min: 0.1, max: 1 }
-                    ];
-
-                    const inputs = {};
-
-                    inputsConfig.forEach(config => {
-                        const row = document.createElement('div');
-                        Object.assign(row.style, { display: 'flex', flexDirection: 'column', marginBottom: '6px' });
-
-                        const label = document.createElement('label');
-                        label.textContent = config.label;
-                        label.htmlFor = config.id;
-                        row.appendChild(label);
-
-                        let input;
-                        if (config.type === 'select') {
-                            input = document.createElement('select');
-                            config.options.forEach(opt => {
-                                const option = document.createElement('option');
-                                option.value = opt;
-                                option.textContent = opt;
-                                input.appendChild(option);
+                            const floatingPanel = document.createElement('div');
+                            floatingPanel.id = 'crosshairPickerWindow';
+                            Object.assign(floatingPanel.style, {
+                                position: 'absolute',
+                                top: '50px',
+                                left: '50px',
+                                width: '220px',
+                                padding: '10px',
+                                background: '#222',
+                                color: '#fff',
+                                border: '1px solid #fff',
+                                borderRadius: '8px',
+                                zIndex: '9999',
+                                boxShadow: '0 0 10px rgba(0,0,0,0.7)',
+                                cursor: 'move'
                             });
-                        } else {
-                            input = document.createElement('input');
-                            input.type = config.type;
-                            if (config.value !== undefined) input.value = config.value;
-                            if (config.min !== undefined) input.min = config.min;
-                            if (config.max !== undefined) input.max = config.max;
-                            if (config.step !== undefined) input.step = config.step;
-                        }
+                            document.body.appendChild(floatingPanel);
 
-                        input.id = config.id;
-                        Object.assign(input.style, { width: '100%', cursor: 'pointer' });
-                        row.appendChild(input);
-                        floatingPanel.appendChild(row);
-                        inputs[config.id] = input;
+                            const title = document.createElement('h4');
+                            title.textContent = 'Crosshair Picker';
+                            Object.assign(title.style, { margin: '0 0 10px 0', fontSize: '1em', cursor: 'move' });
+                            floatingPanel.appendChild(title);
 
-                        input.addEventListener('input', () => {
-                            this.updateCrosshair();
-                            this.saveSettings();
+                            const inputsConfig = [
+                                { label: 'Type:', id: 'chType', type: 'select', options: Object.keys(this.crosshairTypes) },
+                                { label: 'Size (px):', id: 'chSize', type: 'number', value: 30, min: 5, max: 200 },
+                                { label: 'Color:', id: 'chColor', type: 'color', value: '#ff0000' },
+                                { label: 'Thickness (px):', id: 'chThickness', type: 'number', value: 2, min: 1, max: 10 },
+                                { label: 'Opacity (0–1):', id: 'chOpacity', type: 'number', value: 1, step: 0.1, min: 0.1, max: 1 }
+                            ];
+
+                            const inputs = {};
+
+                            inputsConfig.forEach(config => {
+                                const row = document.createElement('div');
+                                Object.assign(row.style, { display: 'flex', flexDirection: 'column', marginBottom: '6px' });
+
+                                const label = document.createElement('label');
+                                label.textContent = config.label;
+                                label.htmlFor = config.id;
+                                row.appendChild(label);
+
+                                let input;
+                                if (config.type === 'select') {
+                                    input = document.createElement('select');
+                                    config.options.forEach(opt => {
+                                        const option = document.createElement('option');
+                                        option.value = opt;
+                                        option.textContent = opt;
+                                        input.appendChild(option);
+                                    });
+                                } else {
+                                    input = document.createElement('input');
+                                    input.type = config.type;
+                                    if (config.value !== undefined) input.value = config.value;
+                                    if (config.min !== undefined) input.min = config.min;
+                                    if (config.max !== undefined) input.max = config.max;
+                                    if (config.step !== undefined) input.step = config.step;
+                                }
+
+                                input.id = config.id;
+                                Object.assign(input.style, { width: '100%', cursor: 'pointer' });
+                                row.appendChild(input);
+                                floatingPanel.appendChild(row);
+                                inputs[config.id] = input;
+
+                                input.addEventListener('input', () => {
+                                    this.updateCrosshair();
+                                    this.saveSettings();
+                                });
+                                input.addEventListener('change', () => {
+                                    this.updateCrosshair();
+                                    this.saveSettings();
+                                });
+                            });
+
+                            // Close button
+                            const closeBtn = document.createElement('button');
+                            closeBtn.textContent = 'Close';
+                            Object.assign(closeBtn.style, { marginTop: '6px', padding: '2px 6px', cursor: 'pointer' });
+                            closeBtn.addEventListener('click', () => floatingPanel.remove());
+                            floatingPanel.appendChild(closeBtn);
+
+                            // --- Make floating panel draggable ---
+                            let isDragging = false;
+                            let offsetX = 0;
+                            let offsetY = 0;
+
+                            title.addEventListener('mousedown', (e) => {
+                                isDragging = true;
+                                offsetX = e.clientX - floatingPanel.offsetLeft;
+                                offsetY = e.clientY - floatingPanel.offsetTop;
+                                document.body.style.userSelect = 'none';
+                            });
+
+                            document.addEventListener('mousemove', (e) => {
+                                if (!isDragging) return;
+                                floatingPanel.style.left = `${e.clientX - offsetX}px`;
+                                floatingPanel.style.top = `${e.clientY - offsetY}px`;
+                            });
+
+                            document.addEventListener('mouseup', () => {
+                                isDragging = false;
+                                document.body.style.userSelect = '';
+                            });
+
+                            // Load saved settings
+                            this.loadSettings();
                         });
-                        input.addEventListener('change', () => {
-                            this.updateCrosshair();
-                            this.saveSettings();
-                        });
-                    });
 
-                    // Close button
-                    const closeBtn = document.createElement('button');
-                    closeBtn.textContent = 'Close';
-                    Object.assign(closeBtn.style, { marginTop: '6px', padding: '2px 6px', cursor: 'pointer' });
-                    closeBtn.addEventListener('click', () => floatingPanel.remove());
-                    floatingPanel.appendChild(closeBtn);
-
-                    // --- Make floating panel draggable ---
-                    let isDragging = false;
-                    let offsetX = 0;
-                    let offsetY = 0;
-
-                    title.addEventListener('mousedown', (e) => {
-                        isDragging = true;
-                        offsetX = e.clientX - floatingPanel.offsetLeft;
-                        offsetY = e.clientY - floatingPanel.offsetTop;
-                        document.body.style.userSelect = 'none';
-                    });
-
-                    document.addEventListener('mousemove', (e) => {
-                        if (!isDragging) return;
-                        floatingPanel.style.left = `${e.clientX - offsetX}px`;
-                        floatingPanel.style.top = `${e.clientY - offsetY}px`;
-                    });
-
-                    document.addEventListener('mouseup', () => {
-                        isDragging = false;
-                        document.body.style.userSelect = '';
-                    });
-
-                    // Load saved settings
-                    this.loadSettings();
-                });
-
-                return panel;
-            }
-
-
-            // --- UPDATE & INIT ---
-            updateCrosshair() {
-                const type = document.getElementById('chType')?.value || 'None';
-                const size = parseInt(document.getElementById('chSize')?.value || 30, 10);
-                const color = document.getElementById('chColor')?.value || '#ff0000';
-                const thickness = parseInt(document.getElementById('chThickness')?.value || 2, 10);
-                const opacity = parseFloat(document.getElementById('chOpacity')?.value || 1);
-
-                const old = document.getElementById('customCrosshair');
-                if (old) old.remove();
-
-                const crosshair = this.createCrosshair(type, size, color, thickness, opacity);
-                document.body.appendChild(crosshair);
-            }
-
-            init() {
-                const saved = this.loadSettings();
-                console.log(saved);
-                if (saved) {
-                    try {
-                        document.getElementById('chType').value = saved.type;
-                        document.getElementById('chSize').value = saved.size;
-                        document.getElementById('chColor').value = saved.color;
-                        document.getElementById('chThickness').value = saved.thickness;
-                        document.getElementById('chOpacity').value = saved.opacity;
-                    } catch (e) {
-                        console.warn('CrosshairOverlay: failed to restore settings', e);
+                        return panel;
                     }
-                }
-
-                this.updateCrosshair();
-            }
-        }
 
 
-        function GUI(utils, theme, themes, currentPreset, CrosshairOverlay) {
-            // Default settings
-            let sett = {
-                disableFrameRateLimit: false,
-                forceHighPerformanceGPU: false,
-                adblocker: false,
-                rpc: false,
-                toggleKey: "o"
-            };
+                    // --- UPDATE & INIT ---
+                    updateCrosshair() {
+                        const type = document.getElementById('chType')?.value || 'None';
+                        const size = parseInt(document.getElementById('chSize')?.value || 30, 10);
+                        const color = document.getElementById('chColor')?.value || '#ff0000';
+                        const thickness = parseInt(document.getElementById('chThickness')?.value || 2, 10);
+                        const opacity = parseFloat(document.getElementById('chOpacity')?.value || 1);
 
-            // Key to store settings in localStorage
-            const STORAGE_KEY = "deadshotSettings";
+                        const old = document.getElementById('customCrosshair');
+                        if (old) old.remove();
 
-            // Load settings from localStorage (if any)
-            function readSettings() {
-                const stored = localStorage.getItem(STORAGE_KEY);
-                if (stored) {
-                    try {
-                        const parsed = JSON.parse(stored);
-                        // Merge stored settings with defaults
-                        sett = { ...sett, ...parsed };
-                    } catch (err) {
-                        console.warn("Failed to parse settings from localStorage:", err);
+                        const crosshair = this.createCrosshair(type, size, color, thickness, opacity);
+                        document.body.appendChild(crosshair);
                     }
-                }
-                return { ...sett }; // return a copy
-            }
 
-            // Save settings to localStorage
-            function writeSettings(obj) {
-                // Merge updates into current settings
-                sett = { ...sett, ...obj };
-                try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(sett));
-                    console.log("Settings saved:", sett);
-                } catch (err) {
-                    console.error("Failed to save settings:", err);
-                }
-            }
-
-            let settings = readSettings();
-            const overlayDefs = [{
-                id: 'dsOverlayStats',
-                name: 'Overlay Stats',
-                settingsId: null
-            },
-            {
-                id: 'keyDisplayOverlay',
-                name: 'Key Display',
-                settingsId: null
-            },
-            ];
-
-            const settingsBtn = utils.el('button', {
-                text: 'Settings'
-            });
-            Object.assign(settingsBtn.style, {
-                padding: '6px 12px',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                background: theme.purple1,
-                color: theme.text1
-            });
-
-
-            const settingsOverlay = utils.el('div', {
-                id: 'omniverseSettingsOverlay'
-            });
-            Object.assign(settingsOverlay.style, {
-                display: 'none',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: 9999
-            });
-
-
-            const box = utils.el('div');
-            Object.assign(box.style, {
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px',
-                padding: '10px',
-                color: theme.text1,
-                borderRadius: '10px',
-                width: '100%',
-                boxSizing: 'border-box',
-            });
-
-
-            settingsOverlay.appendChild(box);
-
-
-
-            function saveTheme() {
-                utils.setRaw('theme', JSON.stringify(theme));
-            }
-            function createColorEditor(box, theme) {
-                const inputs = {};
-
-                // --- THEME PRESET WINDOW ---
-                function openPresetWindow() {
-                    // Remove existing window if any
-                    const existing = document.getElementById('themePresetWindow');
-                    if (existing) existing.remove();
-
-                    const presetWindow = document.createElement('div');
-                    presetWindow.id = 'themePresetWindow';
-                    Object.assign(presetWindow.style, {
-                        position: 'absolute',
-                        top: '50px',
-                        right: '50px',
-                        width: '200px',
-                        padding: '10px',
-                        background: '#222',
-                        color: '#fff',
-                        border: '1px solid #fff',
-                        borderRadius: '8px',
-                        zIndex: '9999',
-                        boxShadow: '0 0 10px rgba(0,0,0,0.7)',
-                    });
-                    document.body.appendChild(presetWindow);
-
-                    const title = document.createElement('h4');
-                    title.textContent = 'Theme Preset';
-                    Object.assign(title.style, { margin: '0 0 10px 0', fontSize: '1em' });
-                    presetWindow.appendChild(title);
-
-                    const presetSelect = document.createElement('select');
-                    presetSelect.id = 'themePresetSelect';
-                    Object.keys(themes).forEach(name => {
-                        const option = document.createElement('option');
-                        option.value = name;
-                        option.textContent = name;
-                        if (name === currentPreset) option.selected = true;
-                        presetSelect.appendChild(option);
-                    });
-                    const customOption = document.createElement('option');
-                    customOption.value = 'custom';
-                    customOption.textContent = 'Custom';
-                    if (currentPreset === 'custom') customOption.selected = true;
-                    presetSelect.appendChild(customOption);
-                    presetWindow.appendChild(presetSelect);
-
-                    presetSelect.addEventListener('change', () => {
-                        const selected = presetSelect.value;
-                        if (selected === 'custom') return;
-
-                        currentPreset = selected;
-                        const presetTheme = themes[selected];
-                        for (const key in presetTheme) {
-                            if (inputs[key]) {
-                                inputs[key].value = presetTheme[key];
-                                theme[key] = presetTheme[key];
-                                document.documentElement.style.setProperty(`--${key}`, presetTheme[key]);
+                    init() {
+                        const saved = this.loadSettings();
+                        console.log(saved);
+                        if (saved) {
+                            try {
+                                document.getElementById('chType').value = saved.type;
+                                document.getElementById('chSize').value = saved.size;
+                                document.getElementById('chColor').value = saved.color;
+                                document.getElementById('chThickness').value = saved.thickness;
+                                document.getElementById('chOpacity').value = saved.opacity;
+                            } catch (e) {
+                                console.warn('CrosshairOverlay: failed to restore settings', e);
                             }
                         }
-                        saveTheme();
+
+                        this.updateCrosshair();
+                    }
+                }
+
+
+                function GUI(utils, theme, themes, currentPreset, CrosshairOverlay) {
+                    // Default settings
+                    let sett = {
+                        disableFrameRateLimit: false,
+                        forceHighPerformanceGPU: false,
+                        adblocker: false,
+                        rpc: false,
+                        toggleKey: "o"
+                    };
+
+                    // Key to store settings in localStorage
+                    const STORAGE_KEY = "deadshotSettings";
+
+                    // Load settings from localStorage (if any)
+                    function readSettings() {
+                        const stored = localStorage.getItem(STORAGE_KEY);
+                        if (stored) {
+                            try {
+                                const parsed = JSON.parse(stored);
+                                // Merge stored settings with defaults
+                                sett = { ...sett, ...parsed };
+                            } catch (err) {
+                                console.warn("Failed to parse settings from localStorage:", err);
+                            }
+                        }
+                        return { ...sett }; // return a copy
+                    }
+
+                    // Save settings to localStorage
+                    function writeSettings(obj) {
+                        // Merge updates into current settings
+                        sett = { ...sett, ...obj };
+                        try {
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(sett));
+                            console.log("Settings saved:", sett);
+                        } catch (err) {
+                            console.error("Failed to save settings:", err);
+                        }
+                    }
+
+                    let settings = readSettings();
+                    const overlayDefs = [{
+                        id: 'dsOverlayStats',
+                        name: 'Overlay Stats',
+                        settingsId: null
+                    },
+                    {
+                        id: 'keyDisplayOverlay',
+                        name: 'Key Display',
+                        settingsId: null
+                    },
+                    ];
+
+                    const settingsBtn = utils.el('button', {
+                        text: 'Settings'
+                    });
+                    Object.assign(settingsBtn.style, {
+                        padding: '6px 12px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        background: theme.purple1,
+                        color: theme.text1
+                    });
+
+
+                    const settingsOverlay = utils.el('div', {
+                        id: 'omniverseSettingsOverlay'
+                    });
+                    Object.assign(settingsOverlay.style, {
+                        display: 'none',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        zIndex: 9999
+                    });
+
+
+                    const box = utils.el('div');
+                    Object.assign(box.style, {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                        padding: '10px',
+                        color: theme.text1,
+                        borderRadius: '10px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                    });
+
+
+                    settingsOverlay.appendChild(box);
+
+
+
+                    function saveTheme() {
+                        utils.setRaw('theme', JSON.stringify(theme));
+                    }
+                    function createColorEditor(box, theme) {
+                        const inputs = {};
+
+                        // --- THEME PRESET WINDOW ---
+                        function openPresetWindow() {
+                            // Remove existing window if any
+                            const existing = document.getElementById('themePresetWindow');
+                            if (existing) existing.remove();
+
+                            const presetWindow = document.createElement('div');
+                            presetWindow.id = 'themePresetWindow';
+                            Object.assign(presetWindow.style, {
+                                position: 'absolute',
+                                top: '50px',
+                                right: '50px',
+                                width: '200px',
+                                padding: '10px',
+                                background: '#222',
+                                color: '#fff',
+                                border: '1px solid #fff',
+                                borderRadius: '8px',
+                                zIndex: '9999',
+                                boxShadow: '0 0 10px rgba(0,0,0,0.7)',
+                            });
+                            document.body.appendChild(presetWindow);
+
+                            const title = document.createElement('h4');
+                            title.textContent = 'Theme Preset';
+                            Object.assign(title.style, { margin: '0 0 10px 0', fontSize: '1em' });
+                            presetWindow.appendChild(title);
+
+                            const presetSelect = document.createElement('select');
+                            presetSelect.id = 'themePresetSelect';
+                            Object.keys(themes).forEach(name => {
+                                const option = document.createElement('option');
+                                option.value = name;
+                                option.textContent = name;
+                                if (name === currentPreset) option.selected = true;
+                                presetSelect.appendChild(option);
+                            });
+                            const customOption = document.createElement('option');
+                            customOption.value = 'custom';
+                            customOption.textContent = 'Custom';
+                            if (currentPreset === 'custom') customOption.selected = true;
+                            presetSelect.appendChild(customOption);
+                            presetWindow.appendChild(presetSelect);
+
+                            presetSelect.addEventListener('change', () => {
+                                const selected = presetSelect.value;
+                                if (selected === 'custom') return;
+
+                                currentPreset = selected;
+                                const presetTheme = themes[selected];
+                                for (const key in presetTheme) {
+                                    if (inputs[key]) {
+                                        inputs[key].value = presetTheme[key];
+                                        theme[key] = presetTheme[key];
+                                        document.documentElement.style.setProperty(`--${key}`, presetTheme[key]);
+                                    }
+                                }
+                                saveTheme();
+                            });
+
+                            // Close button
+                            const closeBtn = document.createElement('button');
+                            closeBtn.textContent = 'Close';
+                            Object.assign(closeBtn.style, { marginTop: '10px', padding: '4px 8px', cursor: 'pointer' });
+                            closeBtn.addEventListener('click', () => presetWindow.remove());
+                            presetWindow.appendChild(closeBtn);
+                        }
+
+                        // Add a button to open the preset window
+                        const openPresetBtn = document.createElement('button');
+                        openPresetBtn.textContent = 'Open Theme Preset';
+                        Object.assign(openPresetBtn.style, { marginBottom: '10px', cursor: 'pointer' });
+                        openPresetBtn.addEventListener('click', openPresetWindow);
+                        box.appendChild(openPresetBtn);
+
+                        // --- COLOR INPUTS ---
+                        for (const key in theme) {
+                            if (!/^#[0-9A-Fa-f]{3,6}$/.test(theme[key])) continue;
+                            if (box.querySelector(`input[title="${key}"]`)) continue;
+
+                            const row = document.createElement('div');
+                            Object.assign(row.style, { display: 'flex', alignItems: 'center', marginBottom: '4px' });
+
+                            const label = document.createElement('label');
+                            label.textContent = key;
+                            Object.assign(label.style, { flex: '1', marginRight: '6px', fontSize: '0.85em' });
+
+                            const input = document.createElement('input');
+                            input.type = 'color';
+                            input.value = theme[key];
+                            Object.assign(input.style, { width: '24px', height: '24px', border: 'none', padding: '0', cursor: 'pointer' });
+
+                            inputs[key] = input;
+                            row.appendChild(label);
+                            row.appendChild(input);
+                            box.appendChild(row);
+
+                            input.addEventListener('input', () => {
+                                theme[key] = input.value;
+                                document.documentElement.style.setProperty(`--${key}`, input.value);
+                                if (currentPreset !== 'custom') {
+                                    currentPreset = 'custom';
+                                }
+                                saveTheme();
+                            });
+                        }
+
+                        for (const key in inputs) {
+                            document.documentElement.style.setProperty(`--${key}`, theme[key]);
+                        }
+                    }
+
+
+                    const warntitle = utils.el('div', {
+                        text: 'NOTE: Restart client to apply changes'
+                    });
+                    Object.assign(warntitle.style, {
+                        fontSize: '12px',
+                        textAlign: 'center',
+                        marginBottom: '8px'
+                    });
+                    box.appendChild(warntitle);
+                    // === STATS PICKER ===
+                    const openStatsBtn = utils.el('button', { text: 'Open Stats Picker' });
+                    Object.assign(openStatsBtn.style, {
+                        width: '100%',
+                        padding: '8px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        background: theme.button || 'rgba(255,255,255,0.1)',
+                        color: theme.text1 || '#fff',
+                        cursor: 'pointer',
+                        fontWeight: 'bold'
+                    });
+                    box.appendChild(openStatsBtn);
+
+                    // Create popup window (hidden initially)
+                    const statsWindow = utils.el('div');
+                    Object.assign(statsWindow.style, {
+                        position: 'fixed',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        background: 'rgba(20,20,20,0.95)',
+                        borderRadius: '8px',
+                        padding: '20px',
+                        boxShadow: '0 0 20px rgba(0,0,0,0.5)',
+                        zIndex: '9999',
+                        display: 'none',
+                        color: theme.text1 || '#fff',
+                        minWidth: '250px'
+                    });
+                    document.body.appendChild(statsWindow);
+
+                    // Header
+                    const statsTitle = utils.el('div', { text: 'Stats Display' });
+                    Object.assign(statsTitle.style, {
+                        fontWeight: 'bold',
+                        marginBottom: '8px',
+                        fontSize: '1.1em',
+                        textAlign: 'center'
+                    });
+                    statsWindow.appendChild(statsTitle);
+
+                    // Checkbox container
+                    const checkboxContainer = utils.el('div');
+                    Object.assign(checkboxContainer.style, {
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '10px',
+                        justifyContent: 'center',
+                        marginBottom: '15px'
+                    });
+                    statsWindow.appendChild(checkboxContainer);
+
+                    const statOptions = [
+                        { id: 'showOS', label: 'OS' },
+                        { id: 'showCPU', label: 'CPU' },
+                        { id: 'showFPS', label: 'FPS' },
+                        { id: 'showPing', label: 'Ping' },
+                        { id: 'showSens', label: 'Sens' },
+                        { id: 'showServer', label: 'Server' }
+                    ];
+
+                    // Add checkboxes
+                    statOptions.forEach(stat => {
+                        const row = utils.el('div');
+                        Object.assign(row.style, {
+                            display: 'flex',
+                            alignItems: 'center',
+                            minWidth: 'fit-content'
+                        });
+
+                        const checkbox = utils.el('input');
+                        Object.assign(checkbox, {
+                            type: 'checkbox',
+                            id: stat.id,
+                            checked: utils.getRaw(stat.id) !== 'false'
+                        });
+                        Object.assign(checkbox.style, {
+                            marginRight: '4px',
+                            accentColor: theme.accent || '#00bfff',
+                            width: '16px',
+                            height: '16px',
+                            cursor: 'pointer'
+                        });
+
+                        const label = utils.el('label', { text: stat.label });
+                        Object.assign(label.style, {
+                            color: theme.text1,
+                            fontSize: '0.9em'
+                        });
+
+                        checkbox.addEventListener('change', () => {
+                            utils.setRaw(stat.id, checkbox.checked ? 'true' : 'false');
+                            updateStatsVisibility();
+                        });
+
+                        row.appendChild(checkbox);
+                        row.appendChild(label);
+                        checkboxContainer.appendChild(row);
                     });
 
                     // Close button
-                    const closeBtn = document.createElement('button');
-                    closeBtn.textContent = 'Close';
-                    Object.assign(closeBtn.style, { marginTop: '10px', padding: '4px 8px', cursor: 'pointer' });
-                    closeBtn.addEventListener('click', () => presetWindow.remove());
-                    presetWindow.appendChild(closeBtn);
-                }
-
-                // Add a button to open the preset window
-                const openPresetBtn = document.createElement('button');
-                openPresetBtn.textContent = 'Open Theme Preset';
-                Object.assign(openPresetBtn.style, { marginBottom: '10px', cursor: 'pointer' });
-                openPresetBtn.addEventListener('click', openPresetWindow);
-                box.appendChild(openPresetBtn);
-
-                // --- COLOR INPUTS ---
-                for (const key in theme) {
-                    if (!/^#[0-9A-Fa-f]{3,6}$/.test(theme[key])) continue;
-                    if (box.querySelector(`input[title="${key}"]`)) continue;
-
-                    const row = document.createElement('div');
-                    Object.assign(row.style, { display: 'flex', alignItems: 'center', marginBottom: '4px' });
-
-                    const label = document.createElement('label');
-                    label.textContent = key;
-                    Object.assign(label.style, { flex: '1', marginRight: '6px', fontSize: '0.85em' });
-
-                    const input = document.createElement('input');
-                    input.type = 'color';
-                    input.value = theme[key];
-                    Object.assign(input.style, { width: '24px', height: '24px', border: 'none', padding: '0', cursor: 'pointer' });
-
-                    inputs[key] = input;
-                    row.appendChild(label);
-                    row.appendChild(input);
-                    box.appendChild(row);
-
-                    input.addEventListener('input', () => {
-                        theme[key] = input.value;
-                        document.documentElement.style.setProperty(`--${key}`, input.value);
-                        if (currentPreset !== 'custom') {
-                            currentPreset = 'custom';
-                        }
-                        saveTheme();
+                    const closeBtn = utils.el('button', { text: 'Close' });
+                    Object.assign(closeBtn.style, {
+                        width: '100%',
+                        padding: '6px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        background: theme.button || 'rgba(255,255,255,0.1)',
+                        color: theme.text1 || '#fff',
+                        cursor: 'pointer',
+                        fontWeight: 'bold'
                     });
-                }
+                    closeBtn.addEventListener('click', () => {
+                        statsWindow.style.display = 'none';
+                    });
+                    statsWindow.appendChild(closeBtn);
 
-                for (const key in inputs) {
-                    document.documentElement.style.setProperty(`--${key}`, theme[key]);
-                }
-            }
+                    // Open button handler
+                    openStatsBtn.addEventListener('click', () => {
+                        statsWindow.style.display = 'block';
+                    });
 
+                    // === TOGGLE GUI KEY BUTTON ===
+                    let toggleKey = settings.toggleKey ?? 'p'; // default key
 
-            const warntitle = utils.el('div', {
-                text: 'NOTE: Restart client to apply changes'
-            });
-            Object.assign(warntitle.style, {
-                fontSize: '12px',
-                textAlign: 'center',
-                marginBottom: '8px'
-            });
-            box.appendChild(warntitle);
-// === STATS PICKER ===
-const openStatsBtn = utils.el('button', { text: 'Open Stats Picker' });
-Object.assign(openStatsBtn.style, {
-    width: '100%',
-    padding: '8px',
-    border: 'none',
-    borderRadius: '6px',
-    background: theme.button || 'rgba(255,255,255,0.1)',
-    color: theme.text1 || '#fff',
-    cursor: 'pointer',
-    fontWeight: 'bold'
-});
-box.appendChild(openStatsBtn);
+                    const toggleBtn = utils.el('button', {
+                        text: `Toggle GUI Key: ${toggleKey}`
+                    });
+                    Object.assign(toggleBtn.style, {
+                        padding: '6px 12px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        color: theme.text1,
+                        background: theme.blue1
+                    });
+                    box.appendChild(toggleBtn);
 
-// Create popup window (hidden initially)
-const statsWindow = utils.el('div');
-Object.assign(statsWindow.style, {
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    background: 'rgba(20,20,20,0.95)',
-    borderRadius: '8px',
-    padding: '20px',
-    boxShadow: '0 0 20px rgba(0,0,0,0.5)',
-    zIndex: '9999',
-    display: 'none',
-    color: theme.text1 || '#fff',
-    minWidth: '250px'
-});
-document.body.appendChild(statsWindow);
+                    let waitingForKey = false;
 
-// Header
-const statsTitle = utils.el('div', { text: 'Stats Display' });
-Object.assign(statsTitle.style, {
-    fontWeight: 'bold',
-    marginBottom: '8px',
-    fontSize: '1.1em',
-    textAlign: 'center'
-});
-statsWindow.appendChild(statsTitle);
+                    toggleBtn.addEventListener('click', () => {
+                        waitingForKey = true;
+                        toggleBtn.textContent = `Press any key...`;
+                        toggleBtn.style.background = theme.yellow1;
+                    });
 
-// Checkbox container
-const checkboxContainer = utils.el('div');
-Object.assign(checkboxContainer.style, {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '10px',
-    justifyContent: 'center',
-    marginBottom: '15px'
-});
-statsWindow.appendChild(checkboxContainer);
+                    // Listen for key press to set the new toggle key
+                    window.addEventListener('keydown', (ev) => {
+                        if (!waitingForKey) return;
 
-const statOptions = [
-    { id: 'showOS', label: 'OS' },
-    { id: 'showCPU', label: 'CPU' },
-    { id: 'showFPS', label: 'FPS' },
-    { id: 'showPing', label: 'Ping' },
-    { id: 'showSens', label: 'Sens' },
-    { id: 'showServer', label: 'Server' }
-];
+                        const key = ev.key;
+                        toggleKey = key;
+                        settings.toggleKey = toggleKey;
+                        writeSettings(settings);
 
-// Add checkboxes
-statOptions.forEach(stat => {
-    const row = utils.el('div');
-    Object.assign(row.style, {
-        display: 'flex',
-        alignItems: 'center',
-        minWidth: 'fit-content'
-    });
-
-    const checkbox = utils.el('input');
-    Object.assign(checkbox, {
-        type: 'checkbox',
-        id: stat.id,
-        checked: utils.getRaw(stat.id) !== 'false'
-    });
-    Object.assign(checkbox.style, {
-        marginRight: '4px',
-        accentColor: theme.accent || '#00bfff',
-        width: '16px',
-        height: '16px',
-        cursor: 'pointer'
-    });
-
-    const label = utils.el('label', { text: stat.label });
-    Object.assign(label.style, {
-        color: theme.text1,
-        fontSize: '0.9em'
-    });
-
-    checkbox.addEventListener('change', () => {
-        utils.setRaw(stat.id, checkbox.checked ? 'true' : 'false');
-        updateStatsVisibility();
-    });
-
-    row.appendChild(checkbox);
-    row.appendChild(label);
-    checkboxContainer.appendChild(row);
-});
-
-// Close button
-const closeBtn = utils.el('button', { text: 'Close' });
-Object.assign(closeBtn.style, {
-    width: '100%',
-    padding: '6px',
-    border: 'none',
-    borderRadius: '6px',
-    background: theme.button || 'rgba(255,255,255,0.1)',
-    color: theme.text1 || '#fff',
-    cursor: 'pointer',
-    fontWeight: 'bold'
-});
-closeBtn.addEventListener('click', () => {
-    statsWindow.style.display = 'none';
-});
-statsWindow.appendChild(closeBtn);
-
-// Open button handler
-openStatsBtn.addEventListener('click', () => {
-    statsWindow.style.display = 'block';
-});
-
-            // === TOGGLE GUI KEY BUTTON ===
-            let toggleKey = settings.toggleKey ?? 'p'; // default key
-
-            const toggleBtn = utils.el('button', {
-                text: `Toggle GUI Key: ${toggleKey}`
-            });
-            Object.assign(toggleBtn.style, {
-                padding: '6px 12px',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                color: theme.text1,
-                background: theme.blue1
-            });
-            box.appendChild(toggleBtn);
-
-            let waitingForKey = false;
-
-            toggleBtn.addEventListener('click', () => {
-                waitingForKey = true;
-                toggleBtn.textContent = `Press any key...`;
-                toggleBtn.style.background = theme.yellow1;
-            });
-
-            // Listen for key press to set the new toggle key
-            window.addEventListener('keydown', (ev) => {
-                if (!waitingForKey) return;
-
-                const key = ev.key;
-                toggleKey = key;
-                settings.toggleKey = toggleKey;
-                writeSettings(settings);
-
-                toggleBtn.textContent = `Toggle GUI Key: ${toggleKey}`;
-                toggleBtn.style.background = theme.blue1;
-                waitingForKey = false;
-            });
+                        toggleBtn.textContent = `Toggle GUI Key: ${toggleKey}`;
+                        toggleBtn.style.background = theme.blue1;
+                        waitingForKey = false;
+                    });
 
 
-            // === ADBLOCKER BUTTON ===
+                    // === ADBLOCKER BUTTON ===
 
-            let adblocker = settings.adblocker ?? false; // default false
+                    let adblocker = settings.adblocker ?? false; // default false
 
-            const adblockBtn = utils.el('button', {
-                text: `Adblocker: (DOESN'T WORK ON WEB)`
-            });
-            Object.assign(adblockBtn.style, {
-                padding: '6px 12px',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                color: theme.text1,
-                background: theme.red3
-            });
-            box.appendChild(adblockBtn);
+                    const adblockBtn = utils.el('button', {
+                        text: `Adblocker: (DOESN'T WORK ON WEB)`
+                    });
+                    Object.assign(adblockBtn.style, {
+                        padding: '6px 12px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        color: theme.text1,
+                        background: theme.red3
+                    });
+                    box.appendChild(adblockBtn);
 
-            // === RPC BUTTON ===
-            let rpc = settings.rpc ?? true; // default true
+                    // === RPC BUTTON ===
+                    let rpc = settings.rpc ?? true; // default true
 
-            const rpcBtn = utils.el('button', {
-                text: `Discord Status: (DOESN'T WORK ON WEB)`
-            });
-            Object.assign(rpcBtn.style, {
-                padding: '6px 12px',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                color: theme.text1,
-                background: theme.red3
-            });
-            box.appendChild(rpcBtn);
+                    const rpcBtn = utils.el('button', {
+                        text: `Discord Status: (DOESN'T WORK ON WEB)`
+                    });
+                    Object.assign(rpcBtn.style, {
+                        padding: '6px 12px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        color: theme.text1,
+                        background: theme.red3
+                    });
+                    box.appendChild(rpcBtn);
 
-            // === HIGH PERFORMANCE GPU BUTTON ===
-            let highPerf = settings.forceHighPerformanceGPU ?? false; // default false
+                    // === HIGH PERFORMANCE GPU BUTTON ===
+                    let highPerf = settings.forceHighPerformanceGPU ?? false; // default false
 
-            const highPerfBtn = utils.el('button', {
-                text: `High Performance Mode:  (DOESN'T WORK ON WEB)`
-            });
-            Object.assign(highPerfBtn.style, {
-                padding: '6px 12px',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                color: theme.text1,
-                background: theme.red3
-            });
-            box.appendChild(highPerfBtn);
+                    const highPerfBtn = utils.el('button', {
+                        text: `High Performance Mode:  (DOESN'T WORK ON WEB)`
+                    });
+                    Object.assign(highPerfBtn.style, {
+                        padding: '6px 12px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        color: theme.text1,
+                        background: theme.red3
+                    });
+                    box.appendChild(highPerfBtn);
 
-            // === SETTINGS TOGGLE BUTTON ===
-            settingsBtn.addEventListener('click', () => {
-                settingsOverlay.style.display =
-                    settingsOverlay.style.display === 'none' ? 'flex' : 'none';
-            });
-
-
-            const gui = utils.el('div', {
-                id: 'dsGuiContainer'
-            });
-
-            Object.assign(gui.style, {
-                position: 'fixed',
-                top: '10px',
-                right: '10px',
-                width: '200px',                        // same as your box
-                paddingTop: '20px',
-                paddingBottom: '20px',
-                //background: 'rgba(0,0,0,0.4)',
-                //backdropFilter: 'blur(10px)',
-                color: theme.text1,
-                borderRadius: '10px',
-                boxShadow: '0 0 20px rgba(0,0,0,0.5)',
-                zIndex: 100000,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px',
-                cursor: 'move',
-            });
-
-            document.body.appendChild(gui);
-
-            // --- Tabs container ---
-            const tabs = utils.el('div');
-            Object.assign(tabs.style, {
-                display: 'flex',
-                gap: '4px',
-                marginBottom: '8px',
-                flexDirection: 'column', // stack title above buttons
-            });
-
-            const title = utils.el('div', {
-                text: `Omniverse | Toggle: ${settings.toggleKey}`
-            });
-            title.style.fontWeight = 'bold';
-            title.style.textAlign = 'center';
-            tabs.appendChild(title);
-
-            // Tab buttons
-            const mainTabBtn = utils.el('button', { text: 'Main' });
-            const settingsTabBtn = utils.el('button', { text: 'Settings' });
-            const themeTabBtn = utils.el('button', { text: 'Theme' });
-            const crosshairTabBtn = utils.el('button', { text: 'Crosshair Editor' });
-
-            [mainTabBtn, settingsTabBtn, themeTabBtn, crosshairTabBtn].forEach(btn => {
-                Object.assign(btn.style, {
-                    flex: 1,
-                    padding: '6px 12px',
-                    border: 'none',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    color: theme.red1,
-                });
-                tabs.appendChild(btn);
-            });
-
-            gui.insertBefore(tabs, gui.firstChild);
-
-            // --- Main GUI content ---
-            const mainGui = utils.el('div');
-            Object.assign(mainGui.style, {
-                padding: '20px',
-                width: '200px',
-                backdropFilter: 'blur(10px)',
-                color: theme.text1,
-                borderRadius: '10px',
-                zIndex: 100000,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px',
-                cursor: 'move',
-            });
-
-            // Move all existing children (except tabs) into mainGui
-            while (gui.children.length > 1) {
-                mainGui.appendChild(gui.children[1]);
-            }
-            gui.appendChild(mainGui);
-
-            // --- Theme tab ---
-            const themeTabContainer = utils.el('div');
-            Object.assign(themeTabContainer.style, {
-                display: 'none',
-                flexDirection: 'column',
-                gap: '8px',
-                padding: '8px',
-            });
-            createColorEditor(themeTabContainer, theme);
-            gui.appendChild(themeTabContainer);
-
-            // --- Settings tab ---
-            const settingsTabContainer = utils.el('div');
-            Object.assign(settingsTabContainer.style, {
-                display: 'none',
-                flexDirection: 'column',
-                gap: '8px',
-                padding: '8px',
-            });
-            settingsTabContainer.appendChild(box); // your original settings overlay content
-            gui.appendChild(settingsTabContainer);
-
-            // --- Crosshair tab ---
-            const crosshairTabContainer = utils.el('div');
-            Object.assign(crosshairTabContainer.style, {
-                display: 'none',
-                flexDirection: 'column',
-                gap: '8px',
-                padding: '8px',
-            });
-            const a = new CrosshairOverlay(utils); // from your crosshair editor
-            let chPanel = a.createSettingsPanel();
-
-            chPanel.style.position = 'relative'; // IMPORTANT: override fixed positioning
-            console.log(chPanel);
-            crosshairTabContainer.appendChild(chPanel);
-            gui.appendChild(crosshairTabContainer);
-            a.init();
-
-            // --- Tab switching ---
-            function showTab(tab) {
-                // Hide all tabs
-                mainGui.style.display = 'none';
-                settingsTabContainer.style.display = 'none';
-                themeTabContainer.style.display = 'none';
-                crosshairTabContainer.style.display = 'none';
-
-                // Reset button styles
-                [mainTabBtn, settingsTabBtn, themeTabBtn, crosshairTabBtn].forEach(btn => {
-                    btn.style.background = theme.red1;
-                    btn.style.color = theme.text1;
-                });
-
-                // Show selected tab
-                if (tab === 'main') {
-                    mainGui.style.display = 'flex';
-                    mainTabBtn.style.background = theme.blue1;
-                } else if (tab === 'settings') {
-                    settingsTabContainer.style.display = 'flex';
-                    settingsTabBtn.style.background = theme.blue1;
-                } else if (tab === 'theme') {
-                    themeTabContainer.style.display = 'flex';
-                    themeTabBtn.style.background = theme.blue1;
-                } else if (tab === 'crosshair') {
-                    crosshairTabContainer.style.display = 'flex';
-                    crosshairTabBtn.style.background = theme.blue1;
-                }
-            }
-
-            // Initial tab
-            showTab('main');
-
-            // Tab button listeners
-            mainTabBtn.addEventListener('click', () => showTab('main'));
-            settingsTabBtn.addEventListener('click', () => showTab('settings'));
-            themeTabBtn.addEventListener('click', () => showTab('theme'));
-            crosshairTabBtn.addEventListener('click', () => showTab('crosshair'));
-
-            // Hide old settings overlay if exists
-            if (settingsBtn) settingsBtn.remove();
-            if (settingsOverlay) settingsOverlay.style.display = 'none';
+                    // === SETTINGS TOGGLE BUTTON ===
+                    settingsBtn.addEventListener('click', () => {
+                        settingsOverlay.style.display =
+                            settingsOverlay.style.display === 'none' ? 'flex' : 'none';
+                    });
 
 
-            // overlay buttons container & state
-            const overlayButtons = {};
-            const state = {};
-            overlayDefs.forEach(def => {
-                const saved = utils.getRaw(def.id);
-                state[def.id] = saved === null ? true : (saved === 'true' || saved === true);
-            });
+                    const gui = utils.el('div', {
+                        id: 'dsGuiContainer'
+                    });
 
-            for (const def of overlayDefs) {
-                const btn = utils.el('button', {
-                    text: `${def.name}: ${state[def.id] ? 'ON' : 'OFF'}`
-                });
-                Object.assign(btn.style, {
-                    padding: '6px 12px',
-                    border: 'none',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    color: theme.text1
-                });
-                mainGui.appendChild(btn);
-                overlayButtons[def.id] = btn;
-            }
+                    Object.assign(gui.style, {
+                        position: 'fixed',
+                        top: '10px',
+                        right: '10px',
+                        width: '200px',                        // same as your box
+                        paddingTop: '20px',
+                        paddingBottom: '20px',
+                        //background: 'rgba(0,0,0,0.4)',
+                        //backdropFilter: 'blur(10px)',
+                        color: theme.text1,
+                        borderRadius: '10px',
+                        boxShadow: '0 0 20px rgba(0,0,0,0.5)',
+                        zIndex: 100000,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                        cursor: 'move',
+                    });
 
-            // Fetch rank button
-            const fetchRankBtn = utils.el('button', {
-                text: 'Fetch My Rank'
-            });
-            Object.assign(fetchRankBtn.style, {
-                padding: '6px 12px',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                background: theme.blue1,
-                color: theme.text1
-            });
-            mainGui.appendChild(fetchRankBtn);
-            fetchRankBtn.addEventListener('click', async () => {
-                const overlay = document.createElement('div');
-                overlay.style.position = 'fixed';
-                overlay.style.top = 0;
-                overlay.style.left = 0;
-                overlay.style.width = '100vw';
-                overlay.style.height = '100vh';
-                overlay.style.background = 'rgba(0,0,0,0.6)';
-                overlay.style.display = 'flex';
-                overlay.style.justifyContent = 'center';
-                overlay.style.alignItems = 'center';
-                overlay.style.zIndex = 9999;
+                    document.body.appendChild(gui);
 
-                const box = document.createElement('div');
-                box.style.background = '#1e1e1e';
-                box.style.padding = '30px';
-                box.style.borderRadius = '10px';
-                box.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
-                box.style.textAlign = 'center';
-                box.style.color = theme.text1;
-                box.style.fontFamily = 'Arial, sans-serif';
+                    // --- Tabs container ---
+                    const tabs = utils.el('div');
+                    Object.assign(tabs.style, {
+                        display: 'flex',
+                        gap: '4px',
+                        marginBottom: '8px',
+                        flexDirection: 'column', // stack title above buttons
+                    });
 
-                const label = document.createElement('div');
-                label.textContent = 'Enter your username:';
-                label.style.marginBottom = '10px';
+                    const title = utils.el('div', {
+                        text: `Omniverse | Toggle: ${settings.toggleKey}`
+                    });
+                    title.style.fontWeight = 'bold';
+                    title.style.textAlign = 'center';
+                    tabs.appendChild(title);
 
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.style.padding = '10px';
-                input.style.borderRadius = '5px';
-                input.style.border = 'none';
-                input.style.width = '200px';
-                input.style.marginBottom = '10px';
-                input.style.fontSize = '16px';
+                    // Tab buttons
+                    const mainTabBtn = utils.el('button', { text: 'Main' });
+                    const settingsTabBtn = utils.el('button', { text: 'Settings' });
+                    const themeTabBtn = utils.el('button', { text: 'Theme' });
+                    const crosshairTabBtn = utils.el('button', { text: 'Crosshair Editor' });
 
-                const submit = document.createElement('button');
-                submit.textContent = 'Submit';
-                submit.style.padding = '10px 20px';
-                submit.style.border = 'none';
-                submit.style.borderRadius = '5px';
-                submit.style.background = '#4CAF50';
-                submit.style.color = theme.text1;
-                submit.style.cursor = 'pointer';
-                submit.style.fontSize = '16px';
+                    [mainTabBtn, settingsTabBtn, themeTabBtn, crosshairTabBtn].forEach(btn => {
+                        Object.assign(btn.style, {
+                            flex: 1,
+                            padding: '6px 12px',
+                            border: 'none',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            color: theme.red1,
+                        });
+                        tabs.appendChild(btn);
+                    });
 
-                submit.addEventListener('click', async () => {
-                    const username = input.value.trim();
-                    console.log(username);
-                    if (!username) return;
+                    gui.insertBefore(tabs, gui.firstChild);
 
-                    try {
-                        const rank = await fetchLeaderboardRank(username);
-                        alert(`${rank}`);
-                        document.body.removeChild(overlay);
-                    } catch (err) {
-                        console.error('Failed to fetch leaderboard rank:', err);
-                        alert('Failed to fetch rank');
-                        document.body.removeChild(overlay);
+                    // --- Main GUI content ---
+                    const mainGui = utils.el('div');
+                    Object.assign(mainGui.style, {
+                        padding: '20px',
+                        width: '200px',
+                        backdropFilter: 'blur(10px)',
+                        color: theme.text1,
+                        borderRadius: '10px',
+                        zIndex: 100000,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                        cursor: 'move',
+                    });
+
+                    // Move all existing children (except tabs) into mainGui
+                    while (gui.children.length > 1) {
+                        mainGui.appendChild(gui.children[1]);
                     }
-                });
+                    gui.appendChild(mainGui);
 
+                    // --- Theme tab ---
+                    const themeTabContainer = utils.el('div');
+                    Object.assign(themeTabContainer.style, {
+                        display: 'none',
+                        flexDirection: 'column',
+                        gap: '8px',
+                        padding: '8px',
+                    });
+                    createColorEditor(themeTabContainer, theme);
+                    gui.appendChild(themeTabContainer);
 
-                box.appendChild(label);
-                box.appendChild(input);
-                box.appendChild(submit);
-                overlay.appendChild(box);
-                document.body.appendChild(overlay);
-                input.focus();
-            });
+                    // --- Settings tab ---
+                    const settingsTabContainer = utils.el('div');
+                    Object.assign(settingsTabContainer.style, {
+                        display: 'none',
+                        flexDirection: 'column',
+                        gap: '8px',
+                        padding: '8px',
+                    });
+                    settingsTabContainer.appendChild(box); // your original settings overlay content
+                    gui.appendChild(settingsTabContainer);
 
-            // Reset button
-            const resetBtn = utils.el('button', {
-                text: 'Reset Omniverse'
-            });
-            Object.assign(resetBtn.style, {
-                padding: '6px 12px',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                background: theme.red3,
-                color: theme.text1
-            });
-            mainGui.appendChild(resetBtn);
-            resetBtn.addEventListener('click', () => {
-                const idsToReset = ['dsOverlayStats', 'keyDisplayOverlay', 'dsGuiContainer', 'minimalstats', 'theme'];
-                idsToReset.forEach(id => {
-                    utils.remove(id + '_pos');
-                    utils.remove(id);
-                });
-                location.reload();
-            });
+                    // --- Crosshair tab ---
+                    const crosshairTabContainer = utils.el('div');
+                    Object.assign(crosshairTabContainer.style, {
+                        display: 'none',
+                        flexDirection: 'column',
+                        gap: '8px',
+                        padding: '8px',
+                    });
+                    const a = new CrosshairOverlay(utils); // from your crosshair editor
+                    let chPanel = a.createSettingsPanel();
 
-            // download button
-            const downloadBtn = utils.el('button', {
-                text: 'Download Omniverse for PC'
-            });
-            Object.assign(downloadBtn.style, {
-                padding: '6px 12px',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                background: theme.red3,
-                color: theme.text1
-            });
-            mainGui.appendChild(downloadBtn);
-            downloadBtn.addEventListener('click', () => {
-                window.open("https://github.com/Typhoonz0/omniverse/releases", "_blank");
-            });
+                    chPanel.style.position = 'relative'; // IMPORTANT: override fixed positioning
+                    console.log(chPanel);
+                    crosshairTabContainer.appendChild(chPanel);
+                    gui.appendChild(crosshairTabContainer);
+                    a.init();
 
-            // Helper to update visibility and button text/style
-            function updateVisibility(id, settingsId) {
-                const elTarget = document.getElementById(id);
-                if (elTarget) elTarget.style.display = state[id] ? '' : 'none';
-                if (settingsId) {
-                    const settingsEl = document.getElementById(settingsId);
-                    if (settingsEl) settingsEl.style.display = state[id] ? 'block' : 'none';
-                }
-                const btn = overlayButtons[id];
-                const def = overlayDefs.find(o => o.id === id);
-                if (btn && def) {
-                    btn.textContent = `${def.name}: ${state[id] ? 'ON' : 'OFF'}`;
-                    btn.style.background = state[id] ? theme.green1 : theme.red3;
-                    utils.setRaw(id, state[id] ? 'true' : 'false');
-                }
-            }
+                    // --- Tab switching ---
+                    function showTab(tab) {
+                        // Hide all tabs
+                        mainGui.style.display = 'none';
+                        settingsTabContainer.style.display = 'none';
+                        themeTabContainer.style.display = 'none';
+                        crosshairTabContainer.style.display = 'none';
 
-            // initialize visibility and add click handlers
-            overlayDefs.forEach(def => {
-                updateVisibility(def.id, def.settingsId);
-                const btn = overlayButtons[def.id];
-                if (!btn) return;
-                btn.addEventListener('click', () => {
-                    state[def.id] = !state[def.id];
-                    updateVisibility(def.id, def.settingsId);
-                });
-            });
+                        // Reset button styles
+                        [mainTabBtn, settingsTabBtn, themeTabBtn, crosshairTabBtn].forEach(btn => {
+                            btn.style.background = theme.red1;
+                            btn.style.color = theme.text1;
+                        });
 
-            // Toggle GUI with P
-            window.addEventListener('keydown', (e) => {
-                if (e.key.toLowerCase() === settings.toggleKey) {
-                    gui.style.display = gui.style.display === 'none' ? 'flex' : 'none';
-                }
-            });
-
-            // Make GUI draggable and persist
-            utils.makeDraggable(gui, {
-                storageKey: 'dsGuiContainer'
-            });
-
-            ['dsOverlayStats', 'keyDisplayOverlay', 'dsGuiContainer'].forEach(id => {
-                const elNode = document.getElementById(id);
-                if (!elNode) return;
-                const pos = utils.loadPosition(id);
-                if (pos && typeof pos.x === 'number' && typeof pos.y === 'number') {
-                    elNode.style.left = pos.x + 'px';
-                    elNode.style.top = pos.y + 'px';
-                    elNode.style.right = 'auto';
-                }
-            });
-
-            async function fetchLeaderboardRank(username) {
-                try {
-                    const response = await fetch('https://login.deadshot.io/leaderboards');
-                    const data = await response.json();
-                    const categories = ["daily", "weekly", "alltime"];
-                    const result = {};
-
-                    for (const category of categories) {
-                        if (data[category] && data[category].kills) {
-                            const leaderboard = data[category].kills;
-                            leaderboard.sort((a, b) => b.kills - a.kills);
-                            const player = leaderboard.find(p => p.name === username);
-                            result[category] = player ? `#${leaderboard.indexOf(player) + 1}` : "Not found";
-                        } else {
-                            result[category] = "Not found";
+                        // Show selected tab
+                        if (tab === 'main') {
+                            mainGui.style.display = 'flex';
+                            mainTabBtn.style.background = theme.blue1;
+                        } else if (tab === 'settings') {
+                            settingsTabContainer.style.display = 'flex';
+                            settingsTabBtn.style.background = theme.blue1;
+                        } else if (tab === 'theme') {
+                            themeTabContainer.style.display = 'flex';
+                            themeTabBtn.style.background = theme.blue1;
+                        } else if (tab === 'crosshair') {
+                            crosshairTabContainer.style.display = 'flex';
+                            crosshairTabBtn.style.background = theme.blue1;
                         }
                     }
 
-                    // Convert to a string
-                    return `Daily: ${result.daily}\nWeekly: ${result.weekly}\nAll-time: ${result.alltime}`;
-                } catch (error) {
-                    console.error('Error fetching leaderboard:', error);
-                    return "Daily: Error\nWeekly: Error\nAll-time: Error";
+                    // Initial tab
+                    showTab('main');
+
+                    // Tab button listeners
+                    mainTabBtn.addEventListener('click', () => showTab('main'));
+                    settingsTabBtn.addEventListener('click', () => showTab('settings'));
+                    themeTabBtn.addEventListener('click', () => showTab('theme'));
+                    crosshairTabBtn.addEventListener('click', () => showTab('crosshair'));
+
+                    // Hide old settings overlay if exists
+                    if (settingsBtn) settingsBtn.remove();
+                    if (settingsOverlay) settingsOverlay.style.display = 'none';
+
+
+                    // overlay buttons container & state
+                    const overlayButtons = {};
+                    const state = {};
+                    overlayDefs.forEach(def => {
+                        const saved = utils.getRaw(def.id);
+                        state[def.id] = saved === null ? true : (saved === 'true' || saved === true);
+                    });
+
+                    for (const def of overlayDefs) {
+                        const btn = utils.el('button', {
+                            text: `${def.name}: ${state[def.id] ? 'ON' : 'OFF'}`
+                        });
+                        Object.assign(btn.style, {
+                            padding: '6px 12px',
+                            border: 'none',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            color: theme.text1
+                        });
+                        mainGui.appendChild(btn);
+                        overlayButtons[def.id] = btn;
+                    }
+
+                    // Fetch rank button
+                    const fetchRankBtn = utils.el('button', {
+                        text: 'Fetch My Rank'
+                    });
+                    Object.assign(fetchRankBtn.style, {
+                        padding: '6px 12px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        background: theme.blue1,
+                        color: theme.text1
+                    });
+                    mainGui.appendChild(fetchRankBtn);
+                    fetchRankBtn.addEventListener('click', async () => {
+                        const overlay = document.createElement('div');
+                        overlay.style.position = 'fixed';
+                        overlay.style.top = 0;
+                        overlay.style.left = 0;
+                        overlay.style.width = '100vw';
+                        overlay.style.height = '100vh';
+                        overlay.style.background = 'rgba(0,0,0,0.6)';
+                        overlay.style.display = 'flex';
+                        overlay.style.justifyContent = 'center';
+                        overlay.style.alignItems = 'center';
+                        overlay.style.zIndex = 9999;
+
+                        const box = document.createElement('div');
+                        box.style.background = '#1e1e1e';
+                        box.style.padding = '30px';
+                        box.style.borderRadius = '10px';
+                        box.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+                        box.style.textAlign = 'center';
+                        box.style.color = theme.text1;
+                        box.style.fontFamily = 'Arial, sans-serif';
+
+                        const label = document.createElement('div');
+                        label.textContent = 'Enter your username:';
+                        label.style.marginBottom = '10px';
+
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.style.padding = '10px';
+                        input.style.borderRadius = '5px';
+                        input.style.border = 'none';
+                        input.style.width = '200px';
+                        input.style.marginBottom = '10px';
+                        input.style.fontSize = '16px';
+
+                        const submit = document.createElement('button');
+                        submit.textContent = 'Submit';
+                        submit.style.padding = '10px 20px';
+                        submit.style.border = 'none';
+                        submit.style.borderRadius = '5px';
+                        submit.style.background = '#4CAF50';
+                        submit.style.color = theme.text1;
+                        submit.style.cursor = 'pointer';
+                        submit.style.fontSize = '16px';
+
+                        submit.addEventListener('click', async () => {
+                            const username = input.value.trim();
+                            console.log(username);
+                            if (!username) return;
+
+                            try {
+                                const rank = await fetchLeaderboardRank(username);
+                                alert(`${rank}`);
+                                document.body.removeChild(overlay);
+                            } catch (err) {
+                                console.error('Failed to fetch leaderboard rank:', err);
+                                alert('Failed to fetch rank');
+                                document.body.removeChild(overlay);
+                            }
+                        });
+
+
+                        box.appendChild(label);
+                        box.appendChild(input);
+                        box.appendChild(submit);
+                        overlay.appendChild(box);
+                        document.body.appendChild(overlay);
+                        input.focus();
+                    });
+
+                    // Reset button
+                    const resetBtn = utils.el('button', {
+                        text: 'Reset Omniverse'
+                    });
+                    Object.assign(resetBtn.style, {
+                        padding: '6px 12px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        background: theme.red3,
+                        color: theme.text1
+                    });
+                    mainGui.appendChild(resetBtn);
+                    resetBtn.addEventListener('click', () => {
+                        const idsToReset = ['dsOverlayStats', 'keyDisplayOverlay', 'dsGuiContainer', 'minimalstats', 'theme'];
+                        idsToReset.forEach(id => {
+                            utils.remove(id + '_pos');
+                            utils.remove(id);
+                        });
+                        location.reload();
+                    });
+
+                    // download button
+                    const downloadBtn = utils.el('button', {
+                        text: 'Download Omniverse for PC'
+                    });
+                    Object.assign(downloadBtn.style, {
+                        padding: '6px 12px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        background: theme.red3,
+                        color: theme.text1
+                    });
+                    mainGui.appendChild(downloadBtn);
+                    downloadBtn.addEventListener('click', () => {
+                        window.open("https://github.com/Typhoonz0/omniverse/releases", "_blank");
+                    });
+
+                    // Helper to update visibility and button text/style
+                    function updateVisibility(id, settingsId) {
+                        const elTarget = document.getElementById(id);
+                        if (elTarget) elTarget.style.display = state[id] ? '' : 'none';
+                        if (settingsId) {
+                            const settingsEl = document.getElementById(settingsId);
+                            if (settingsEl) settingsEl.style.display = state[id] ? 'block' : 'none';
+                        }
+                        const btn = overlayButtons[id];
+                        const def = overlayDefs.find(o => o.id === id);
+                        if (btn && def) {
+                            btn.textContent = `${def.name}: ${state[id] ? 'ON' : 'OFF'}`;
+                            btn.style.background = state[id] ? theme.green1 : theme.red3;
+                            utils.setRaw(id, state[id] ? 'true' : 'false');
+                        }
+                    }
+
+                    // initialize visibility and add click handlers
+                    overlayDefs.forEach(def => {
+                        updateVisibility(def.id, def.settingsId);
+                        const btn = overlayButtons[def.id];
+                        if (!btn) return;
+                        btn.addEventListener('click', () => {
+                            state[def.id] = !state[def.id];
+                            updateVisibility(def.id, def.settingsId);
+                        });
+                    });
+
+                    // Toggle GUI with P
+                    window.addEventListener('keydown', (e) => {
+                        if (e.key.toLowerCase() === settings.toggleKey) {
+                            gui.style.display = gui.style.display === 'none' ? 'flex' : 'none';
+                        }
+                    });
+
+                    // Make GUI draggable and persist
+                    utils.makeDraggable(gui, {
+                        storageKey: 'dsGuiContainer'
+                    });
+
+                    ['dsOverlayStats', 'keyDisplayOverlay', 'dsGuiContainer'].forEach(id => {
+                        const elNode = document.getElementById(id);
+                        if (!elNode) return;
+                        const pos = utils.loadPosition(id);
+                        if (pos && typeof pos.x === 'number' && typeof pos.y === 'number') {
+                            elNode.style.left = pos.x + 'px';
+                            elNode.style.top = pos.y + 'px';
+                            elNode.style.right = 'auto';
+                        }
+                    });
+
+                    async function fetchLeaderboardRank(username) {
+                        try {
+                            const response = await fetch('https://login.deadshot.io/leaderboards');
+                            const data = await response.json();
+                            const categories = ["daily", "weekly", "alltime"];
+                            const result = {};
+
+                            for (const category of categories) {
+                                if (data[category] && data[category].kills) {
+                                    const leaderboard = data[category].kills;
+                                    leaderboard.sort((a, b) => b.kills - a.kills);
+                                    const player = leaderboard.find(p => p.name === username);
+                                    result[category] = player ? `#${leaderboard.indexOf(player) + 1}` : "Not found";
+                                } else {
+                                    result[category] = "Not found";
+                                }
+                            }
+
+                            // Convert to a string
+                            return `Daily: ${result.daily}\nWeekly: ${result.weekly}\nAll-time: ${result.alltime}`;
+                        } catch (error) {
+                            console.error('Error fetching leaderboard:', error);
+                            return "Daily: Error\nWeekly: Error\nAll-time: Error";
+                        }
+                    }
+
+
+
+                    const footer = utils.el('div', {
+                        text: 'xliam.space'
+                    });
+                    footer.style.textAlign = 'center';
+                    gui.appendChild(footer);
                 }
-            }
 
+                let themeRaw = utils.getRaw('theme');
+                let theme;
+                let currentPreset;
 
+                try {
+                    if (!themeRaw) {
+                        theme = { ...themes.default };
+                        currentPreset = 'default';
+                    } else if (themes[themeRaw]) {
+                        theme = { ...themes[themeRaw] };
+                        currentPreset = themeRaw;
+                    } else {
+                        theme = JSON.parse(themeRaw);
+                        currentPreset = 'custom';
+                    }
+                } catch {
+                    theme = { ...themes.default };
+                    currentPreset = 'default';
+                }
 
-            const footer = utils.el('div', {
-                text: 'xliam.space'
-            });
-            footer.style.textAlign = 'center';
-            gui.appendChild(footer);
-        }
-
-        let themeRaw = utils.getRaw('theme');
-        let theme;
-        let currentPreset;
-
-        try {
-            if (!themeRaw) {
-                theme = { ...themes.default };
-                currentPreset = 'default';
-            } else if (themes[themeRaw]) {
-                theme = { ...themes[themeRaw] };
-                currentPreset = themeRaw;
-            } else {
-                theme = JSON.parse(themeRaw);
-                currentPreset = 'custom';
-            }
-        } catch {
-            theme = { ...themes.default };
-            currentPreset = 'default';
-        }
-
-        utils.injectStyle(`
+                utils.injectStyle(`
 @import 'https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap';
 *{
     margin:0;
@@ -1875,33 +1980,32 @@ openStatsBtn.addEventListener('click', () => {
 }`)
 
 
-        StatsOverlay(utils, theme);
-        KeysOverlay(utils, theme);
-        GUI(utils, theme, themes, currentPreset, CrosshairOverlay);
+                StatsOverlay(utils, theme);
+                KeysOverlay(utils, theme);
+                GUI(utils, theme, themes, currentPreset, CrosshairOverlay);
 
-        const date = new Date().toLocaleDateString();
-        const osInfo = (utils && utils.OSInfo()) ? utils.OSInfo() : 'Unknown OS';
+                const date = new Date().toLocaleDateString();
+                const osInfo = (utils && utils.OSInfo()) ? utils.OSInfo() : 'Unknown OS';
 
-        const watermark = document.createElement('div');
-        watermark.textContent = `Omniverse v${version} | ${date} | ${osInfo}`;
+                const watermark = document.createElement('div');
+                watermark.textContent = `Omniverse v${version} | ${date} | ${osInfo}`;
 
-        Object.assign(watermark.style, {
-            position: 'fixed',
-            bottom: '8px',
-            left: '8px',
-            opacity: '0.3',
-            color: '#fff',
-            fontSize: '20px',
-            zIndex: '999999',
-            pointerEvents: 'none',
-            userSelect: 'none',
-            textShadow: '1px 1px 2px rgba(0,0,0,0.6)',
-        });
+                Object.assign(watermark.style, {
+                    position: 'fixed',
+                    bottom: '8px',
+                    left: '8px',
+                    opacity: '0.3',
+                    color: '#fff',
+                    fontSize: '20px',
+                    zIndex: '999999',
+                    pointerEvents: 'none',
+                    userSelect: 'none',
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.6)',
+                });
 
-        document.body.appendChild(watermark);
+                document.body.appendChild(watermark);
 
-        })();
-    
-</script>
+            };
+        </script>
 
 </html>
