@@ -442,9 +442,8 @@
                 "text1": "#ffffff"
             }
         }
-
-        function StatsOverlay(utils, theme) {
-            const statsCSS = `
+function StatsOverlay(utils, theme) {
+    const statsCSS = `
     #dsOverlayStats {
         position: fixed;
         top: 80px;
@@ -459,70 +458,116 @@
         white-space: nowrap;
     }`;
 
-            utils.injectStyle(statsCSS);
+    utils.injectStyle(statsCSS);
 
-            const overlayStats = utils.el('div', {
-                id: 'dsOverlayStats',
-                text: 'Loading stats...'
-            });
-            document.body.appendChild(overlayStats);
+    const overlayStats = utils.el('div', {
+        id: 'dsOverlayStats',
+        text: 'Loading stats...'
+    });
+    document.body.appendChild(overlayStats);
 
-            let fps = 0;
-            (function fpsLoop() {
-                let last = performance.now();
-                function tick() {
-                    const now = performance.now();
-                    fps = Math.round(1000 / (now - last));
-                    last = now;
-                    requestAnimationFrame(tick);
-                }
-                requestAnimationFrame(tick);
-            })();
-
-            let ping = 0;
-            async function updatePing() {
-                const start = performance.now();
-                try {
-                    await fetch("https://deadshot.io/favicon.ico", {
-                        method: "HEAD",
-                        cache: "no-store"
-                    });
-                    ping = Math.round(performance.now() - start);
-                } catch {
-                    ping = -1;
-                }
-            }
-
-            function getCPU() {
-                return navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} cores` : 'N/A';
-            }
-
-            function getOS() {
-                return navigator.platform ? `${navigator.platform}` : 'N/A';
-            }
-
-            setInterval(() => {
-                const minimalMode = utils.getRaw("minimalstats") === "true";
-
-                if (minimalMode) {
-                    overlayStats.innerHTML = `
-                FPS: ${fps}<br>
-                Ping: ${ping === -1 ? 'offline' : ping + ' ms'}
-            `;
-                } else {
-                    overlayStats.innerHTML = `
-                OS: ${getOS()}<br>
-                CPU: ${getCPU()}<br>
-                FPS: ${fps}<br>
-                Ping: ${ping === -1 ? 'offline' : ping + ' ms'}
-            `;
-                }
-
-                updatePing();
-            }, 1000);
-
-            utils.makeDraggable(overlayStats, { storageKey: 'dsOverlayStats' });
+    let fps = 0;
+    (function fpsLoop() {
+        let last = performance.now();
+        function tick() {
+            const now = performance.now();
+            fps = Math.round(1000 / (now - last));
+            last = now;
+            requestAnimationFrame(tick);
         }
+        requestAnimationFrame(tick);
+    })();
+
+    let ping = 0;
+    async function updatePing() {
+        const start = performance.now();
+        try {
+            await fetch("https://deadshot.io/favicon.ico", {
+                method: "HEAD",
+                cache: "no-store"
+            });
+            ping = Math.round(performance.now() - start);
+        } catch {
+            ping = -1;
+        }
+    }
+
+    function getCPU() {
+        return navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} cores` : 'N/A';
+    }
+
+    function getOS() {
+        return navigator.platform ? `${navigator.platform}` : 'N/A';
+    }
+
+    function getSens() {
+        return utils.get('settings', {})?.sensitivity ?? 'N/A';
+    }
+
+    const regionMap = {
+        "Europe": "EU",
+        "North America": "NA",
+        "Asia": "AS",
+        "South America": "SA",
+        "Australia": "AU",
+        "South India": "IN"
+    };
+
+    function getServer() {
+        const region = utils.get('settings', {})?.region ?? 'N/A';
+        return regionMap[region] ?? "N/A";
+    }
+
+    function getDate() {
+        try {
+            const d = new Date();
+            const dd = String(d.getDate()).padStart(2, '0');
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const yyyy = d.getFullYear();
+            return `${yyyy}/${mm}/${dd}`;
+        } catch { return 'N/A'; }
+    }
+
+    function getTime() {
+        try {
+            const d = new Date();
+            const hh = String(d.getHours()).padStart(2, '0');
+            const mm = String(d.getMinutes()).padStart(2, '0');
+            return `${hh}:${mm}`;
+        } catch { return 'N/A'; }
+    }
+
+    function updateStatsVisibility() {
+        const showDate = utils.getRaw("showDate") !== "false";
+        const showTime = utils.getRaw("showTime") !== "false";
+        const showOS = utils.getRaw("showOS") !== "false";
+        const showCPU = utils.getRaw("showCPU") !== "false";
+        const showServer = utils.getRaw("showServer") !== "false";
+        const showSens = utils.getRaw("showSens") !== "false";
+        const showFPS = utils.getRaw("showFPS") !== "false";
+        const showPing = utils.getRaw("showPing") !== "false";
+        
+        let html = '';
+        
+        if (showDate) html += `Date: ${getDate()}<br>`;
+        if (showTime) html += `Time: ${getTime()}<br>`;
+        if (showOS) html += `OS: ${getOS()}<br>`;
+        if (showCPU) html += `CPU: ${getCPU()}<br>`;
+        if (showServer) html += `Server: ${getServer()}<br>`;
+        if (showSens) html += `Sens: ${getSens()}<br>`;
+        if (showFPS) html += `FPS: ${fps}<br>`;
+        if (showPing) html += `Ping: ${ping === -1 ? 'offline' : ping + ' ms'}<br>`;
+
+        overlayStats.innerHTML = html.trim();
+    }
+
+    setInterval(() => {
+        updatePing();
+        updateStatsVisibility();
+    }, 1000);
+
+    utils.makeDraggable(overlayStats, { storageKey: 'dsOverlayStats' });
+}
 
         function KeysOverlay(utils, theme) {
             const keys = [
@@ -1168,34 +1213,6 @@
             }
 
 
-
-            // === MINIMAL STATS TOGGLE ===
-            let minimalStats = utils.getRaw('minimalstats') === 'true';
-
-            const minimalBtn = utils.el('button', {
-                text: `Minimal Stats: ${minimalStats ? 'ON' : 'OFF'}`
-            });
-            Object.assign(minimalBtn.style, {
-                padding: '6px 12px',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                color: theme.text1,
-                background: minimalStats ? theme.green1 : theme.red3
-            });
-            box.appendChild(minimalBtn);
-
-            minimalBtn.addEventListener('click', () => {
-                minimalStats = !minimalStats;
-                utils.setRaw('minimalstats', minimalStats ? 'true' : 'false');
-                minimalBtn.textContent = `Minimal Stats: ${minimalStats ? 'ON' : 'OFF'}`;
-                minimalBtn.style.background = minimalStats ? theme.green1 : theme.red3;
-                toggleMinimalStats(minimalStats); // apply changes immediately
-            });
-
-
-
             const warntitle = utils.el('div', {
                 text: 'NOTE: Restart client to apply changes'
             });
@@ -1205,6 +1222,128 @@
                 marginBottom: '8px'
             });
             box.appendChild(warntitle);
+// === STATS PICKER ===
+const openStatsBtn = utils.el('button', { text: 'Open Stats Picker' });
+Object.assign(openStatsBtn.style, {
+    width: '100%',
+    padding: '8px',
+    border: 'none',
+    borderRadius: '6px',
+    background: theme.button || 'rgba(255,255,255,0.1)',
+    color: theme.text1 || '#fff',
+    cursor: 'pointer',
+    fontWeight: 'bold'
+});
+box.appendChild(openStatsBtn);
+
+// Create popup window (hidden initially)
+const statsWindow = utils.el('div');
+Object.assign(statsWindow.style, {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    background: 'rgba(20,20,20,0.95)',
+    borderRadius: '8px',
+    padding: '20px',
+    boxShadow: '0 0 20px rgba(0,0,0,0.5)',
+    zIndex: '9999',
+    display: 'none',
+    color: theme.text1 || '#fff',
+    minWidth: '250px'
+});
+document.body.appendChild(statsWindow);
+
+// Header
+const statsTitle = utils.el('div', { text: 'Stats Display' });
+Object.assign(statsTitle.style, {
+    fontWeight: 'bold',
+    marginBottom: '8px',
+    fontSize: '1.1em',
+    textAlign: 'center'
+});
+statsWindow.appendChild(statsTitle);
+
+// Checkbox container
+const checkboxContainer = utils.el('div');
+Object.assign(checkboxContainer.style, {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '10px',
+    justifyContent: 'center',
+    marginBottom: '15px'
+});
+statsWindow.appendChild(checkboxContainer);
+
+const statOptions = [
+    { id: 'showOS', label: 'OS' },
+    { id: 'showCPU', label: 'CPU' },
+    { id: 'showFPS', label: 'FPS' },
+    { id: 'showPing', label: 'Ping' },
+    { id: 'showSens', label: 'Sens' },
+    { id: 'showServer', label: 'Server' }
+];
+
+// Add checkboxes
+statOptions.forEach(stat => {
+    const row = utils.el('div');
+    Object.assign(row.style, {
+        display: 'flex',
+        alignItems: 'center',
+        minWidth: 'fit-content'
+    });
+
+    const checkbox = utils.el('input');
+    Object.assign(checkbox, {
+        type: 'checkbox',
+        id: stat.id,
+        checked: utils.getRaw(stat.id) !== 'false'
+    });
+    Object.assign(checkbox.style, {
+        marginRight: '4px',
+        accentColor: theme.accent || '#00bfff',
+        width: '16px',
+        height: '16px',
+        cursor: 'pointer'
+    });
+
+    const label = utils.el('label', { text: stat.label });
+    Object.assign(label.style, {
+        color: theme.text1,
+        fontSize: '0.9em'
+    });
+
+    checkbox.addEventListener('change', () => {
+        utils.setRaw(stat.id, checkbox.checked ? 'true' : 'false');
+        updateStatsVisibility();
+    });
+
+    row.appendChild(checkbox);
+    row.appendChild(label);
+    checkboxContainer.appendChild(row);
+});
+
+// Close button
+const closeBtn = utils.el('button', { text: 'Close' });
+Object.assign(closeBtn.style, {
+    width: '100%',
+    padding: '6px',
+    border: 'none',
+    borderRadius: '6px',
+    background: theme.button || 'rgba(255,255,255,0.1)',
+    color: theme.text1 || '#fff',
+    cursor: 'pointer',
+    fontWeight: 'bold'
+});
+closeBtn.addEventListener('click', () => {
+    statsWindow.style.display = 'none';
+});
+statsWindow.appendChild(closeBtn);
+
+// Open button handler
+openStatsBtn.addEventListener('click', () => {
+    statsWindow.style.display = 'block';
+});
 
             // === TOGGLE GUI KEY BUTTON ===
             let toggleKey = settings.toggleKey ?? 'p'; // default key
