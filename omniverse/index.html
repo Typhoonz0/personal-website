@@ -114,12 +114,6 @@
             </div>
         </div>
 
-        <button id="homeButton" class="button" style="  
-    display: none;
-        top: 16px;
-        left: 16px;
-        ">Back (right click to hide forever)</button>
-
         <iframe id="gameFrame" allowfullscreen style="display:none; width:100vw; height:100vh; border:none;"></iframe>
 
         <script>
@@ -128,7 +122,6 @@
             const whyButton = document.getElementById('whyButton');
             const iframe = document.getElementById('gameFrame');
             const sidefr = document.getElementById('sidefr');
-            const homeButton = document.getElementById('homeButton');
          
 
             dlButton.addEventListener('click', () => {
@@ -244,10 +237,6 @@
                 });
             });
 
-            homeButton.addEventListener('click', () => {
-                localStorage.removeItem('playedBefore');
-                location.reload();
-            });
             // Check if user already clicked before
             if (localStorage.getItem('playedBefore') === 'true') {
                 startGame();
@@ -260,11 +249,6 @@
             }
 
 
-            // Return to landing page
-            homeButton.addEventListener('click', () => {
-                localStorage.removeItem('playedBefore');
-                location.reload();
-            });
             function startGame() {
   
                 playButton.style.display = 'none';
@@ -274,15 +258,7 @@
            
                 iframe.style.display = 'block';
                 iframe.src = 'https://deadshot.io';
-                if (localStorage.getItem('hideHomeButton') !== 'true') {
-                    homeButton.style.display = 'block';
-                }
 
-                homeButton.addEventListener('contextmenu', (e) => {
-                    e.preventDefault();
-                    localStorage.setItem('hideHomeButton', 'true');
-                    homeButton.style.display = 'none';
-                });
 
                 //  __   _  _  __ _  __  _  _  ____  ____  ____  ____
                 // /  \ ( \/ )(  ( \(  )/ )( \(  __)(  _ \/ ___)(  __)
@@ -1861,7 +1837,8 @@
                     });
                     mainGui.appendChild(downloadBtn);
                     downloadBtn.addEventListener('click', () => {
-                        window.open("https://github.com/Typhoonz0/omniverse/releases", "_blank");
+                localStorage.removeItem('playedBefore');
+                location.reload();
                     });
 
                     // Helper to update visibility and button text/style
