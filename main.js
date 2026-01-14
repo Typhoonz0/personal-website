@@ -1,156 +1,132 @@
-for(let i=0; i<55; i++){
-    const p = document.createElement('div');
-    p.classList.add('particle');
-    p.style.left = Math.random()*window.innerWidth + 'px';
-    p.style.top = window.innerHeight + Math.random()*400 + 'px';
-    p.style.width = 2 + Math.random()*4 + 'px';
-    p.style.height = p.style.width;
-    p.style.animationDuration = 6 + Math.random()*6 + 's';
-    p.style.setProperty('--drift',(Math.random()-0.5)*2);
-    document.body.appendChild(p);
-}
+const osuCursor = document.getElementById("osu-cursor");
+const trailCanvas = document.getElementById("cursor-trail");
+const ctx = trailCanvas.getContext("2d");
 
-const osuCursor = document.getElementById('osu-cursor');
-const trailCanvas = document.getElementById('cursor-trail');
-const ctx = trailCanvas.getContext('2d');
+let mouseX = innerWidth / 2;
+let mouseY = innerHeight / 2;
+let trailX = mouseX;
+let trailY = mouseY;
 
-let mouseX = innerWidth/2, mouseY = innerHeight/2;
-let trailX = mouseX, trailY = mouseY;
 trailCanvas.width = innerWidth;
 trailCanvas.height = innerHeight;
 
 const trailPoints = [];
 const trailLength = 10;
 
-document.addEventListener('mousemove', e=>{
+let hoveringLink = false;
+let scale = 1;
+let targetScale = 1;
+let colorT = 0; 
+
+document.addEventListener("mousemove", (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
+
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    hoveringLink = !!(el && el.closest("a"));
+
+    targetScale = hoveringLink ? 0.75 : 1;
+    colorT = hoveringLink ? 1 : 0;
 });
+
 document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-function animate(){
-    trailX += (mouseX-trailX)*0.3;
-    trailY += (mouseY-trailY)*0.3;
+const lerp = (a, b, t) => ( a + (b - a) * t);
 
-    osuCursor.style.left = trailX+'px';
-    osuCursor.style.top = trailY+'px';
+const animateCursor = () => {
+    trailX += (mouseX - trailX) * 0.3;
+    trailY += (mouseY - trailY) * 0.3;
 
-    trailPoints.push({x:trailX,y:trailY});
-    if(trailPoints.length>trailLength) trailPoints.shift();
+    scale = lerp(scale, targetScale, 0.15);
 
-    ctx.clearRect(0,0,trailCanvas.width,trailCanvas.height);
+    osuCursor.style.left = `${trailX}px`;
+    osuCursor.style.top = `${trailY}px`;
+    osuCursor.style.transform =
+        `translate(-50%, -50%) scale(${scale})`;
+
+    trailPoints.push({ x: trailX, y: trailY });
+    if (trailPoints.length > trailLength) trailPoints.shift();
+
+    ctx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
     ctx.beginPath();
-    if(trailPoints.length>0){
-        ctx.moveTo(trailPoints[0].x,trailPoints[0].y);
-        for(let i=1;i<trailPoints.length;i++) ctx.lineTo(trailPoints[i].x,trailPoints[i].y);
+
+    if (trailPoints.length) {
+        ctx.moveTo(trailPoints[0].x, trailPoints[0].y);
+        for (let i = 1; i < trailPoints.length; i++) {
+            ctx.lineTo(trailPoints[i].x, trailPoints[i].y);
+        }
     }
-    ctx.strokeStyle='rgba(255,255,255,.6)';
-    ctx.lineWidth=2;
+
+    const r = lerp(255, 132, colorT);
+    const g = lerp(255, 203, colorT);
+    const b = lerp(255, 250, colorT);
+
+    const color = `rgba(${r}, ${g}, ${b}, 0.7)`;
+
+    osuCursor.style.borderColor = color;
+    ctx.strokeStyle = color;
+
+    ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    requestAnimationFrame(animate);
+    requestAnimationFrame(animateCursor);
 }
-animate();
 
-addEventListener('resize',()=>{
+animateCursor();
+
+addEventListener("resize", () => {
     trailCanvas.width = innerWidth;
     trailCanvas.height = innerHeight;
 });
 
-const bgMusic = document.getElementById('bg-music');
-let playing = false;
 
-const buttons = document.querySelectorAll('.music-btn');
-const spacing = 20;
-
-buttons.forEach((btn, index) => {
-    btn.style.position = "fixed";
-    btn.style.right = "20px";
-    btn.style.bottom = `${20 + index * (btn.offsetHeight + spacing)}px`;
-
-    const action = btn.getAttribute('data-action');
-
-    btn.addEventListener('click', () => {
-        if (action === 'music') {
-            if (!playing) {
-                bgMusic.play();
-                btn.style.fontSize = "1rem";
-                btn.textContent = "Now Playing - KORE ⏸";
-            } else {
-                bgMusic.pause();
-                btn.textContent = "▶";
-            }
-            playing = !playing;
-        } else if (action === 'link') {
-            window.open("https://github.com/Typhoonz0/personal-website", "_blank");
-        }
-    });
-});
 const desktopVideo = document.getElementById("bg-desktop");
 const poster = document.getElementById("video-poster");
-const titleElement = document.querySelector(".tagfr .about-title");
 
 const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-let bgElement = poster;
 
-function showPoster() {
+const showPoster = () => {
     if (!poster) return;
     poster.style.display = "block";
     if (typeof applyBlur === "function") applyBlur(poster);
 }
 
-function showVideo() {
+const showVideo = () => {
     if (!desktopVideo) return;
+
     poster.style.display = "none";
     desktopVideo.style.display = "block";
-    desktopVideo.play().catch(()=>{});
+
+    desktopVideo.muted = true;
+    desktopVideo.loop = true;
+    desktopVideo.playsInline = true;
+
+    desktopVideo.play().catch(() => { });
     if (typeof applyBlur === "function") applyBlur(desktopVideo);
-    titleElement.textContent = "Liam's Website";
 }
 
 if (isMobile) {
     if (desktopVideo) desktopVideo.style.display = "none";
     showPoster();
-    titleElement.textContent = "Liam's Website";
-}
-
-else {
-    const reloaded = sessionStorage.getItem("videoReloaded");
-
+} else {
     showPoster();
-    titleElement.textContent = "Liam's Website (loading movie, reload if frozen)";
 
-    if (desktopVideo) {
-        desktopVideo.preload = "auto";
+    desktopVideo.preload = "metadata";
 
-        const waitUntilFullyBuffered = setInterval(() => {
-            if (
-                desktopVideo.readyState >= 3 &&
-                desktopVideo.buffered.length &&
-                desktopVideo.buffered.end(0) >= desktopVideo.duration - 0.1
-            ) {
-                clearInterval(waitUntilFullyBuffered);
-                showVideo();
-            }
-        }, 200);
+    desktopVideo.addEventListener(
+        "canplay",
+        () => {
+            showVideo();
+        },
+        { once: true }
+    );
 
-        setTimeout(() => {
-            if (desktopVideo.readyState < 3 && !reloaded) {
-                sessionStorage.setItem("videoReloaded", "true");
-                location.reload();
-            }
-        }, 4000);
-    }
+    setTimeout(() => {
+        if (desktopVideo.readyState >= 2) {
+            showVideo();
+        }
+    }, 1000);
 }
-const bgElement2 = document.getElementById('parallax-wrapper'); 
-
-let targetX = 0, targetY = 0;
-let currentX = 0, currentY = 0;
-
-document.addEventListener("mousemove", (e) => {
-    targetX = (e.clientX / window.innerWidth - 0.1) * 10;
-    targetY = (e.clientY / window.innerHeight - 0.1) * 10;
-});
 
 const siteName = "Liam's Website - ";
 let scrollTitle = siteName;
@@ -160,13 +136,3 @@ const scrollTitleFunc = () => {
     setTimeout(scrollTitleFunc, 150);
 };
 scrollTitleFunc();
-
-
-const animateParallax = () => {
-    currentX += (targetX - currentX) * 0.1;
-    currentY += (targetY - currentY) * 0.1;
-    bgElement2.style.transform = `translate(${currentX}px, ${currentY}px) scale(1.05)`;
-    requestAnimationFrame(animateParallax);
-};
-
-animateParallax();

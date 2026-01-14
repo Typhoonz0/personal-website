@@ -1,100 +1,108 @@
-<!--
-xliam.space
--->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Portfolio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="discord-avatar.ico">
     <link rel="stylesheet" href="style.css">
+    <title>@xliam111</title>
 </head>
 
 <body>
-
-    <div id="parallax-wrapper">
-        <div id="video-wrapper"
-            style="position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; overflow:hidden;"> <img
-                id="video-poster" src="assets/bocchi.png" style="width:100%; height:100%; object-fit:cover;"> <video
-                id="bg-desktop" autoplay muted loop playsinline
-                style="width:100%; height:100%; object-fit:cover; display:none;">
-                <source src="assets/bocchi.mp4" type="video/mp4">
-            </video> </div>
-        <div class="tagfr">
-            <h1 class="about-title" style="text-align: center;">Liam's Website</h1>
-        </div>
-        <div class="main-wrapper">
-
-            <section class="about-section">
-                <div class="about-content">
-                    <h2 class="about-title">Who am I?</h2>
-                    <p>I'm a 16 year old developer from Australia.</p>
-                    <p>I'm interested in building real world projects developers actually use,</p>
-                    <p>like programming languages, package managers and a whole OS.</p>
-                    <p>I use Arch Linux and I am proficient in Python, Bash, and C.</p>
-                    <br>
-                    <a href="https://github.com/Typhoonz0" target="_blank">
-                        <img src="assets/git.png" style="    width: 50px; height: auto;"
-                            alt="click to look at my github">
-                    </a>
-
-
-                </div>
-            </section>
-
-            <section class="portfolio-section">
-                <h1 class="portfolio-title">Featured Code</h1>
-
-                <div class="portfolio-grid">
-                    <a href="https://github.com/Typhoonz0/breezeos" class="project-tile" target="_blank">
-                        <h3 class="project-name">BreezeOS</h3>
-                        <p class="project-description">A simple hobby OS</p>
-                    </a>
-
-                    <a href="https://github.com/Typhoonz0/nebula-language" class="project-tile" target="_blank">
-                        <h3 class="project-name">Nebula Language</h3>
-                        <p class="project-description">Simple general-purpose OOP language</p>
-                    </a>
-
-
-                    <a href="https://github.com/Typhoonz0/archfr" class="project-tile" target="_blank">
-                        <h3 class="project-name">ArchFR</h3>
-                        <p class="project-description">Automated Arch Install w/ configs</p>
-                    </a>
-
-                    <a href="https://github.com/Typhoonz0/ypkg" class="project-tile" target="_blank">
-                        <h3 class="project-name">ypkg</h3>
-                        <p class="project-description">Simple package manager</p>
-                    </a>
-
-                    <a href="sigmaos/index.html" class="project-tile" target="_blank">
-                        <h3 class="project-name">Sigma'OS'</h3>
-                        <p class="project-description">Win95-style browser OS</p>
-                    </a>
-
-                    <a href="omniverse/index.html" class="project-tile" target="_blank">
-                        <h3 class="project-name">Omniverse</h3>
-                        <p class="project-description">Modern Deadshot.io Client</p>
-                    </a>
-
-                </div>
-            </section>
-
-            <footer>
-                I'm @xliam111 on IG
-            </footer>
-
-        </div>
-
-        <div id="osu-cursor"></div>
-        <canvas id="cursor-trail"></canvas>
-
-        <audio id="bg-music" src="assets/KORE.mp3" preload="auto"></audio>
+    <div id="video-wrapper"
+        style="position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; overflow:hidden;"> <img
+            id="video-poster" src="assets/bocchi.png" style="width:100%; height:100%; object-fit:cover;"> <video
+            id="bg-desktop" autoplay muted loop playsinline
+            style="width:100%; height:100%; object-fit:cover; display:none;">
+            <source src="assets/bocchi.mp4" type="video/mp4">
+        </video> </div>
+    <div class="tagfr">
     </div>
-    <button class="music-btn" data-action="music">▶</button>
-    <script src="main.js"></script>
+    <h1>Liam's Website</h1>
+    <div class="intro">
+        <h3>Who am I?</h3>
+        <p>I'm a 16 year old developer from Australia. I'm interested in building real world projects that developers
+            use every day,</p>
+        <p>like programming languages, packages managers and a whole operating system, to understand how they work and
+            how to make them better.</p>
+        <p>I use Arch Linux and I am proficient in Python, Bash, and C.</p>
+    </div>
 
+    <h3>Stuff</h3>
+    <dl>
+        <dt>
+            <a href="https://github.com/Typhoonz0">Github</a>
+        </dt>
+        <dd>
+            My Github profile.
+        </dd>
+    </dl>
+
+    <h3>Featured Code</h3>
+    <dl>
+        <dt>
+            <a href="https://github.com/Typhoonz0/breezeos" target="_blank">BreezeOS</a>
+        </dt>
+        <dd>
+            A simple hobby OS targeting x86_64 UEFI systems written in C.
+        </dd>
+        <dt>
+            <a href="https://github.com/Typhoonz0/nebula-language" target="_blank">Nebula Language</a>
+        </dt>
+        <dd>
+            My simple, general purpose, object oriented programming language.
+        </dd>
+        <dt>
+            <a href="https://github.com/Typhoonz0/cooked-language" target="_blank">Cooked Language</a>
+        </dt>
+        <dd>
+            My programming language with a clean syntax for writing HTML.
+        </dd>
+        <dt>
+            <a href="https://github.com/Typhoonz0/archfr" target="_blank">ArchFR</a>
+        </dt>
+        <dd>
+            Automated Arch Linux install scripts with my config.
+        </dd>
+        <dt>
+            <a href="https://github.com/Typhoonz0/ypkg" target="_blank">ypkg</a>
+        </dt>
+        <dd>
+            My very simple package manager. <i>Note: Server isn't running.</i>
+        </dd>
+        <dt>
+            <a href="omniverse/index.html" target="_blank">Omniverse</a>
+        </dt>
+        <dd>
+            A simple and modern Deadshot.io Electron client.
+        </dd>
+    </dl>
+
+    <h3>Some Other Stuff</h3>
+    <dl>
+        <dt>
+            <a href="sigmaos/index.html" target="_blank">Sigma'OS'</a>
+        </dt>
+        <dd>
+            A windows 95 esque operating system simulator in the browser.
+        </dd>
+        <dt>
+            <a href="copter.user.js" target="_blank">Copter Tweaks</a>
+        </dt>
+        <dd>
+            A userscript that changes your level in Copter Royale on coolmathgames.com.
+        </dd>
+        <dt>
+            <a href="draco/index.html" target="_blank">Draco</a>
+        </dt>
+        <dd>
+            A 3D deadshot.io map viewer.
+        </dd>
+    </dl>
+    <div id="osu-cursor"></div>
+    <canvas id="cursor-trail"></canvas>
 </body>
+<script src="main.js"></script>
 
 </html>

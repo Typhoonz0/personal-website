@@ -2,143 +2,59 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
     cursor: none;
+
 }
 
-html, body {
-    background: #050505;
-    color: rgba(255, 255, 255, 0.8);
+html {
+    scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body,
+html {
+    width: 100%;
+    height: auto;
+    overflow-x: hidden;
+    /* background-color: #212227;*/
     font-family: "DM Sans", Arial, system-ui;
-}
-
-@media (max-width: 950px) {
-    html, body {
-        overflow: auto;
-    }
-}
-
-h1:hover {
-    transform: translateY(-1px); 
-}
-
-.main-wrapper {
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.tagfr {
-    margin-top: 10px;
-    text-align: center;
-    font-size: 58px;
-    font-weight: 800;
-    letter-spacing: 2px;
-}
-
-.about-section {
-    margin-top: 40px;
-    display: flex;
-    justify-content: center;
-}
-
-.about-content,
-.project-tile,
-.music-btn {
-    border-radius: 26px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.04);
-    color: rgba(255, 255, 255, 0.8);
-    transition: all 0.3s ease;
-    text-align: center;
-}
-
-.about-content {
-    padding: 35px;
-    width: 80%;
-    border-radius: 30px;
-}
-
-.about-content:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 1);
-    transform: translateY(-6px);
-    box-shadow: 0 0 35px rgba(255, 255, 255, 0.15);
-}
-
-.portfolio-section {
-    margin-top: 55px;
-    text-align: center;
-}
-
-.portfolio-title {
-    margin-bottom: 25px;
-}
-
-.portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-    margin-top: 10px;
-    align-items: stretch;
-}
-
-.project-tile {
-    display: block;
-    text-decoration: none;
-    color: rgba(255, 255, 255, 0.7);
-    padding: 22px;
-}
-
-.project-tile:hover {
-    background: rgba(255, 255, 255, 0.2);
     color: white;
-    transform: translateY(-6px);
-    box-shadow: 0 0 28px rgba(255, 255, 255, 0.18);
+    text-decoration: none;
 }
 
-.project-description {
-    opacity: 0.8;
+a {
+    color: rgb(183, 232, 255);
 }
 
-footer {
-    margin: 80px 0;
-    text-align: center;
-    opacity: 0.6;
+a:hover {
+    color: #84cbfa;
+    font-size: medium;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transition: all .2s ease-in;
 }
 
-@media (max-width: 950px) {
-    .portfolio-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-    }
+dd {
+    margin: 0;
+    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
+    font-style: oblique;
 }
 
-@media (max-width: 650px) {
-    .portfolio-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
-    .about-content {
-        width: 92%;
-    }
+.simple {
+    font-size: large;
+    font-weight: 600;
+    color: rgb(130, 215, 255);
 }
 
-.particle {
-    position: fixed;
-    background: white;
-    opacity: 0.9;
-    border-radius: 50%;
-    animation: floatUp linear infinite;
-    pointer-events: none;
+.intro h3 {
+    margin: 0 0 0.5rem 0;
 }
 
-@keyframes floatUp {
-    from { transform: translateY(0) translateX(calc(var(--drift) * 40px)); opacity: 0.9; }
-    to { transform: translateY(-140vh) translateX(calc(var(--drift) * -40px)); opacity: 0; }
+.intro p {
+    margin: 0.25rem 0;
 }
 
 #osu-cursor {
@@ -158,24 +74,4 @@ footer {
     top: 0;
     z-index: 998;
     pointer-events: none;
-}
-
-.music-btn {
-    position: fixed;
-    right: 20px;
-    min-width: 60px;
-    height: 60px;
-    padding: 0 1rem;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-}
-
-.music-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    transform: translateY(-6px);
-    box-shadow: 0 0 28px rgba(255, 255, 255, 0.18);
 }
