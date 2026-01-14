@@ -181,6 +181,10 @@ loader.setDRACOLoader(dracoLoader);
 let currentScene = null;
 let allMeshes = [];
 
+// Base path for GLTF files - change this to match your server structure
+// Examples: './' for same directory, './models/' for models subfolder, '/gltf/' for root gltf folder
+const GLTF_BASE_PATH = './';
+
 // Wireframe toggle
 let wireframeEnabled = false;
 document.getElementById('wireframeToggle').addEventListener('click', () => {
@@ -202,8 +206,9 @@ window.loadScene = function(sceneName) {
         allMeshes = [];
     }
     
-    const filename = `${sceneName}.gltf`;
+    const filename = `${GLTF_BASE_PATH}${sceneName}.gltf`;
     console.log(`Loading ${filename}...`);
+    console.log(`Full path: ${window.location.origin}${window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'))}/${filename}`);
     
     // Load GLTF
     loader.load(filename, (gltf) => {
@@ -343,7 +348,8 @@ window.loadScene = function(sceneName) {
         pitch = 0;
     }, undefined, (error) => {
         console.error(`Error loading ${filename}:`, error);
-        alert(`Failed to load ${sceneName}. Make sure ${filename} exists.`);
+        console.error('Error details:', error.message);
+        alert(`Failed to load ${sceneName}.gltf\n\nMake sure:\n1. The file exists in the same directory as this HTML\n2. The file is named exactly: ${sceneName}.gltf\n3. Check browser console (F12) for more details`);
     });
 };
 
