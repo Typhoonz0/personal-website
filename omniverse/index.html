@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta property="og:title" content="Omniverse Client">
@@ -8,296 +7,191 @@
     <meta property="og:url" content="https://xliam.xyz/omniverse">
     <meta property="og:type" content="website">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <title>omniverse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&amp;display=swap" rel="stylesheet">
+    <title>Omniverse</title>
     <style>
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--black);
-            color: var(--white);
-            display: flex;
-            align-items: center;
-            text-align: center;
-            flex-direction: column;
-            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-            justify-content: flex-start;
-
-        }
-
-        iframe {
-            border: none;
-            width: 100%;
-            height: 100%;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
 
         :root {
-            --black: #1e1e2e;
-            --black2: #3a3a58;
-            --white: #b4befe;
-            --gray-light: #9ca3af;
-            --gray-dark: rgba(58, 29, 41, 0.4);
-            --gray-border: #374151;
-            --gray-bg: rgba(17, 17, 17, 0.4);
+            --bg: #0d0d14;
+            --panel-bg: rgba(20, 18, 32, 0.82);
+            --border: rgba(180, 190, 254, 0.13);
             --accent: #b4befe;
+            --accent2: #cba6f7;
+            --red: #f38ba8;
+            --text: #cdd6f4;
+            --subtext: rgba(180, 190, 254, 0.5);
+            --row-hover: rgba(180, 190, 254, 0.07);
+            --toggle-on: #b4befe;
+            --toggle-off: rgba(180, 190, 254, 0.2);
         }
 
+        html, body {
+            width: 100%; height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            overflow: hidden;
+        }
+
+        .page {
+            position: relative; z-index: 10;
+            width: 100%; height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            padding: 38px 48px;
+        }
+
+        ::selection {
+        background: rgba(0, 0, 0, 0.2);
+        color: inherit;
+        }
+        
+        .left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding-top: 4px;
+        }
 
         h1 {
-            font-size: 200px;
+            font-size: clamp(100px, 7vw, 88px);
             font-weight: 800;
-            color: var(--accent);
-            margin-bottom: 20px;
-            width: 100%;
+            line-height: 1.0;
+            color: #c3cbff;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
             transition: color 0.3s ease, transform 0.3s ease;
         }
 
         h1:hover {
-            color: #c3cbff;
+            color: var(--text);
             transform: translateY(-2px);
         }
 
-        h2 {
-            color: var(--white);
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 12px;
+        .tagline {
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            font-size: 12px;
+            color: var(--subtext);
+            letter-spacing: 0.04em;
+            margin-bottom: 36px;
+            margin-left: 10px;
         }
 
-        input,
-        button {
-            font-family: inherit;
-            font-size: 1rem;
-            border-radius: 8px;
+
+        .buttons {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+            width: fit-content;
         }
 
-        input {
-            width: calc(100% - 110px);
-            padding: 10px;
-            border: 1px solid var(--gray-border);
-            background: var(--gray-dark);
-            color: var(--white);
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--white);
-        }
-
-        .button {
-            background: var(--white);
-            color: var(--black);
-            padding: 10px 14px;
-            font-weight: 600;
+        .btn {
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 10px 220px;
+            border-radius: 4px;
             cursor: pointer;
-            border: 1px var(--white);
-            transition: background 0.2s ease;
+            border: 1px solid;
+            transition: all 0.2s ease;
+            font-weight: 700;
         }
 
-        .button:hover {
-            background: var(--black);
-            color: var(--white);
-            border: 10px #c3cbff;
+        .btn-primary {
+            background: var(--accent);
+            color: #0d0d14;
+            border-color: var(--accent);
         }
 
-        .gallery {
-    width: 90%;
-    max-width: 1000px;
-    margin-top: 40px;
-}
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--accent);
+        }
 
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-}
+        .btn-secondary {
+            background: transparent;
+            color: var(--subtext);
+            border-color: var(--border);
+        }
 
-.gallery-grid img {
-    width: 100%;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-}
+        .btn-secondary:hover {
+            color: var(--accent);
+            border-color: rgba(180,190,254,0.35);
+        }
 
-.gallery-grid img:hover {
-    transform: scale(1.03);
-    opacity: 0.9;
-}
+        .panel-crop {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 62vw;
+            height: 80vh;
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%),
+                                linear-gradient(to right, black 30%, transparent 100%);
+            -webkit-mask-composite: destination-in;
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%),
+                        linear-gradient(to right, black 30%, transparent 100%);
+            mask-composite: intersect;
+            pointer-events: none;
+        }
 
-/* fullscreen preview */
-.img-viewer {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 20000;
-}
+        .panel-crop img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top left;
+            border-radius: 12px 0 0 0;
+        }
 
-.img-viewer img {
-    max-width: 90%;
-    max-height: 90%;
-    border-radius: 12px;
-}
     </style>
 </head>
-
 <body>
 
-    <body>
-        <h1>Omniverse</h1>
-        <div id="sidefr">
-            <p>A simple, modern, feature rich Deadshot.io client</p>
-            <div class="butt">
-                <button class="button" id="dlButton">Download Omniverse</button>
-                <button class="button" id="whyButton">Why Omniverse?</button>
-            </div>
-            <div class="gallery">
-                <h2>Screenshots</h2>
-                <div class="gallery-grid">
-                    <img src="omniverse/ss1.png" alt="Screenshot 1">
-                </div>
-            </div>
+
+
+
+<div class="page">
+    <div class="left">
+        <h1>omniverse</h1>
+        <div class="tagline">The best Deadshot.io client</div>
+
+        <div class="buttons">
+            <button class="btn btn-primary" id="dlButton">Download</button>
         </div>
 
-        <script>
-            const playButton = document.getElementById('playButton');
-            const dlButton = document.getElementById('dlButton');
-            const whyButton = document.getElementById('whyButton');
+        <ul style="margin-bottom:16px;padding-left:18px;font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;font-size:11px;color:var(--subtext);line-height:2;list-style:disc;">
+            <li>Use any skin in the game (including Neon and Matrix)</li>
+            <li>FPS Booster</li>
+            <li>Keys Overlay</li>
+            <li>PC/ Game Stats</li>
+            <li>Resource Swapper</li>
+            <li>Customizable UI</li>
+            <li>Leaderboard Scraper</li>
+            <li>Adblocker</li>
+            <li>Actively maintained</li>
+            <li>Lightweight</li>
+            <li>Not AI Slop (:</li> 
+        </ul>
 
-            dlButton.addEventListener('click', () => {
-                window.open("https://github.com/Typhoonz0/omniverse/releases", "_blank");
-            });
-            whyButton.addEventListener('click', () => {
-                const overlay = document.createElement('div');
-                Object.assign(overlay.style, {
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100vw',
-                    height: '100vh',
-                    background: 'rgba(0,0,0,0.7)',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    zIndex: 10000,
-                    overflow: 'auto'
-                });
+    </div>
+</div>
 
-                const popup = document.createElement('div');
-                Object.assign(popup.style, {
-                    background: '#1e1e2e',
-                    padding: '24px',
-                    borderRadius: '12px',
-                    maxWidth: '600px',
-                    width: '90%',
-                    color: '#b4befe',
-                    display: 'flex',
-                    gap: '24px',
-                    alignItems: 'flex-start',
-                    opacity: 0,
-                    transform: 'scale(0.8)',
-                    transition: 'all 0.3s ease'
-                });
+<div class="panel-crop">
+    <img src="ss.png" alt="Omniverse Client Preview">
+</div>
 
-                requestAnimationFrame(() => {
-                    popup.style.opacity = 1;
-                    popup.style.transform = 'scale(1)';
-                });
-
-                const textDiv = document.createElement('div');
-                textDiv.style.flex = '1';
-                textDiv.innerHTML = `
-                <h3>Features</h3>
-                <ul style="list-style:none; padding:0; margin:0; line-height:1.6;">
-                    <li>Use any skin in the game</li>
-                    <li>FPS Booster</li>
-                    <li>Keys Overlay</li>
-                    <li>Deadshot + PC Stats</li>
-                    <li>Gun Skin Swapper</li>
-                    <li>Customizable UI</li>
-                    <li>Leaderboard Scraper</li>
-                    <li>Auto Fullscreen</li>
-                    <li>Adblocker</li>
-                    <li>Discord RPC</li>
-                </ul>
-                <h3>Also...</h3>
-                <ul style="list-style:none; padding:0; margin:0; line-height:1.6;">
-                    <li>Omniverse is actively being maintained</li>
-                    <li>Omniverse is lightweight both RAM wise and UI wise</li>
-                    <li>I made it so its good (:</li>
-                    <li>You've read this far, why not try it?</li>
-                </ul>
-                `;
-
-
-                const rightDiv = document.createElement('div');
-                rightDiv.style.display = 'flex';
-                rightDiv.style.flexDirection = 'column';
-                rightDiv.style.alignItems = 'flex-end';
-                rightDiv.style.gap = '12px';
-
-                const closeBtn = document.createElement('span');
-                closeBtn.textContent = '×';
-                Object.assign(closeBtn.style, {
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    fontSize: '1.5rem'
-                });
-
-                const img = document.createElement('img');
-                img.src = 'omniverse/image.png'; 
-                img.alt = 'Preview';
-                Object.assign(img.style, {
-                    width: '120px',
-                    borderRadius: '8px'
-                });
-
-                rightDiv.appendChild(closeBtn);
-                rightDiv.appendChild(img);
-
-
-                popup.appendChild(textDiv);
-                popup.appendChild(rightDiv);
-                overlay.appendChild(popup);
-                document.body.appendChild(overlay);
-
-                popup.getBoundingClientRect();
-
-                popup.style.opacity = 1;
-                popup.style.transform = 'scale(1)';
-
-                function closePopup() {
-                    popup.style.opacity = 0;
-                    popup.style.transform = 'scale(0.8)';
-                    setTimeout(() => document.body.removeChild(overlay), 300);
-                }
-
-                closeBtn.addEventListener('click', closePopup);
-                overlay.addEventListener('click', e => {
-                    if (e.target === overlay) closePopup();
-                });
-            });
-document.querySelectorAll('.gallery-grid img').forEach(img => {
-    img.addEventListener('click', () => {
-        const viewer = document.createElement('div');
-        viewer.className = 'img-viewer';
-
-        const fullImg = document.createElement('img');
-        fullImg.src = img.src;
-
-        viewer.appendChild(fullImg);
-        document.body.appendChild(viewer);
-
-        viewer.addEventListener('click', () => {
-            document.body.removeChild(viewer);
-        });
+<script>
+    document.getElementById('dlButton').addEventListener('click', () => {
+        window.open("https://github.com/Typhoonz0/omniverse/releases", "_blank");
     });
-});
-        </script>
+</script>
 
+</body>
 </html>
