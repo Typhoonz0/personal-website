@@ -57,10 +57,9 @@ const animateCursor = () => {
         }
     }
 
-    const r = lerp(255, 132, colorT);
-    const g = lerp(255, 203, colorT);
-    const b = lerp(255, 250, colorT);
-
+    const r = lerp(255, 205, colorT);
+    const g = lerp(255, 214, colorT);
+    const b = lerp(255, 244, colorT);
     const color = `rgba(${r}, ${g}, ${b}, 0.7)`;
 
     osuCursor.style.borderColor = color;
