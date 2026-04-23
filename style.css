@@ -38,8 +38,8 @@ h1 {
     position: fixed;
     bottom: 0;
     right: 0;
-    width: 62vw;
-    height: 80vh;
+    width: 50vw;
+    height: 72vh;
     overflow: hidden;
     -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 100%),
                         linear-gradient(to right, black 30%, transparent 100%);
