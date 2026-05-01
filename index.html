@@ -4,26 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="discord-avatar.ico">
     <link rel="stylesheet" href="style.css">
     <title>locked in</title>
 </head>
 
 <body>
-
-    <div class="tagfr">
-    </div>
     <h1>Liam's Website</h1>
-    <!--<div style="color: #c3cbff">ft. miku</div>-->
-    <dl>
-        <dt>
-            <a href="https://github.com/Typhoonz0" target="_blank">Github</a>
-        </dt>
-        <dd>
-            My Github profile.
-        </dd>
-    </dl>
-
+    <p><i>student, developer, based in australia</i></p>
+    <div class="panel-crop">
+        <img src="miku.gif" alt="the goat">
+    </div>
+    <div>
+        <a href="https://github.com/Typhoonz0" target="_blank">GitHub</a><br>My Github profile.
+    </div>
+            
     <h3>Featured Code</h3>
     <dl>
         <dt>
@@ -36,7 +30,7 @@
             <a href="omniverse" target="_blank">Omniverse</a>
         </dt>
         <dd>
-            The best Deadshot.io client.
+            The only working Deadshot.io Electron client.
         </dd>
         <dt>
             <a href="https://github.com/Typhoonz0/nebula-language" target="_blank">Nebula Language</a>
@@ -44,60 +38,24 @@
         <dd>
             My simple, general purpose, object oriented programming language.
         </dd>
-       
     </dl>
 
-    <h3>Some Other Stuff</h3>
-        <dt>
-            <a href="https://github.com/Typhoonz0/cooked-language" target="_blank">Cooked Language</a>
-        </dt>
-        <dd>
-            My programming language with a clean syntax for writing HTML.
-        </dd>
-        <dt>
-            <a href="https://github.com/Typhoonz0/archfr" target="_blank">ArchFR</a>
-        </dt>
-        <dd>
-            Automated Arch Linux install scripts with my config.
-        </dd>
-        <dt>
-            <a href="https://github.com/Typhoonz0/ypkg" target="_blank">ypkg</a>
-        </dt>
-        <dd>
-            My very simple package manager (discontinued).
-        </dd>
-
-    <dl>
-        <dt>
-            <a href="sigmaos/index.html" target="_blank">Sigma'OS'</a>
-        </dt>
-        <dd>
-            A windows 95 esque operating system simulator in the browser.
-        </dd>
-        <dt>
-            <a href="copter.user.js" target="_blank">Copter Tweaks</a>
-        </dt>
-        <dd>
-            A userscript that changes your level in Copter Royale on coolmathgames.com.
-        </dd>
-        <dt>
-            <a href="draco/index.html" target="_blank">Draco</a>
-        </dt>
-        <dd>
-            A 3D deadshot.io map viewer.
-        </dd>
-    </dl>
-    <div class="panel-crop">
-        <img src="miku.gif" alt="the goat">
-        
-    </div>
-    <div style="position: fixed; bottom: 10px; left: 10px; z-index: 1000;">
+    <div style="z-index: 1000;">
         <img src="https://count.getloli.com/@:xliam1" alt="website view counter" />
     </div>
-    <!--<img src="https://count.getloli.com/@:xliam1?theme=booru-touhoulat&scale=0.5" alt=":website view counter" />-->
-    <div id="osu-cursor"></div>
-    <canvas id="cursor-trail"></canvas>
-</body>
-<script src="main.js"></script>
 
+</body>
+
+<script>
+    document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    const siteName = "Liam's Website - ";
+    let scrollTitle = siteName;
+    const scrollTitleFunc = () => {
+        document.title = scrollTitle;
+        scrollTitle = scrollTitle.slice(1) + scrollTitle.charAt(0);
+        setTimeout(scrollTitleFunc, 150);
+    };
+    scrollTitleFunc();
+</script>
 </html>
