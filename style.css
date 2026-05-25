@@ -35,3 +35,29 @@ a:hover {
         display: none;
     }
 }
+
+.music-btn {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background-color: rgba(203, 166, 247, 0.1);
+    color: #c3cbff;
+    border: 2px solid #c3cbff;
+    border-radius: 50px;
+    padding: 0 1rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.music-btn:hover {
+    background-color: #cdd6f4;
+    color: #1E1E2E;
+    box-shadow: 0 0 20px rgba(203, 166, 247, 0.6);
+    transform: scale(1.1);
+}

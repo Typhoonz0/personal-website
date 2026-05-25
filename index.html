@@ -43,6 +43,9 @@
     <div style="z-index: 1000;">
         <img src="https://count.getloli.com/@:xliam1" alt="website view counter" />
     </div>
+        <audio id="bg-music" src="bgm.mp3" preload="auto"></audio>
+    </div>
+    <button class="music-btn" data-action="music">▶</button>
 
 </body>
 
@@ -57,5 +60,31 @@
         setTimeout(scrollTitleFunc, 150);
     };
     scrollTitleFunc();
+
+    const bgMusic = document.getElementById('bg-music');
+    let playing = false;
+
+    const buttons = document.querySelectorAll('.music-btn');
+    const spacing = 20;
+
+    buttons.forEach((btn, index) => {
+        btn.style.position = "fixed";
+        btn.style.right = "20px";
+        btn.style.bottom = `${20 + index * (btn.offsetHeight + spacing)}px`;
+
+        const action = btn.getAttribute('data-action');
+
+        btn.addEventListener('click', () => {
+            if (!playing) {
+                bgMusic.play();
+                btn.style.fontSize = "1rem";
+                btn.textContent = "just relax.";
+            } else {
+                bgMusic.pause();
+                btn.textContent = "▶";
+            }
+            playing = !playing;
+        });
+});
 </script>
 </html>
