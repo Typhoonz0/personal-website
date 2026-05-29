@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://xliam.xyz/style.css">
     <title>locked in</title>
 </head>
 
@@ -12,7 +12,7 @@
     <h1>Liam's Website</h1>
     <p><i>student, developer, based in australia</i></p>
     <div class="panel-crop">
-        <img src="miku.gif" alt="the goat">
+        <img src="https://xliam.xyz/assets/miku.gif" alt="the goat">
     </div>
     <div>
         <a href="https://github.com/Typhoonz0" target="_blank">GitHub</a><br>My Github profile.
@@ -27,7 +27,7 @@
             A simple hobby OS targeting x86_64 UEFI systems written in C.
         </dd>
         <dt>
-            <a href="omniverse" target="_blank">Omniverse</a>
+            <a href="https://xliam.xyz/omniverse" target="_blank">Omniverse</a>
         </dt>
         <dd>
             The only working Deadshot.io Electron client.
@@ -43,8 +43,8 @@
     <div style="z-index: 1000;">
         <img src="https://count.getloli.com/@:xliam1" alt="website view counter" />
     </div>
-        <audio id="bg-music" src="bgm.mp3" preload="auto"></audio>
-    </div>
+
+    <audio id="bg-music" src="https://xliam.xyz/assets/bgm.mp3#t=12" preload="auto"></audio>
     <button class="music-btn" data-action="music">▶</button>
 
 </body>
@@ -52,14 +52,13 @@
 <script>
     document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-    const siteName = "Liam's Website - ";
-    let scrollTitle = siteName;
-    const scrollTitleFunc = () => {
+    let title = "Liam's Website - ";;
+    const scrollTitle = () => {
         document.title = scrollTitle;
         scrollTitle = scrollTitle.slice(1) + scrollTitle.charAt(0);
-        setTimeout(scrollTitleFunc, 150);
+        setTimeout(scrollTitle, 150);
     };
-    scrollTitleFunc();
+    scrollTitle();
 
     const bgMusic = document.getElementById('bg-music');
     let playing = false;
@@ -78,7 +77,7 @@
             if (!playing) {
                 bgMusic.play();
                 btn.style.fontSize = "1rem";
-                btn.textContent = "just relax.";
+                btn.textContent = "⏸";
             } else {
                 bgMusic.pause();
                 btn.textContent = "▶";
