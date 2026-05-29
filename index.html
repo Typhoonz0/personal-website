@@ -52,13 +52,14 @@
 <script>
     document.addEventListener("contextmenu", (e) => e.preventDefault());
 
-    let title = "Liam's Website - ";;
-    const scrollTitle = () => {
+    const siteName = "Liam's Website - ";
+    let scrollTitle = siteName;
+    const scrollTitleFunc = () => {
         document.title = scrollTitle;
         scrollTitle = scrollTitle.slice(1) + scrollTitle.charAt(0);
-        setTimeout(scrollTitle, 150);
+        setTimeout(scrollTitleFunc, 150);
     };
-    scrollTitle();
+    scrollTitleFunc();
 
     const bgMusic = document.getElementById('bg-music');
     let playing = false;
