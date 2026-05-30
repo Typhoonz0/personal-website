@@ -1,18 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@800&display=swap');
 
+* {
+        font-size: 20px;
+}
+h1 {
+    font-family: "Syne", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    font-size: 100px;
+    color: #cdd6f4;
+    font-weight: 800;
+    font-weight: bold;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
 body {
     text-align: center;
     justify-content: center;
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    background-color: #0d0d14;
+    background-color: #000;
     color: #fff;
-    
-}
-
-
-h1 {
-    color: #cdd6f4;
-    transition: color 0.3s ease, transform 0.3s ease;
+    font-family: "Inter";
 }
 
 h1:hover {
