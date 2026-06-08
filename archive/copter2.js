@@ -38657,25 +38657,25 @@ function Sn(e) {
                 Nt()
             }
         },
-        clickPlay: function() {
-            var e = bi();
-            Ho[Xe] && e < Ho[Xe] && (Xe = 1,
-            localStorage.setItem("playerSkin", Xe)),
-            Io[He] && e < Io[Xe] && (He = 0,
-            localStorage.setItem("playerTrail", He)),
-            function() {
-                try {
-                    if (-1 === (WebSocket + "").indexOf("native code"))
-                        return !0;
-                    if (-1 === (WebSocket.prototype.send + "").indexOf("native code"))
-                        return !0
-                } catch (e) {}
-                return !1
-            }(),
-            Re ? (jt = !0,
-            Vt()) : Kt(),
-            je.click.play()
-        },
+clickPlay: function() {
+    var e = bi();
+    Xe = 32;
+    He = 5;
+    localStorage.setItem("playerSkin", 32);
+    localStorage.setItem("playerTrail", 5);
+    (function() {
+        try {
+            if (-1 === (WebSocket + "").indexOf("native code"))
+                return !0;
+            if (-1 === (WebSocket.prototype.send + "").indexOf("native code"))
+                return !0
+        } catch (e) {}
+        return !1
+    })(),
+    Re ? (jt = !0,
+    Vt()) : Kt(),
+    je.click.play()
+},
         backToHomepage: function() {
             if (gi)
                 try {
