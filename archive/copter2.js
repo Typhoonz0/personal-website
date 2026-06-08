@@ -35728,9 +35728,8 @@ function Sn(e) {
         } else
             ut[o].chargeShotShield && (ut[o].chargeShotShield.visible = !1);
 
-        // apply velocity overrides if set, otherwise use server values
-        var overriddenSx = velocityOverrides[o] ? velocityOverrides[o].sx : s;
-        var overriddenSy = velocityOverrides[o] ? velocityOverrides[o].sy : d;
+        var overriddenSx = s;
+        var overriddenSy = d;
 
         o != ht ? (ut[o].x = r,
         ut[o].y = l,
