@@ -37724,6 +37724,8 @@ else if ("KeyB" == e.code) {
         return e * (2 - e)
     }
     function $a() {
+        // force radar to always be active
+        if (lt.indexOf(2) == -1) lt.push(2);
         // at the start of $a(), clear previous tracers
         if (window.tracerGraphics) {
             m.removeChild(window.tracerGraphics);
