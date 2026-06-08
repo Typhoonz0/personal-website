@@ -35573,6 +35573,29 @@ function vn(e, t) {
     n && (o.isZombie = !0);
     return o
 }
+    function In(e, t) {
+        if (cn) {
+            (n = cn).clear()
+        } else {
+            var n = new PIXI.Graphics;
+            cn = n,
+            m.addChild(cn)
+        }
+        n.beginFill(16711680, 1);
+        var i = Math.min(2 * -V, e.x - t)
+          , a = Math.min(2 * -j, e.y - t)
+          , o = Math.max(q + 2 * V, e.x + t)
+          , r = Math.max(_ + 2 * j, e.y + t);
+        n.moveTo(i, a).lineTo(o, a).lineTo(o, r).lineTo(i, r),
+        n.moveTo(e.x - t, e.y).arcTo(e.x - t, e.y - t, e.x, e.y - t, t).arcTo(e.x + t, e.y - t, e.x + t, e.y, t).arcTo(e.x + t, e.y + t, e.x, e.y + t, t).arcTo(e.x - t, e.y + t, e.x - t, e.y, t).addHole(),
+        n.alpha = .6;
+        var l = document.getElementById("minimap-fog");
+        l.style.width = S.width * t * 2 / q + "px",
+        l.style.height = S.height * t * 2 / _ + "px",
+        l.style.left = (e.x - t) / q * 100 + "%",
+        l.style.top = (e.y - t) / _ * 100 + "%"
+    }
+    var wn, bn = new PIXI.Point, xn = new PIXI.Point, kn = new PIXI.Point, Mn = 0, Pn = 0, En = 0, Cn = 0;
     function Bn(e, t, n) {
         var i = Math.pow(n.x - e, 2) + Math.pow(n.y - t, 2);
         if (i < .01 || i > 1)
@@ -35584,6 +35607,18 @@ function vn(e, t) {
             n.y = a * n.y + (1 - a) * t
         }
     }
+    function Bn(e, t, n) {
+        var i = Math.pow(n.x - e, 2) + Math.pow(n.y - t, 2);
+        if (i < .01 || i > 1)
+            n.x = e,
+            n.y = t;
+        else {
+            var a = .01 / i;
+            n.x = a * n.x + (1 - a) * e,
+            n.y = a * n.y + (1 - a) * t
+        }
+    }
+
     function Tn(e) {
         var t = ut[e];
         delete ut[e],
