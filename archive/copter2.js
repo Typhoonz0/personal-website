@@ -32973,7 +32973,7 @@ var defly = function() {
                 o.drawRect(0, 0, q, _),
                 h.addChild(o),
                 Be[ht] = d,
-                Te[ht] = Xe,
+                Te[ht] = 32,
                 Se[ht] = He,
                 vn(ht),
                 anime({
@@ -36694,13 +36694,13 @@ function Sn(e) {
     function $i() {
         var e = new DataView(new ArrayBuffer(21));
         e.setUint8(0, 14),
-        e.setInt32(1, Xe),
+        e.setInt32(1, 32),
         e.setInt32(5, Fe),
         e.setInt32(9, He),
         e.setInt32(13, ze),
         e.setInt32(17, De),
         s.send(e.buffer),
-        Te[ht] = Xe,
+        Te[ht] = 32,
         Bt[ht] = It[Fe >= 0 ? Fe : 0],
         Se[ht] = He,
         ut[ht] && ta(ht),
@@ -38053,8 +38053,8 @@ function Sn(e) {
                 }, 1e3 / 60)
             }();
         else if (2 == e) {
-            Te[-1] = Xe,
-            Te[0] = Xe,
+            Te[-1] = 32,
+            Te[0] = 32,
             Bt[0] = It[Fe >= 0 ? Fe : 0];
             var n = yn(0, 72, 0, 72);
             n.style.backgroundColor = "";
@@ -38080,7 +38080,7 @@ function Sn(e) {
         n.x = 300;
         var i = ht;
         ht = -1,
-        Te[-1] = Xe,
+        Te[-1] = 32,
         Bt[-1] = It[Fe < 0 ? 0 : Fe],
         Se[-1] = t,
         n.removeChildren();
@@ -38104,7 +38104,7 @@ function Sn(e) {
         t.x = 300;
         var n = ht;
         ht = -1,
-        Te[-1] = Xe,
+        Te[-1] = 32,
         Bt[-1] = It[Fe < 0 ? 0 : Fe],
         t.removeChildren();
         var i = new PIXI.Container;
@@ -38279,14 +38279,14 @@ function Sn(e) {
         document.getElementById("skin-popup-canvas").innerHTML = "",
         document.getElementById("skin-list").innerHTML = ""),
         Bt[-1] = It[Fe >= 0 ? Fe : 0],
-        Te[-1] = Xe;
+        Te[-1] = 32;
         var t = yn(-1, 86);
-        t.skinId = Xe,
+        t.skinId = 32,
         document.getElementById("skin-homepage-canvas").appendChild(t),
         Bt[-1] = It[Fe >= 0 ? Fe : 0],
-        Te[-1] = Xe;
+        Te[-1] = 32;
         var n = yn(-1, 100);
-        n.skinId = Xe,
+        n.skinId = 32,
         document.getElementById("skin-popup-canvas").appendChild(n),
         po = [t, n];
         for (var i = [1, 3, 4, 5, 6, 8, 21, 16, 9, 10, 13, 14, 11, 19, 12, 17, 20, 15, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32], a = 0; a < i.length; a++) {
@@ -38298,7 +38298,7 @@ function Sn(e) {
             l.skinId = o;
             var s = document.createElement("div");
             if (s.setAttribute("id", "player-skin-" + o),
-            s.className = "card" + (Xe == o ? " selected" : "") + (r ? " locked" : ""),
+            s.className = "card" + (32 == o ? " selected" : "") + (r ? " locked" : ""),
             r || (s.style.cursor = "pointer"),
             s.appendChild(l),
             r) {
@@ -38336,8 +38336,8 @@ function Sn(e) {
         je.click.play()
     }
     function Uo(e) {
-        document.getElementById("player-skin-" + Xe).classList.remove("selected"),
-        Xe = e;
+        document.getElementById("player-skin-" + 32).classList.remove("selected"),
+        32 = e;
         for (var t = 0; t < 2; t++) {
             Te[-1] = e,
             Bt[-1] = It[Fe >= 0 ? Fe : 0];
@@ -38347,10 +38347,10 @@ function Sn(e) {
             n.parentNode.replaceChild(i, n),
             po[t] = i
         }
-        if (document.getElementById("player-skin-" + Xe).classList.add("selected"),
+        if (document.getElementById("player-skin-" + 32).classList.add("selected"),
         "undefined" != typeof Storage)
             try {
-                localStorage.setItem("playerSkin", Xe)
+                localStorage.setItem("playerSkin", 32)
             } catch (e) {
                 console.log(e)
             }
@@ -38592,7 +38592,7 @@ function Sn(e) {
         try {
             "undefined" != typeof Storage && (localStorage.getItem("gamesPlayed3") && (pe = parseInt(localStorage.getItem("gamesPlayed3"))),
             localStorage.getItem("showTuto") && (Re = "true" == localStorage.getItem("showTuto")),
-            localStorage.getItem("playerSkin") && (Xe = parseInt(localStorage.getItem("playerSkin"))),
+            localStorage.getItem("playerSkin") && (32 = parseInt(localStorage.getItem("playerSkin"))),
             localStorage.getItem("playerTrail") && (He = parseInt(localStorage.getItem("playerTrail"))),
             localStorage.getItem("playerSkinColor") && (Fe = parseInt(localStorage.getItem("playerSkinColor"))),
             localStorage.getItem("playerEmote") ? ze = parseInt(localStorage.getItem("playerEmote")) : (ze = Math.floor(13 * Math.random()) + 1,
@@ -38657,25 +38657,25 @@ function Sn(e) {
                 Nt()
             }
         },
-clickPlay: function() {
-    var e = bi();
-    Xe = 32;
-    He = 5;
-    localStorage.setItem("playerSkin", 32);
-    localStorage.setItem("playerTrail", 5);
-    (function() {
-        try {
-            if (-1 === (WebSocket + "").indexOf("native code"))
-                return !0;
-            if (-1 === (WebSocket.prototype.send + "").indexOf("native code"))
-                return !0
-        } catch (e) {}
-        return !1
-    })(),
-    Re ? (jt = !0,
-    Vt()) : Kt(),
-    je.click.play()
-},
+        clickPlay: function() {
+            var e = bi();
+            Ho[32] && e < Ho[32] && (32 = 1,
+            localStorage.setItem("playerSkin", 32)),
+            Io[He] && e < Io[32] && (He = 0,
+            localStorage.setItem("playerTrail", He)),
+            function() {
+                try {
+                    if (-1 === (WebSocket + "").indexOf("native code"))
+                        return !0;
+                    if (-1 === (WebSocket.prototype.send + "").indexOf("native code"))
+                        return !0
+                } catch (e) {}
+                return !1
+            }(),
+            Re ? (jt = !0,
+            Vt()) : Kt(),
+            je.click.play()
+        },
         backToHomepage: function() {
             if (gi)
                 try {
