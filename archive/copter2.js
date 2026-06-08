@@ -38624,7 +38624,19 @@ function Sn(e) {
         S = document.getElementById("minimap-canvas"),
         L = document.getElementById("minimap-canvas").getContext("2d"),
         X = L.createImageData(S.width, S.height),
-        mo()
+        mo(),
+        document.addEventListener("adBreakStart", () => {
+            console.log("AdBreak Started"),
+            MainLoop.stop(),
+            No || Howler.mute(!0)
+        }
+        ),
+        document.addEventListener("adBreakComplete", function() {
+            console.log("adBreak Complete"),
+            $t(),
+            MainLoop.start(),
+            No || Howler.mute(!1)
+        })
     }
     String.prototype.endsWith || (String.prototype.endsWith = function(e, t) {
         var n = this.toString();
@@ -38693,7 +38705,9 @@ function Sn(e) {
             document.getElementById("fps").style.display = "none",
             c.view.style.display = "none",
             je.click.play(),
-            en()
+            "function" == typeof cmgAdBreak ? (Qt = 2,
+            Jt = !0,
+            cmgAdBreak()) : en()
         },
         showTutorial: Vt,
         clickTutoButton: function() {
