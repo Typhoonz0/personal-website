@@ -35573,6 +35573,17 @@ function vn(e, t) {
     n && (o.isZombie = !0);
     return o
 }
+    function Bn(e, t, n) {
+        var i = Math.pow(n.x - e, 2) + Math.pow(n.y - t, 2);
+        if (i < .01 || i > 1)
+            n.x = e,
+            n.y = t;
+        else {
+            var a = .01 / i;
+            n.x = a * n.x + (1 - a) * e,
+            n.y = a * n.y + (1 - a) * t
+        }
+    }
     function Tn(e) {
         var t = ut[e];
         delete ut[e],
