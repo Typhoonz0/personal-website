@@ -35469,132 +35469,115 @@ var defly = function() {
         var t = .34 * ((16711680 & e) >> 16) + .5 * ((65280 & e) >> 8) + .16 * (255 & e);
         return (t << 16) + (t << 8) + t
     }
-    function vn(e, t) {
-        var n = (65536 & Te[e]) > 0
-          , i = !n && (32768 & Te[e]) > 0;
-        if (n)
-            var a = un[Te[e] ? 255 & Te[e] : 8];
-        else if (i)
-            a = un[Te[e] ? 255 & Te[e] : 7];
-        else
-            a = un[Te[e] ? Te[e] : 1];
-        var o = new PIXI.Container;
-        if (o.isDrone = i,
-        !n && !i) {
-            var r = new PIXI.Sprite(E.shield);
-            r.width = 2 * Y,
-            r.height = 2 * Y,
-            r.anchor.set(.5),
-            r.tint = Tt(e),
-            r.visible = !1,
-            o.shield = r,
-            M.addChild(r);
-            var l = new PIXI.Sprite(E.shield2);
-            if (l.height = 2 * Y,
-            l.width = l.height / l.texture.height * l.texture.width,
-            l.anchor.set(.1, .5),
-            l.tint = Tt(e),
-            l.visible = !1,
-            o.shield2 = l,
-            o.addChild(l),
-            Se[e]) {
-                var s = Mt[Se[e]];
-                if (s) {
-                    var d = s.image;
-                    o.emitter = new PIXI.particles.Emitter(t || w,d,s)
-                }
+function vn(e, t) {
+    var n = (65536 & Te[e]) > 0
+      , i = !n && (32768 & Te[e]) > 0;
+    if (n)
+        var a = un[Te[e] ? 255 & Te[e] : 8];
+    else if (i)
+        a = un[Te[e] ? 255 & Te[e] : 7];
+    else
+        a = un[Te[e] ? Te[e] : 1];
+    var o = new PIXI.Container;
+    if (o.isDrone = i,
+    !n && !i) {
+        var r = new PIXI.Sprite(E.shield);
+        r.width = 2 * Y,
+        r.height = 2 * Y,
+        r.anchor.set(.5),
+        r.tint = Tt(e),
+        r.visible = !1,
+        o.shield = r,
+        M.addChild(r);
+        var l = new PIXI.Sprite(E.shield2);
+        if (l.height = 2 * Y,
+        l.width = l.height / l.texture.height * l.texture.width,
+        l.anchor.set(.1, .5),
+        l.tint = Tt(e),
+        l.visible = !1,
+        o.shield2 = l,
+        o.addChild(l),
+        Se[e]) {
+            var s = Mt[Se[e]];
+            if (s) {
+                var d = s.image;
+                o.emitter = new PIXI.particles.Emitter(t || w,d,s)
             }
         }
-        var c = new PIXI.Sprite(E[a.base]);
-        c.width = 2 * Y * a.size,
-        c.height = 2 * Y * a.size,
-        c.anchor.set(.5),
-        c.tint = n ? fn(Tt(e)) : Tt(e),
-        o.addChild(c);
-        var u = new PIXI.Sprite(E[a.notint]);
-        u.width = 2 * Y * a.size,
-        u.height = 2 * Y * a.size,
-        u.anchor.set(.5),
-        o.addChild(u),
-        o.rotors = [];
-        for (var h = 0; h < a.rotors.length; h++) {
-            var g = a.rotors[h]
-              , p = new PIXI.Sprite(E[g.img]);
-            p.width = 2 * Y * a.size * g.size,
-            p.height = p.width / p.texture.width * p.texture.height,
-            p.anchor.set(.5),
-            p.baseRotation = 0,
-            p.x = g.x * Y * a.size,
-            p.y = g.y * Y * a.size,
-            void 0 !== g.layer && g.layer <= o.children.length ? o.addChildAt(p, g.layer) : o.addChild(p),
-            void 0 !== g.tinted && g.tinted && (p.tint = Tt(e)),
-            o.rotors.push({
-                sprite: p,
-                speed: g.speed,
-                visibility: void 0 !== g.visibility ? g.visibility : 0,
-                fixedRotation: void 0 !== g.fixedRotation && g.fixedRotation,
-                noRotation: void 0 !== g.noRotation && g.noRotation
-            })
-        }
-        var y = new PIXI.Text(!i && Be[e] ? Be[e] : "",{
-            fontFamily: "Arial",
-            fontSize: Math.round(window.innerHeight / 60),
-            fill: 0,
-            align: "center"
-        });
-        return y.anchor.set(.5),
-        y.scale.set(1 / m.scale.x),
-        o.sx = 0,
-        o.sy = 0,
-        o.name = name,
-        o.playerId = e,
-        ut[e] = o,
-        M.addChild(o),
-        o.usernameText = y,
-        x.addChild(y),
-        B && e == ht && (o.visible = !1,
-        y.visible = !1),
-        n && (o.isZombie = !0),
-        o
     }
-    function In(e, t) {
-        if (cn) {
-            (n = cn).clear()
-        } else {
-            var n = new PIXI.Graphics;
-            cn = n,
-            m.addChild(cn)
-        }
-        n.beginFill(16711680, 1);
-        var i = Math.min(2 * -V, e.x - t)
-          , a = Math.min(2 * -j, e.y - t)
-          , o = Math.max(q + 2 * V, e.x + t)
-          , r = Math.max(_ + 2 * j, e.y + t);
-        n.moveTo(i, a).lineTo(o, a).lineTo(o, r).lineTo(i, r),
-        n.moveTo(e.x - t, e.y).arcTo(e.x - t, e.y - t, e.x, e.y - t, t).arcTo(e.x + t, e.y - t, e.x + t, e.y, t).arcTo(e.x + t, e.y + t, e.x, e.y + t, t).arcTo(e.x - t, e.y + t, e.x - t, e.y, t).addHole(),
-        n.alpha = .6;
-        var l = document.getElementById("minimap-fog");
-        l.style.width = S.width * t * 2 / q + "px",
-        l.style.height = S.height * t * 2 / _ + "px",
-        l.style.left = (e.x - t) / q * 100 + "%",
-        l.style.top = (e.y - t) / _ * 100 + "%"
+    var c = new PIXI.Sprite(E[a.base]);
+    c.width = 2 * Y * a.size,
+    c.height = 2 * Y * a.size,
+    c.anchor.set(.5),
+    c.tint = n ? fn(Tt(e)) : Tt(e),
+    o.addChild(c);
+    var u = new PIXI.Sprite(E[a.notint]);
+    u.width = 2 * Y * a.size,
+    u.height = 2 * Y * a.size,
+    u.anchor.set(.5),
+    o.addChild(u),
+    o.rotors = [];
+    for (var h = 0; h < a.rotors.length; h++) {
+        var g = a.rotors[h]
+          , p = new PIXI.Sprite(E[g.img]);
+        p.width = 2 * Y * a.size * g.size,
+        p.height = p.width / p.texture.width * p.texture.height,
+        p.anchor.set(.5),
+        p.baseRotation = 0,
+        p.x = g.x * Y * a.size,
+        p.y = g.y * Y * a.size,
+        void 0 !== g.layer && g.layer <= o.children.length ? o.addChildAt(p, g.layer) : o.addChild(p),
+        void 0 !== g.tinted && g.tinted && (p.tint = Tt(e)),
+        o.rotors.push({
+            sprite: p,
+            speed: g.speed,
+            visibility: void 0 !== g.visibility ? g.visibility : 0,
+            fixedRotation: void 0 !== g.fixedRotation && g.fixedRotation,
+            noRotation: void 0 !== g.noRotation && g.noRotation
+        })
     }
-    var wn, bn = new PIXI.Point, xn = new PIXI.Point, kn = new PIXI.Point, Mn = 0, Pn = 0, En = 0, Cn = 0;
-    function Bn(e, t, n) {
-        var i = Math.pow(n.x - e, 2) + Math.pow(n.y - t, 2);
-        if (i < .01 || i > 1)
-            n.x = e,
-            n.y = t;
-        else {
-            var a = .01 / i;
-            n.x = a * n.x + (1 - a) * e,
-            n.y = a * n.y + (1 - a) * t
-        }
-    }
+    var y = new PIXI.Text(!i && Be[e] ? Be[e] : "",{
+        fontFamily: "Arial",
+        fontSize: Math.round(window.innerHeight / 60),
+        fill: 0,
+        align: "center"
+    });
+    y.anchor.set(.5),
+    y.scale.set(1 / m.scale.x),
+    o.usernameText = y,
+    x.addChild(y);
+
+    // superpower text above username
+    var sp = new PIXI.Text("",{
+        fontFamily: "Arial",
+        fontSize: Math.round(window.innerHeight / 70),
+        fill: 0xffffff,
+        align: "center",
+        stroke: 0x000000,
+        strokeThickness: 3
+    });
+    sp.anchor.set(.5),
+    sp.scale.set(1 / m.scale.x),
+    o.superpowerText = sp,
+    x.addChild(sp);
+
+    o.sx = 0,
+    o.sy = 0,
+    o.name = name,
+    o.playerId = e,
+    ut[e] = o,
+    M.addChild(o),
+    B && e == ht && (o.visible = !1,
+    y.visible = !1,
+    sp.visible = !1),
+    n && (o.isZombie = !0);
+    return o
+}
     function Tn(e) {
         var t = ut[e];
         delete ut[e],
         M.removeChild(t),
+        t.superpowerText && x.removeChild(t.superpowerText);
         x.removeChild(t.usernameText),
         t.shield && M.removeChild(t.shield),
         t.shield2 && M.removeChild(t.shield2),
@@ -37802,6 +37785,14 @@ else if ("KeyB" == e.code) {
         for (var f in ut)
             ut[f].shield && ut[f].shield.visible && ut[f].shield.position.set(ut[f].position.x, ut[f].position.y),
             1 != ut[f].scale.x ? ut[f].usernameText.position.set(ut[f].position.x, ut[f].position.y - ut[f].scale.y * Y - .3 * Y) : ut[f].usernameText.position.set(ut[f].position.x, ut[f].position.y - 1.3 * Y);
+            if (ut[f].superpowerText) {
+    ut[f].superpowerText.text = ut[f].superpower > 0 ? ji[ut[f].superpower] : "";
+    ut[f].superpowerText.scale.set(1 / m.scale.x);
+    ut[f].superpowerText.position.set(
+        ut[f].position.x,
+        ut[f].position.y - 1.8 * Y
+    );
+}
         if (1 != ye && 2 != ye || function() {
             for (var e = 0; e < na.length; e++) {
                 var t = na[e]
