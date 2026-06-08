@@ -32278,10 +32278,8 @@ Object.assign(PIXI.filters, this ? this.__filters : __filters);
     }])
 });
 //# sourceMappingURL=jquery-ui.js.map
-console.log("ddd")
+console.log("am i running?")
 var defly = function() {
-    console.log("gaghahahahahah")
-    var velocityOverrides = {};
     var e, t, n, i, a, o, r, l, s, d, c, m, u, h, g, p, f, v, I, w, b, x, k, M, P, E, C, B, T, S, L, X, z, F, H, D, R, U, A, O, W, Y, G, N, q, _, V, j, Z, K, Q, J = "http://s2-copterroyale.coolmathgames.com", ee = "192.168.0.12:3000", te = {}, ne = {}, ie = !1, ae = 0, oe = !1, re = 1, le = 0, se = 0, de = [], ce = 0, me = 0, ue = [], he = [], ge = 0, pe = 0, ye = 100, fe = {}, ve = !1, Ie = 20, we = [], be = 0, xe = -1, ke = 0, Me = !1, Pe = 0, Ee = {}, Ce = 0, Be = {}, Te = {}, Se = {}, Le = {}, Xe = 1, ze = 1, Fe = -1, He = 0, De = 1, Re = !0, Ue = !1, Ae = !1, Oe = !1, We = 0, Ye = 0, Ge = 0, Ne = 0, qe = !1, _e = 0, Ve = !0, je = {}, Ze = 5, Ke = 0, Qe = 0, Je = 2, $e = 9, et = 48, tt = 24, nt = .6763066483560869, it = .1, at = 0, ot = 0, rt = 0, lt = [], st = {}, dt = {}, ct = {}, mt = {}, ut = {}, ht = -1, gt = -1, pt = {}, yt = 0, ft = 4, vt = nt / .5036440950091954, It = [4021759, 9587711, 16144895, 16736174, 16594229, 16747050, 16252714, 9698816, 1630751, 32823, 65468, 5625343], wt = [4021759, 16144895, 16594229, 16747050, 16252714, 1630751, 32823, 5625343, 9587711, 16736174, 9698816, 65468], bt = [5066061, 4021759, 16594229], xt = ["Blue", "Pink", "Red", "Orange", "Yellow", "Green", "Dark Green", "Sky Blue", "Purple", "Rose", "Lime", "Turquoise"], kt = ["", "Blue", "Red"], Mt = {
         0: void 0,
         5: {
@@ -32568,8 +32566,6 @@ var defly = function() {
     function St(e) {
         return wt[e - 1]
     }
-    window.customUsername = "liam";
-    document.getElementById("username").value = "liam";
     var Lt = {
         EU1: "Europe",
         EU2: "Europe Central",
@@ -32737,6 +32733,7 @@ var defly = function() {
                         On((new Date).toLocaleTimeString() + " - Error selecting server: " + o.responseText, "error");
                     else {
                         var n = o.responseText.split(" ");
+                        console.log(n);
                         if (ee = n[0],
                         t = n[1],
                         "undefined" != typeof Storage)
@@ -32780,7 +32777,7 @@ var defly = function() {
                 var e = t || ""
                   , n = new DataView(new ArrayBuffer(2 + 2 * d.length + 1 + 2 * e.length + 4 + 4 + 16 + 1));
                 n.setUint8(0, 1),
-                ln(n, 1, "liam"),
+                ln(n, 1, d),
                 ln(n, 2 + 2 * d.length, e),
                 n.setInt32(2 + 2 * d.length + 1 + 2 * e.length, 32),
                 n.setInt32(2 + 2 * d.length + 1 + 2 * e.length + 4, pe),
@@ -37083,61 +37080,13 @@ function Sn(e) {
                 else if (t && "KeyD" == e.code || !t && 68 == e.keyCode || !Ve && 39 == e.keyCode)
                     Ca[3] = !0,
                     La();
-else if ("KeyT" == e.code) {
-    window.showTracers = !window.showTracers;
-    if (!window.showTracers && window.tracerGraphics) {
-        m.removeChild(window.tracerGraphics);
-        window.tracerGraphics = null;
-    }
-}
-else if ("KeyB" == e.code) {
-    if (ut[ht]) {
-        var closestId = null;
-        var closestDist = Infinity;
-        
-        for (var id in ut) {
-            if (id != ht) {
-                var dx = ut[id].x - ut[ht].x;
-                var dy = ut[id].y - ut[ht].y;
-                var dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < closestDist) {
-                    closestDist = dist;
-                    closestId = id;
+                else if ("KeyT" == e.code) {
+                    window.showTracers = !window.showTracers;
+                    if (!window.showTracers && window.tracerGraphics) {
+                        m.removeChild(window.tracerGraphics);
+                        window.tracerGraphics = null;
+                    }
                 }
-            }
-        }
-        
-        if (closestId) {
-            var target = ut[closestId];
-            var bulletSpeed = $e * 60;
-            var timeToReach = (closestDist / bulletSpeed) * window.leadMultiplier;
-            var predictedX = target.x + target.sx * timeToReach;
-            var predictedY = target.y + target.sy * timeToReach;
-            var dx = predictedX - ut[ht].x;
-            var dy = predictedY - ut[ht].y;
-            var baseAngle = Math.atan2(dy, dx);
-            var dist = Math.sqrt(dx * dx + dy * dy);
-
-            // send multiple bullets with slight angle spread
-            var numBullets = 1000;  // how many bullets
-            var spreadAngle = 0.1; // radians between each bullet
-
-            for (var b = 0; b < numBullets; b++) {
-                var angleOffset = (b - numBullets / 2) * spreadAngle;
-                var angle = baseAngle + angleOffset;
-
-                var pkt = new DataView(new ArrayBuffer(20));
-                pkt.setUint8(0, 2);
-                pkt.setUint8(1, 1);
-                pkt.setFloat32(2, angle);
-                pkt.setFloat32(6, angle);
-                pkt.setInt16(10, o || 0);
-                pkt.setFloat32(12, dist);
-                s.send(pkt.buffer);
-            }
-        }
-    }
-}
                 else if (t && "Space" == e.code || !t && 32 == e.keyCode) {
                     if (true) {
                         Xa = !0;
@@ -37832,12 +37781,12 @@ else if ("KeyB" == e.code) {
             ut[f].shield && ut[f].shield.visible && ut[f].shield.position.set(ut[f].position.x, ut[f].position.y),
             1 != ut[f].scale.x ? ut[f].usernameText.position.set(ut[f].position.x, ut[f].position.y - ut[f].scale.y * Y - .3 * Y) : ut[f].usernameText.position.set(ut[f].position.x, ut[f].position.y - 1.3 * Y);
             if (ut[f].superpowerText) {
-    ut[f].superpowerText.text = ut[f].superpower > 0 ? ji[ut[f].superpower] : "";
-    ut[f].superpowerText.scale.set(1 / m.scale.x);
-    ut[f].superpowerText.position.set(
-        ut[f].position.x,
-        ut[f].position.y - 1.8 * Y
-    );
+                ut[f].superpowerText.text = ut[f].superpower > 0 ? ji[ut[f].superpower] : "";
+                ut[f].superpowerText.scale.set(1 / m.scale.x);
+                ut[f].superpowerText.position.set(
+                    ut[f].position.x,
+                    ut[f].position.y - 1.8 * Y
+            );
 }
         if (1 != ye && 2 != ye || function() {
             for (var e = 0; e < na.length; e++) {
