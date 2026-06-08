@@ -37071,17 +37071,28 @@ else if ("KeyB" == e.code) {
         }
         
         if (closestId) {
-            var dx = ut[closestId].x - ut[ht].x;
-            var dy = ut[closestId].y - ut[ht].y;
+            var target = ut[closestId];
+            
+            // bullet speed is $e (maxSpeed), estimate time to reach target
+            var bulletSpeed = $e * 60; // per second
+            var timeToReach = closestDist / bulletSpeed;
+            
+            // predict where target will be when bullet arrives
+            var predictedX = target.x + target.sx * timeToReach;
+            var predictedY = target.y + target.sy * timeToReach;
+            
+            var dx = predictedX - ut[ht].x;
+            var dy = predictedY - ut[ht].y;
             var angle = Math.atan2(dy, dx);
+            var dist = Math.sqrt(dx * dx + dy * dy);
             
             var pkt = new DataView(new ArrayBuffer(20));
             pkt.setUint8(0, 2);
-            pkt.setUint8(1, 1); // shooting flag
+            pkt.setUint8(1, 1);
             pkt.setFloat32(2, angle);
             pkt.setFloat32(6, angle);
             pkt.setInt16(10, o || 0);
-            pkt.setFloat32(12, closestDist);
+            pkt.setFloat32(12, dist);
             s.send(pkt.buffer);
         }
     }
