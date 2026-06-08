@@ -32279,7 +32279,6 @@ Object.assign(PIXI.filters, this ? this.__filters : __filters);
 });
 //# sourceMappingURL=jquery-ui.js.map
 console.log("ddd")
-"use strict";
 var defly = function() {
     console.log("gaghahahahahah")
     var velocityOverrides = {};
