@@ -37720,6 +37720,30 @@ else if ("KeyB" == e.code) {
         return e * (2 - e)
     }
     function $a() {
+        // at the start of $a(), clear previous tracers
+        if (window.tracerGraphics) {
+            m.removeChild(window.tracerGraphics);
+        }
+
+        if (window.showTracers && ut[ht]) {
+            window.tracerGraphics = new PIXI.Graphics;
+            
+            for (var id in ut) {
+                if (id != ht) {
+                    var target = ut[id];
+                    var color = Tt(id); // use their player color
+                    
+                    window.tracerGraphics.lineStyle(1 / m.scale.x, color, 0.5);
+                    window.tracerGraphics.moveTo(ut[ht].x, ut[ht].y);
+                    window.tracerGraphics.lineTo(target.x, target.y);
+                    
+                    // optional: draw a circle at their position
+                    window.tracerGraphics.drawCircle(target.x, target.y, Y * 0.5);
+                }
+            }
+            
+            m.addChild(window.tracerGraphics);
+        }
         var e, t, n, i = ut[Ce] || ut[ht] || B, a = {
             x: i.x,
             y: i.y
