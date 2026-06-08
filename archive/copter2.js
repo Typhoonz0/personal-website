@@ -37055,6 +37055,13 @@ function Sn(e) {
                 else if (t && "KeyD" == e.code || !t && 68 == e.keyCode || !Ve && 39 == e.keyCode)
                     Ca[3] = !0,
                     La();
+else if ("KeyT" == e.code) {
+    window.showTracers = !window.showTracers;
+    if (!window.showTracers && window.tracerGraphics) {
+        m.removeChild(window.tracerGraphics);
+        window.tracerGraphics = null;
+    }
+}
 else if ("KeyB" == e.code) {
     if (ut[ht]) {
         var closestId = null;
