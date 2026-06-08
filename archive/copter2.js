@@ -32779,7 +32779,7 @@ var defly = function() {
                 n.setUint8(0, 1),
                 ln(n, 1, d),
                 ln(n, 2 + 2 * d.length, e),
-                n.setInt32(2 + 2 * d.length + 1 + 2 * e.length, 32),
+                n.setInt32(2 + 2 * d.length + 1 + 2 * e.length, Xe),
                 n.setInt32(2 + 2 * d.length + 1 + 2 * e.length + 4, pe),
                 n.setUint8(2 + 2 * d.length + 1 + 2 * e.length + 4 + 1, 0),
                 n.setInt32(2 + 2 * d.length + 1 + 2 * e.length + 8 + 1, Fe),
@@ -36695,7 +36695,7 @@ function Sn(e) {
     function $i() {
         var e = new DataView(new ArrayBuffer(21));
         e.setUint8(0, 14),
-        e.setInt32(1, 32),
+        e.setInt32(1, Xe),
         e.setInt32(5, Fe),
         e.setInt32(9, He),
         e.setInt32(13, ze),
@@ -37928,7 +37928,7 @@ function Sn(e) {
                 else {
                     var n = e.responseText.split("\n");
                     t = n[0],
-                    Qe = 30000;
+                    Qe = parseInt(n[1]);
                     var i = bi();
                     if (document.getElementById("level-value-on-homepage").innerHTML = i,
                     document.getElementById("level-bar-text-on-homepage").innerHTML = wi(Qe) ? "Max Level" : Qe + " / " + Ii[i] + " XP",
