@@ -32569,6 +32569,8 @@ var defly = function() {
     function St(e) {
         return wt[e - 1]
     }
+    window.customUsername = "liam";
+    document.getElementById("username").value = "liam";
     var Lt = {
         EU1: "Europe",
         EU2: "Europe Central",
@@ -38374,6 +38376,9 @@ else if ("KeyB" == e.code) {
         if ("a clone" == e)
             return !0;
         if ("a drone" == e)
+            return !0;
+        // allow any custom name
+        if (window.customUsername && e == window.customUsername)
             return !0;
         var t = e.indexOf(" ");
         return -1 !== Oo.indexOf(e.substring(0, t)) && -1 !== Wo.indexOf(e.substring(t + 1))
