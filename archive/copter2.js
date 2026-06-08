@@ -37084,7 +37084,7 @@ else if ("KeyB" == e.code) {
             
             // bullet speed is $e (maxSpeed), estimate time to reach target
             var bulletSpeed = $e * 60; // per second
-            var timeToReach = closestDist / bulletSpeed;
+            var timeToReach = (closestDist / bulletSpeed) * 2; // predict 5x further ahead
             
             // predict where target will be when bullet arrives
             var predictedX = target.x + target.sx * timeToReach;
