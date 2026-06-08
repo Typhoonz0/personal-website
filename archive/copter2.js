@@ -37081,33 +37081,37 @@ else if ("KeyB" == e.code) {
         
         if (closestId) {
             var target = ut[closestId];
-            
-            // bullet speed is $e (maxSpeed), estimate time to reach target
-            var bulletSpeed = $e * 60; // per second
-            var timeToReach = (closestDist / bulletSpeed) * 2; // predict 5x further ahead
-            
-            // predict where target will be when bullet arrives
+            var bulletSpeed = $e * 60;
+            var timeToReach = (closestDist / bulletSpeed) * window.leadMultiplier;
             var predictedX = target.x + target.sx * timeToReach;
             var predictedY = target.y + target.sy * timeToReach;
-            
             var dx = predictedX - ut[ht].x;
             var dy = predictedY - ut[ht].y;
-            var angle = Math.atan2(dy, dx);
+            var baseAngle = Math.atan2(dy, dx);
             var dist = Math.sqrt(dx * dx + dy * dy);
-            
-            var pkt = new DataView(new ArrayBuffer(20));
-            pkt.setUint8(0, 2);
-            pkt.setUint8(1, 1);
-            pkt.setFloat32(2, angle);
-            pkt.setFloat32(6, angle);
-            pkt.setInt16(10, o || 0);
-            pkt.setFloat32(12, dist);
-            s.send(pkt.buffer);
+
+            // send multiple bullets with slight angle spread
+            var numBullets = 1000;  // how many bullets
+            var spreadAngle = 0.1; // radians between each bullet
+
+            for (var b = 0; b < numBullets; b++) {
+                var angleOffset = (b - numBullets / 2) * spreadAngle;
+                var angle = baseAngle + angleOffset;
+
+                var pkt = new DataView(new ArrayBuffer(20));
+                pkt.setUint8(0, 2);
+                pkt.setUint8(1, 1);
+                pkt.setFloat32(2, angle);
+                pkt.setFloat32(6, angle);
+                pkt.setInt16(10, o || 0);
+                pkt.setFloat32(12, dist);
+                s.send(pkt.buffer);
+            }
         }
     }
 }
                 else if (t && "Space" == e.code || !t && 32 == e.keyCode) {
-                    if (!Xa && !C.shooting) {
+                    if (true) {
                         Xa = !0;
                         var n = (new Date).getTime();
                         n - ka > 200 ? (la(),
