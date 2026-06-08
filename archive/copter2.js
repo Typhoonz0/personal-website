@@ -37053,16 +37053,39 @@ function Sn(e) {
                 else if (t && "KeyD" == e.code || !t && 68 == e.keyCode || !Ve && 39 == e.keyCode)
                     Ca[3] = !0,
                     La();
-                // inside za(), add a new else if branch
-                else if ("KeyP" == e.code) {
-                    console.log("nigggg")
-                    // freeze all players except yourself
-                    for (var id in ut) {
-                        if (id != ht) {
-                            velocityOverrides[id] = { sx: 0, sy: 0 };
-                        }
-                    }
+else if ("KeyB" == e.code) {
+    if (ut[ht]) {
+        var closestId = null;
+        var closestDist = Infinity;
+        
+        for (var id in ut) {
+            if (id != ht) {
+                var dx = ut[id].x - ut[ht].x;
+                var dy = ut[id].y - ut[ht].y;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closestId = id;
                 }
+            }
+        }
+        
+        if (closestId) {
+            var dx = ut[closestId].x - ut[ht].x;
+            var dy = ut[closestId].y - ut[ht].y;
+            var angle = Math.atan2(dy, dx);
+            
+            var pkt = new DataView(new ArrayBuffer(20));
+            pkt.setUint8(0, 2);
+            pkt.setUint8(1, 1); // shooting flag
+            pkt.setFloat32(2, angle);
+            pkt.setFloat32(6, angle);
+            pkt.setInt16(10, o || 0);
+            pkt.setFloat32(12, closestDist);
+            s.send(pkt.buffer);
+        }
+    }
+}
                 else if (t && "Space" == e.code || !t && 32 == e.keyCode) {
                     if (!Xa && !C.shooting) {
                         Xa = !0;
