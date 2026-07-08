@@ -1780,7 +1780,7 @@ class NetClient {
       if (msg.spawn) { player.pos.set(msg.spawn[0],msg.spawn[1],msg.spawn[2]); player.vel.set(0,0,0); player.render_pos.copy(player.pos); player.eye_y_smooth=null; }
       roundState = msg.round_state || 'active';
       timeLeftMs = msg.time_left || 5*60*1000;
-      const mapUrl = msg.map_url || '/ex.gltf';
+      const mapUrl = msg.map_url || '/liamfps/ex.gltf';
       fetch(mapUrl,{method:'HEAD'}).then(r=>{ if(r.ok){ loadGLTF(mapUrl,scene,MAP_SCALE).then(root=>{ if(root) floorMesh.visible=false; }); buildCollision(mapUrl); }}).catch(()=>{});
     } else if (t==='state') {
       roundState = msg.round_state || roundState;
